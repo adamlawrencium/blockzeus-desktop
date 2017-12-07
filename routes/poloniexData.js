@@ -8,6 +8,20 @@ let secret = '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f98
 let poloniex = new Poloniex(key, secret);
 
 
+/*
+"BTC_DASH": {
+  "id": 24,
+  "last": "0.04802523",
+  "lowestAsk": "0.04802524",
+  "highestBid": "0.04802523",
+  "percentChange": "-0.16781788",
+  "baseVolume": "1792.54829461",
+  "quoteVolume": "34876.35427715",
+  "isFrozen": "0",
+  "high24hr": "0.05869352",
+  "low24hr": "0.04607966"
+}, ...
+*/
 router.get('/ticker', function (req, res, next) {
   poloniex.returnTicker().then((ticker) => {
     res.json(ticker);
@@ -51,6 +65,19 @@ router.get('/completeBalances', function (req, res, next) {
   });
 });
 
+/*
+[
+  {
+    "globalTradeID": 280277971,
+    "tradeID": 14345849,
+    "date": "2017-12-07 06:54:03",
+    "type": "sell",
+    "rate": "14001.00000007",
+    "amount": "0.00003570",
+    "total": "0.49983570"
+  }, ...
+]
+*/
 router.get('/tradeHistory/:currencyPair', function (req, res, next) {
   poloniex.returnTradeHistory(req.params.currencyPair).then((balances) => {
     res.json(balances);
