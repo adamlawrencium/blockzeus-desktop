@@ -76,14 +76,14 @@ class DonutChart extends Component {
     // this.addHolding()
     console.log(this.state)
     return (
-      <div>
-        <div className="card">
-          <div className="card-body">
-            <h4 className="card-title">Digital Asset Holdings</h4>
-            <ReactHighcharts config={this.state.config} />
-          </div>
-        </div>
-      </div>
+      <ReactHighcharts config={this.state.config} />
+      // <div>
+      //   <div className="card">
+      //     <div className="card-body">
+      //       <h4 className="card-title">Digital Asset Holdings</h4>
+      //     </div>
+      //   </div>
+      // </div>
     )
   }
 }

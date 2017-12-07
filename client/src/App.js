@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import Navbar from './Navbar';
 import DonutChart from './DonutChart';
+import PortfolioLineChart from './PortfolioLineChart';
+import HoldingsTiles from './HoldingsTiles';
 import Tile from './Tile'
 
 import { Container, Row, Col } from 'reactstrap';
@@ -15,13 +18,16 @@ import {
 import './App.css';
 
 class App extends Component {
-  state = { data: {} }
+  state = {
+    data: {},
+    holdings: {}
+  }
 
   componentDidMount() {
     fetch('/poloniexData/ticker')
       .then(res => res.json())
       .then(data => {
-        console.log(data);
+        // console.log(data);
         this.setState({ data });
       });
   }
@@ -29,44 +35,31 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <nav className="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
-          <a className="navbar-brand" href="#">BlockZeus</a>
-          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon" />
-          </button>
-          <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div className="navbar-nav">
-              <a className="nav-item nav-link active" href="#">Home <span className="sr-only">(current)</span></a>
-              <a className="nav-item nav-link" href="#">Features</a>
-              <a className="nav-item nav-link" href="#">Pricing</a>
-            </div>
-          </div>
-        </nav>
+        <Navbar />
         <div className="container">
           <br />
           <div className="row">
             <div className="col-5">
-              <DonutChart />
+              <div className="card">
+                <div className="card-body">
+                  <h4 className="card-title">Digital Asset Holdings</h4>
+                  <DonutChart />
+                </div>
+              </div>
             </div>
             <div className="col-7">
-              <DonutChart />
+              <div className="card">
+                <div className="card-body">
+                  <h4 className="card-title">Portfolio Performance</h4>
+                  <PortfolioLineChart />
+                </div>
+              </div>
             </div>
           </div>
           <hr />
-          <div className="row">
-            <div className="col">
-              <Tile />
-            </div>
-            <div className="col">
-              <Tile />
-            </div>
-            <div className="col">
-              <Tile />
-            </div>
-          </div>
+          <HoldingsTiles />
         </div>
         <br />
-        <div><pre>{JSON.stringify(this.state.data, null, 2)}</pre></div>
       </div>
     );
   }
