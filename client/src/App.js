@@ -57,7 +57,7 @@ class App extends Component {
             <div className="col">
               <Tile />
             </div>
-            <div className="col-6">
+            <div className="col">
               <Tile />
             </div>
             <div className="col">
