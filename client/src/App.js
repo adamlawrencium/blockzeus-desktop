@@ -1,18 +1,34 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+  state = { data: {} }
+
+  componentDidMount() {
+    // fetch('/poloniexData/ticker')
+    //   .then(res => res.json())
+    //   .then(users => this.setState({ users }));
+
+    fetch('/poloniexData/ticker')
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+        this.setState({ data });
+      });
+    
+    // console.log(res.json());
+  }
+
   render() {
+
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <h1>Users</h1>
+        <div><pre>{JSON.stringify(this.state.data, null, 2) }</pre></div>
+        {/* {this.state.data} */}
+        {/* {this.state.data.map(pair =>
+          <div key={pair}>{pair}</div>
+        )} */}
       </div>
     );
   }
