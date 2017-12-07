@@ -78,7 +78,6 @@ class DonutChart extends Component {
     return (
       <div>
         <ReactHighcharts config={this.state.config} />
-        <button onClick={this.addHolding}/>
       </div>
     )
   }
