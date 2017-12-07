@@ -6,7 +6,7 @@ class DonutChart extends Component {
   // constructor(props) {
   //   super(props)
   // }
-  
+
   state = {
     blah: 'hi',
 
@@ -16,7 +16,7 @@ class DonutChart extends Component {
         type: 'pie'
       },
       title: {
-        text: 'Digital Assset Holdings'
+        text: ''
       },
       yAxis: {
         title: {
@@ -45,10 +45,10 @@ class DonutChart extends Component {
       }]
     }
   }
-  
+
   updatePortfolio() {
     // poll data
-    console.log('hi',this)
+    console.log('hi', this)
     return [['ZEC', 0.06138262],
     ['DASH', 0.00000362],
     ['BTCD', 0.07855733],
@@ -77,7 +77,12 @@ class DonutChart extends Component {
     console.log(this.state)
     return (
       <div>
-        <ReactHighcharts config={this.state.config} />
+        <div className="card">
+          <div className="card-body">
+            <h4 className="card-title">Digital Asset Holdings</h4>
+            <ReactHighcharts config={this.state.config} />
+          </div>
+        </div>
       </div>
     )
   }

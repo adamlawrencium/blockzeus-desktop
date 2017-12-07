@@ -27,19 +27,40 @@ class App extends Component {
   }
 
   render() {
-
     return (
       <div className="App">
-        <DonutChart />
+        <nav className="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
+          <a className="navbar-brand" href="#">BlockZeus</a>
+          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon" />
+          </button>
+          <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div className="navbar-nav">
+              <a className="nav-item nav-link active" href="#">Home <span className="sr-only">(current)</span></a>
+              <a className="nav-item nav-link" href="#">Features</a>
+              <a className="nav-item nav-link" href="#">Pricing</a>
+            </div>
+          </div>
+        </nav>
         <div className="container">
+          <br />
           <div className="row">
-            <div className="col-lg">
+            <div className="col-5">
+              <DonutChart />
+            </div>
+            <div className="col-7">
+              <DonutChart />
+            </div>
+          </div>
+          <hr />
+          <div className="row">
+            <div className="col">
               <Tile />
             </div>
-            <div className="col-lg">
+            <div className="col-6">
               <Tile />
             </div>
-            <div className="col-lg">
+            <div className="col">
               <Tile />
             </div>
           </div>
