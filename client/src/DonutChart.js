@@ -17,7 +17,7 @@ class DonutChart extends Component {
     fetch('/poloniexData/completeBalances')
       .then(res => res.json())
       .then(balances => {
-        balances = this.poloObjectToArray(balances).filter(b => b[1] > 0).sort((i,j) => j[1] - i[1])
+        balances = this.poloObjectToArray(balances).filter(b => b[1] > 0).sort((i, j) => j[1] - i[1])
         this.setState({ balances })
         this.setState({ loaded: true })
       })
@@ -35,26 +35,33 @@ class DonutChart extends Component {
     return a;
   }
 
+
   renderLoading() {
     return <h2>Loading...</h2>
   }
-
   renderDonut() {
     const plotOptions = {
       pie: {
         allowPointSelect: true,
         dataLabels: {
-          distance: 15,
+          distance: -30,
           enabled: true
         }
       }
     };
+
     return (
       <HighchartsChart plotOptions={plotOptions}>
         <Chart />
         <Title verticalAlign="middle">{`${this.state.totalValue.toString()} BTC`}</Title>
         {/* <Legend /> */}
-        <PieSeries id="holdings" name="holdings" data={this.state.balances} showInLegend={true} innerSize="0%" />
+        <PieSeries
+          id="holdings"
+          name="holdings"
+          data={this.state.balances}
+          showInLegend={true}
+          innerSize="66%"
+        />
       </HighchartsChart>
     )
   }

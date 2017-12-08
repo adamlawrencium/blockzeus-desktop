@@ -5,6 +5,7 @@ export default class Navbar extends Component {
     return (
       <nav className="navbar navbar-expand-lg sticky-top navbar-dark navbar-bz-purple">
         <a className="navbar-brand" href="">BlockZeus</a>
+        <a className="blockzeus-comment">//</a> 
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon" />
         </button>
