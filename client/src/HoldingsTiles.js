@@ -15,14 +15,17 @@ class HoldingsTiles extends Component {
       .catch(e => console.log(e))
       .then(holdings => {
         const h = Object.keys(holdings).map(key => [key, holdings[key]]);
-        // console.log(h);
         this.setState({ holdings: h })
         this.setState({ loaded: true })
       });
   }
 
-  render() {
+  renderLoading() {
+    return <h1>Loading...</h1>
+  }
 
+  renderTiles() {
+    const { holdings } = this.state.holdings;
     return (
       <div>
         <div className="row">
@@ -32,9 +35,16 @@ class HoldingsTiles extends Component {
               amount={holding[1]}
             />)}
         </div>
-        {/* <div><pre>{JSON.stringify(this.state.holdings, null, 2)}</pre></div> */}
       </div>
     )
+  }
+
+  render() {
+    if (this.state.loaded) {
+      return this.renderTiles();
+    } else {
+      return this.renderLoading();
+    }
   }
 }
 

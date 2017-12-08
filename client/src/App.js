@@ -58,7 +58,7 @@ class App extends Component {
           </div>
           <hr />
           <br />
-          <HoldingsTiles />
+          <HoldingsTiles ticker={this.state.data} />
         </div>
         <br />
       </div>
