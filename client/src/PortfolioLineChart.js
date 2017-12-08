@@ -4,10 +4,6 @@ import {
   HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis, Title, Legend,
   AreaSplineSeries, SplineSeries, Navigator, RangeSelector, Tooltip
 } from 'react-jsx-highstock';
-// import ExampleCode from '../utils/ExampleCode';
-// import code from './exampleCode';
-// import { createRandomData } from '../utils/data-helpers';
-
 
 export const createDataPoint = (time = Date.now(), magnitude = 1000, offset = 0) => {
   return [

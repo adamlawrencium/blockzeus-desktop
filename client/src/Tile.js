@@ -9,7 +9,7 @@ class Tile extends Component {
             {/* <h4 className="card-title">{this.props.currency}</h4> */}
             <h2>{this.props.currency}</h2>
             <p className="card-text">You have {this.props.amount} of this currency. Congrats!</p>
-            <a href="#" className="btn btn-primary">Go somewhere</a>
+            <a href="google.com" className="btn btn-primary">Go somewhere</a>
           </div>
         </div>
       </div>
