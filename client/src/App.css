@@ -22,6 +22,10 @@
   font-size: large;
 }
 
+.navbar-bz-purple {
+  background-color: #483453;
+}
+
 .card {
   margin-bottom: 20px;
 }

@@ -44,7 +44,7 @@ class DonutChart extends Component {
       pie: {
         allowPointSelect: true,
         dataLabels: {
-          distance: -30,
+          distance: 15,
           enabled: true
         }
       }
@@ -54,7 +54,7 @@ class DonutChart extends Component {
         <Chart />
         <Title verticalAlign="middle">{`${this.state.totalValue.toString()} BTC`}</Title>
         {/* <Legend /> */}
-        <PieSeries id="holdings" name="holdings" data={this.state.balances} showInLegend={true} innerSize="66%" />
+        <PieSeries id="holdings" name="holdings" data={this.state.balances} showInLegend={true} innerSize="0%" />
       </HighchartsChart>
     )
   }

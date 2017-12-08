@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Navbar from './Navbar';
-import DonutChart from './DonutChart';
-import PortfolioLineChart from './PortfolioLineChart';
+import AllocationsCard from './AllocationsCard';
+import PerformanceCard from './PerformanceCard';
 import HoldingsTiles from './HoldingsTiles';
 
 import './App.css';
@@ -29,20 +29,10 @@ class App extends Component {
           <br />
           <div className="row">
             <div className="col-lg-5">
-              <div className="card">
-                <div className="card-body">
-                  <h4 className="card-title">Digital Asset Holdings</h4>
-                  <DonutChart />
-                </div>
-              </div>
+              <AllocationsCard />
             </div>
             <div className="col-lg-7">
-              <div className="card">
-                <div className="card-body">
-                  <h4 className="card-title">Portfolio Performance</h4>
-                  <PortfolioLineChart />
-                </div>
-              </div>
+              <PerformanceCard/>
             </div>
           </div>
           <hr />
