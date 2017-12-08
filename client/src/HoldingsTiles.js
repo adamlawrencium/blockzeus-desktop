@@ -4,11 +4,12 @@ import { TabContent } from 'reactstrap';
 
 class HoldingsTiles extends Component {
 
-  // state = {
-  //   holdings: []
-  // }
+  state = {
+    holdings: [],
+    loaded: false
+  }
 
-  componentWillMount() {
+  componentDidMount() {
     fetch('/poloniexData/balances')
       .then(res => res.json())
       .catch(e => console.log(e))
@@ -16,14 +17,19 @@ class HoldingsTiles extends Component {
         const h = Object.keys(holdings).map(key => [key, holdings[key]]);
         // console.log(h);
         this.setState({ holdings: h })
+        this.setState({ loaded: true })
       });
+  }
+
+  filterHoldings() {
+    console.log(this.state.holdings.filter( holding => { holding[1] > 0 }));
   }
 
   render() {
     return (
       <div>
         <div className="row">
-          {this.state.holdings.map(holding => <p1>{holding[0]}</p1>)}
+          {this.state.holdings.map(holding => <Tile currency={holding[0]} />)}
         </div>
         {/* <div><pre>{JSON.stringify(this.state.holdings, null, 2)}</pre></div> */}
       </div>
