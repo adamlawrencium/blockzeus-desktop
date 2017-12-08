@@ -21,15 +21,12 @@ class HoldingsTiles extends Component {
       });
   }
 
-  filterHoldings() {
-    console.log(this.state.holdings.filter( holding => { holding[1] > 0 }));
-  }
-
   render() {
+    
     return (
       <div>
         <div className="row">
-          {this.state.holdings.map(holding => <Tile currency={holding[0]} />)}
+          {this.state.holdings.filter(h => h[1] > 0).map(holding => <Tile currency={holding[0]} />)}
         </div>
         {/* <div><pre>{JSON.stringify(this.state.holdings, null, 2)}</pre></div> */}
       </div>

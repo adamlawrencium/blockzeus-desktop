@@ -48,7 +48,7 @@ class DonutChart extends Component {
 
   updatePortfolio() {
     // poll data
-    console.log('hi', this)
+    // console.log('hi', this)
     return [['ZEC', 0.06138262],
     ['DASH', 0.00000362],
     ['BTCD', 0.07855733],
@@ -74,7 +74,7 @@ class DonutChart extends Component {
   render() {
     // updatePortfolio()]
     // this.addHolding()
-    console.log(this.state)
+    // console.log(this.state)
     return (
       <ReactHighcharts config={this.state.config} />
       // <div>
