@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
 import Tile from './Tile';
+import { TabContent } from 'reactstrap';
 
 class HoldingsTiles extends Component {
 
-  state = {
-    holdings: []
-  }
+  // state = {
+  //   holdings: []
+  // }
 
-  componentDidMount() {
+  componentWillMount() {
     fetch('/poloniexData/balances')
       .then(res => res.json())
       .catch(e => console.log(e))
       .then(holdings => {
         const h = Object.keys(holdings).map(key => [key, holdings[key]]);
+        // console.log(h);
         this.setState({ holdings: h })
       });
   }
@@ -21,20 +23,7 @@ class HoldingsTiles extends Component {
     return (
       <div>
         <div className="row">
-          {this.state.holdings.length !== 0 &&
-            this.state.holdings.map(holding => {
-              <div>
-                <p>hi</p>
-              </div>
-
-            })
-            
-            
-          }
-          <Tile currency="blah" />
-          <Tile currency="blah" />
-          <Tile currency="blah" />
-
+          {this.state.holdings.map(holding => <p1>{holding[0]}</p1>)}
         </div>
         {/* <div><pre>{JSON.stringify(this.state.holdings, null, 2)}</pre></div> */}
       </div>
