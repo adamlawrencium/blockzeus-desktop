@@ -33,7 +33,7 @@ class HoldingsTiles extends Component {
         //   }
         // })
         this.setState({ loaded: true })
-        console.log(h);
+        // console.log(h);
         this.setState({ holdings: h })
       });
   }

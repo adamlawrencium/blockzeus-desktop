@@ -1,35 +1,70 @@
 import React, { Component } from 'react';
 import Highcharts from 'highcharts';
 import {
-  HighchartsChart, Chart, withHighcharts, PieSeries, Legend
+  HighchartsChart, Chart, withHighcharts, PieSeries, Legend, Title
 } from 'react-jsx-highcharts';
 
 
 class DonutChart extends Component {
 
-  updatePortfolio() {
-    return [['ZEC', 0.06138262],
-    ['DASH', 0.00000362],
-    ['BTCD', 0.07855733],
-    ['DASH', 0.00000362],
-    ['MAID', .1354355480],
-    ['REP', 0.00003815],
-    ['LSK', 0.20641178],
-    ['ZEC', 0.06138262],
-    ['XRP', .1730111802],
-    ['USDT', .18860279],
-    ['BTC', 0.00099013],
-    ['STEEM', 0.00039982]]
+  state = {
+    balances: [],
+    loaded: false,
+    totalValue: 0
+  }
+
+  componentDidMount() {
+    fetch('/poloniexData/completeBalances')
+      .then(res => res.json())
+      .then(balances => {
+        balances = this.poloObjectToArray(balances).filter(b => b[1] > 0).sort((i,j) => j[1] - i[1])
+        this.setState({ balances })
+        this.setState({ loaded: true })
+      })
+  }
+
+  poloObjectToArray(obj) {
+    let a = [];
+    let total = 0;
+    for (let key in obj) {
+      a.push([key, parseFloat(obj[key]['btcValue'])])
+      total += parseFloat(obj[key]['btcValue'])
+    }
+    total = parseFloat(total.toFixed(8))
+    this.setState({ totalValue: total });
+    return a;
+  }
+
+  renderLoading() {
+    return <h2>Loading...</h2>
+  }
+
+  renderDonut() {
+    const plotOptions = {
+      pie: {
+        allowPointSelect: true,
+        dataLabels: {
+          distance: -30,
+          enabled: true
+        }
+      }
+    };
+    return (
+      <HighchartsChart plotOptions={plotOptions}>
+        <Chart />
+        <Title verticalAlign="middle">{`${this.state.totalValue.toString()} BTC`}</Title>
+        {/* <Legend /> */}
+        <PieSeries id="holdings" name="holdings" data={this.state.balances} showInLegend={true} innerSize="66%" />
+      </HighchartsChart>
+    )
   }
 
   render() {
-    return (
-      <HighchartsChart>
-        <Chart />
-        <Legend />
-        <PieSeries id="holdings" name="holdings" data={this.updatePortfolio()} showInLegend={true} innerSize="60%" />
-      </HighchartsChart>
-    )
+    if (this.state.loaded) {
+      return this.renderDonut();
+    } else {
+      return this.renderLoading();
+    }
   }
 }
 

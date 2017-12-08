@@ -49,8 +49,6 @@ class PortfolioLineChart extends Component {
         <HighchartsStockChart>
           <Chart zoomType="x" />
 
-          <Title>Highstocks Example</Title>
-
           <Legend>
             <Legend.Title>Key</Legend.Title>
           </Legend>
@@ -66,7 +64,6 @@ class PortfolioLineChart extends Component {
           <Tooltip />
 
           <XAxis>
-            <XAxis.Title>Time</XAxis.Title>
           </XAxis>
 
           <YAxis id="price">
