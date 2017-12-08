@@ -22,11 +22,15 @@ class HoldingsTiles extends Component {
   }
 
   render() {
-    
+
     return (
       <div>
         <div className="row">
-          {this.state.holdings.filter(h => h[1] > 0).map(holding => <Tile currency={holding[0]} />)}
+          {this.state.holdings.filter(h => h[1] > 0).map(holding =>
+            <Tile
+              currency={holding[0]}
+              amount={holding[1]}
+            />)}
         </div>
         {/* <div><pre>{JSON.stringify(this.state.holdings, null, 2)}</pre></div> */}
       </div>

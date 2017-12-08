@@ -57,6 +57,7 @@ class App extends Component {
             </div>
           </div>
           <hr />
+          <br />
           <HoldingsTiles />
         </div>
         <br />
