@@ -13,34 +13,19 @@ class DonutChart extends Component {
     totalValue: 0
   }
 
-  componentDidMount() {
-    fetch('/poloniexData/completeBalances')
-      .then(res => res.json())
-      .then(balances => {
-        balances = this.poloObjectToArray(balances).filter(b => b[1] > 0).sort((i, j) => j[1] - i[1])
-        this.setState({ balances })
-        console.log(balances)
-        this.setState({ loaded: true })
-      })
-  }
-
-  poloObjectToArray(obj) {
-    let a = [];
+  addTotalValue = () => {
     let total = 0;
-    for (let key in obj) {
-      a.push([key, parseFloat(obj[key]['btcValue'])])
-      total += parseFloat(obj[key]['btcValue'])
+    console.log(this.props.balances)
+    for (let i = 0; i < this.props.balances.length; i++) {
+      total += 1;
     }
-    total = parseFloat(total.toFixed(8))
-    this.setState({ totalValue: total });
-    return a;
+    return total;
   }
-
 
   renderLoading() {
     return <h2>Loading...</h2>
   }
-  renderDonut() {
+  renderDonut(balances) {
     const plotOptions = {
       pie: {
         allowPointSelect: true,
@@ -54,12 +39,12 @@ class DonutChart extends Component {
     return (
       <HighchartsChart plotOptions={plotOptions}>
         <Chart />
-        <Title verticalAlign="middle">{`${this.state.totalValue.toString()} BTC`}</Title>
+        <Title verticalAlign="middle">{`${this.addTotalValue()} BTC`}</Title>
         {/* <Legend /> */}
         <PieSeries
           id="holdings"
           name="holdings"
-          data={this.state.balances}
+          data={balances}
           showInLegend={true}
           innerSize="66%"
         />
@@ -68,8 +53,8 @@ class DonutChart extends Component {
   }
 
   render() {
-    if (this.state.loaded) {
-      return this.renderDonut();
+    if (this.props.balances) {
+      return this.renderDonut(this.props.balances);
     } else {
       return this.renderLoading();
     }

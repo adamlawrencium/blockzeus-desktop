@@ -6,7 +6,7 @@ class PerformanceCard extends Component {
     return (
       <div className="card" >
         <div className="card-body">
-          <h4 className="card-title">Portfolio Performance</h4>
+          <h2 className="card-title">Portfolio Performance</h2>
           <PortfolioLineChart />
         </div>
       </div>

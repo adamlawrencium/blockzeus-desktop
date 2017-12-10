@@ -3,20 +3,19 @@ import Navbar from './Components/Navbar';
 import AllocationsCard from './Components/AllocationsCard';
 import PerformanceCard from './Components/PerformanceCard';
 import HoldingsTiles from './Components/HoldingsTiles';
-import fetchPoloniexData from './exchanges/poloniex';
+import { fetchPoloniexTicker, fetchPoloniexCompleteBalances } from './exchanges/poloniex';
 
 import './App.css';
 
 class App extends Component {
   state = {
-    data: {},
-    holdings: {}
+    ticker: {},
+    balances: {}
   }
 
   componentDidMount() {
-    fetchPoloniexData().then(data => {
-      this.setState({ data });
-    });
+    fetchPoloniexTicker().then(ticker => { this.setState({ ticker }) });
+    fetchPoloniexCompleteBalances().then(balances => { this.setState({ balances }) });
   }
 
   render() {
@@ -27,15 +26,14 @@ class App extends Component {
           <br />
           <div className="row">
             <div className="col-lg-5">
-              <AllocationsCard />
+              <AllocationsCard balances={this.state.balances}/>
             </div>
             <div className="col-lg-7">
               <PerformanceCard />
             </div>
           </div>
           <hr />
-          <br />
-          <HoldingsTiles ticker={this.state.data} />
+          <HoldingsTiles ticker={this.state.ticker} />
         </div>
         <br />
       </div>

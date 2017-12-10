@@ -39,19 +39,31 @@ class HoldingsTiles extends Component {
   }
 
   renderLoading() {
-    return <h1>Loading...</h1>
+    return (
+      <div>
+        <div className="row">
+          <div className="col"><h1>Individual Holdings</h1></div>
+        </div>
+        <div className="row">
+          <h1>Loading...</h1>
+        </div>
+      </div>
+    )
   }
 
   renderTiles() {
     return (
       <div>
         <div className="row">
+          <div className="col"><h1>Individual Holdings</h1></div>
+        </div>
+        <div className="row">
           {this.state.holdings.filter(h => h[1] > 0).map(holding =>
             <Tile
               key={holding[0]}
               currency={holding[0]}
               amount={holding[1]}
-              // price={holding[2].last}
+            // price={holding[2].last}
             />)}
         </div>
       </div>
