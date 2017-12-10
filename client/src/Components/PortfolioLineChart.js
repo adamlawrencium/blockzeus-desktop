@@ -49,9 +49,9 @@ class PortfolioLineChart extends Component {
         <HighchartsStockChart>
           <Chart zoomType="x" />
 
-          <Legend>
+          {/* <Legend>
             <Legend.Title>Key</Legend.Title>
-          </Legend>
+          </Legend> */}
 
           <RangeSelector>
             <RangeSelector.Button count={1} type="day">1d</RangeSelector.Button>
@@ -70,16 +70,16 @@ class PortfolioLineChart extends Component {
             <YAxis.Title>Price</YAxis.Title>
             <AreaSplineSeries id="profit" name="Profit" data={data1} />
           </YAxis>
-
+{/* 
           <YAxis id="social" opposite>
             <YAxis.Title>Social Buzz</YAxis.Title>
             <SplineSeries id="twitter" name="Twitter mentions" data={data2} />
-          </YAxis>
+          </YAxis> */}
 
-          <Navigator>
+          {/* <Navigator>
             <Navigator.Series seriesId="profit" />
             <Navigator.Series seriesId="twitter" />
-          </Navigator>
+          </Navigator> */}
         </HighchartsStockChart>
 
         {/* <ExampleCode name="Highstocks">{code}</ExampleCode> */}

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Navbar from './Navbar';
-import AllocationsCard from './AllocationsCard';
-import PerformanceCard from './PerformanceCard';
-import HoldingsTiles from './HoldingsTiles';
+import Navbar from './Components/Navbar';
+import AllocationsCard from './Components/AllocationsCard';
+import PerformanceCard from './Components/PerformanceCard';
+import HoldingsTiles from './Components/HoldingsTiles';
 
 import './App.css';
 

@@ -19,6 +19,7 @@ class DonutChart extends Component {
       .then(balances => {
         balances = this.poloObjectToArray(balances).filter(b => b[1] > 0).sort((i, j) => j[1] - i[1])
         this.setState({ balances })
+        console.log(balances)
         this.setState({ loaded: true })
       })
   }
@@ -44,7 +45,7 @@ class DonutChart extends Component {
       pie: {
         allowPointSelect: true,
         dataLabels: {
-          distance: -30,
+          distance: 30,
           enabled: true
         }
       }
