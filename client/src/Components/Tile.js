@@ -8,7 +8,7 @@ class Tile extends Component {
           <div className="card-body">
             {/* <h4 className="card-title">{this.props.currency}</h4> */}
             <h2>{this.props.currency}</h2>
-            <p1 className="card-text">Quantity: {this.props.amount}</p1>
+            <p className="card-text">Quantity: {this.props.amount}</p>
             <a href="google.com" className="btn btn-primary">Buy/Sell</a>
           </div>
         </div>

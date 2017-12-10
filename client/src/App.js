@@ -3,6 +3,7 @@ import Navbar from './Components/Navbar';
 import AllocationsCard from './Components/AllocationsCard';
 import PerformanceCard from './Components/PerformanceCard';
 import HoldingsTiles from './Components/HoldingsTiles';
+import fetchPoloniexData from './exchanges/poloniex';
 
 import './App.css';
 
@@ -13,12 +14,9 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetch('/poloniexData/ticker')
-      .then(res => res.json())
-      .then(data => {
-        // console.log(data);
-        this.setState({ data });
-      });
+    fetchPoloniexData().then(data => {
+      this.setState({ data });
+    });
   }
 
   render() {
@@ -32,7 +30,7 @@ class App extends Component {
               <AllocationsCard />
             </div>
             <div className="col-lg-7">
-              <PerformanceCard/>
+              <PerformanceCard />
             </div>
           </div>
           <hr />
