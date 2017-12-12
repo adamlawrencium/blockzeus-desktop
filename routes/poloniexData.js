@@ -80,7 +80,7 @@ router.get('/completeBalances', function (req, res, next) {
 one month periods
 */
 router.get('/tradeHistory/:currencyPair', function (req, res, next) {
-  poloniex.returnTradeHistory(req.params.currencyPair, 1510704000, 9999999999).then((balances) => {
+  poloniex.returnMyTradeHistory(req.params.currencyPair, 1000000000, 9999999999).then((balances) => {
     console.log(balances)
     res.json(balances);
   }).catch((err) => {

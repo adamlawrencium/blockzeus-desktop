@@ -16,8 +16,8 @@ class AllocationsCard extends Component {
       <div className="card" >
         <div className="card-body">
           <h2 className="card-title">Digital Asset Allocations</h2>
-          <DonutChart balances={this.props.balances} />
-          <h5>Total Value: ${this.totalBtcValue()}</h5>
+          <DonutChart balances={this.props.balances} total={this.totalBtcValue()} />
+          {/* <h5>Total Value: ${this.totalBtcValue()}</h5> */}
         </div>
       </div>
     )

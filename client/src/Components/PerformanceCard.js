@@ -10,7 +10,6 @@ class PerformanceCard extends Component {
           <PortfolioLineChart />
         </div>
       </div>
-
     )
   }
 }
