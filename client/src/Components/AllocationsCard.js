@@ -3,6 +3,7 @@ import DonutChart from './DonutChart';
 
 class AllocationsCard extends Component {
   totalBtcValue() {
+    // weird behavior here with the undef conditional...
     if (this.props.ticker['USDT_BTC'] == undefined) { return "Loading..." }
     let total = 0.0;
     for (let i = 0; i < this.props.balances.length; i++) {

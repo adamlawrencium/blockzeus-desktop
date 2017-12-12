@@ -1,3 +1,5 @@
+// import { resolve } from "url";
+
 export function fetchPoloniexTicker() {
   return new Promise((resolve, reject) => {
     fetch('/poloniexData/ticker')
@@ -9,27 +11,32 @@ export function fetchPoloniexTicker() {
 }
 
 export function fetchPoloniexCompleteBalances() {
-  return new Promise((resolve, rejct) => {
+  return new Promise((resolve, reject) => {
     fetch('/poloniexData/completeBalances')
-    .then(res => res.json())
-    .then(balances => {
-      balances = poloObjectToArray(balances).filter(b => b[1] > 0).sort((i, j) => j[1] - i[1])
-      resolve(balances);
-      // this.setState({ balances })
-      // console.log(balances)
-      // this.setState({ loaded: true })
-    });
+      .then(res => res.json())
+      .then(balances => {
+        balances = poloObjectToArray(balances).filter(b => b[1] > 0).sort((i, j) => j[1] - i[1])
+        resolve(balances);
+      });
+  });
+}
+
+export function fetchTradeHistory(pair) {
+  return new Promise((resolve, reject) => {
+    fetch(`/poloniexData/tradeHistory/${pair}`)
+      .then(res => res.json())
+      .then(history => {
+        resolve(history);
+      }).catch(err => {
+        console.log(err)
+      });
   });
 }
 
 function poloObjectToArray(obj) {
   let a = [];
-  // let total = 0;
   for (let key in obj) {
     a.push([key, parseFloat(obj[key]['btcValue'])])
-    // total += parseFloat(obj[key]['btcValue'])
   }
-  // total = parseFloat(total.toFixed(8))
-  // this.setState({ totalValue: total });
   return a;
 }
