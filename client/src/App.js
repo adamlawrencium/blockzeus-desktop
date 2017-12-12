@@ -26,7 +26,7 @@ class App extends Component {
           <br />
           <div className="row">
             <div className="col-lg-5">
-              <AllocationsCard balances={this.state.balances}/>
+              <AllocationsCard balances={this.state.balances} ticker={this.state.ticker}/>
             </div>
             <div className="col-lg-7">
               <PerformanceCard />
