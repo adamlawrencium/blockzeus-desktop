@@ -12,16 +12,36 @@ class AllocationsCard extends Component {
     return (total * this.props.ticker['USDT_BTC']['last']).toFixed(2);
   }
 
-  render() {
+  renderLoading() {
+    return <h2>Loading...</h2>
+  }
+
+  renderCard() {
+    let balances = this.props.balances;
+    for (let i in balances) {
+      if (balances[i][0] !== "USDT") {
+        console.log((this.props.ticker['USDT_BTC']));
+        balances[i][1] *= parseFloat(this.props.ticker['USDT_BTC'].last);
+      }
+    }
     return (
       <div className="card card-section" >
         <div className="card-body">
           <h2 className="card-title">Digital Asset Allocations</h2>
-          <DonutChart balances={this.props.balances} total={this.totalBtcValue()} />
-          {/* <h5>Total Value: ${this.totalBtcValue()}</h5> */}
+          <DonutChart balances={balances} total={this.totalBtcValue()} />
         </div>
       </div>
     )
+  }
+
+
+
+  render() {
+    if (this.props.ticker['USDT_BTC'] == undefined || !this.props.balances) {
+      return this.renderLoading();
+    } else {
+      return this.renderCard();
+    }
   }
 }
 

@@ -15,7 +15,10 @@ export function fetchPoloniexCompleteBalances() {
     fetch('/poloniexData/completeBalances')
       .then(res => res.json())
       .then(balances => {
-        balances = poloObjectToArray(balances).filter(b => b[1] > 0).sort((i, j) => j[1] - i[1])
+        balances = poloObjectToArray(balances).filter(b => b[1] > 0);
+        console.log(balances);
+        balances = balances.sort((i, j) => j[0] - i[0]);
+        console.log(balances)
         resolve(balances);
       });
   });
@@ -36,7 +39,14 @@ export function fetchTradeHistory(pair) {
 function poloObjectToArray(obj) {
   let a = [];
   for (let key in obj) {
-    a.push([key, parseFloat(obj[key]['btcValue'])])
+    console.log(obj[key])
+    if (key === 'USDT') {
+      a.push([key, parseFloat(obj[key]['available'])])
+    }
+    else {
+      a.push([key, parseFloat(obj[key]['btcValue'])])
+    }
   }
+  console.log(a)
   return a;
 }

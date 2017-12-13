@@ -2,6 +2,19 @@ import React, { Component } from 'react';
 import Tile from './Tile';
 
 class HoldingsTiles extends Component {
+  constructor(props) {
+    super(props);
+    fetch('/poloniexData/balances')
+      .then(res => res.json())
+      .catch(e => console.log(e))
+      .then(holdings => {
+        var h = Object.keys(holdings).map(key => [key, holdings[key]]);
+        this.setState({ loaded: true })
+        this.setState({ holdings: h })
+      });
+    // console.log(props.ticker)
+  }
+
 
   state = {
     holdings: [],
@@ -9,40 +22,32 @@ class HoldingsTiles extends Component {
   }
 
   componentDidMount() {
-    fetch('/poloniexData/balances')
-      .then(res => res.json())
-      .catch(e => console.log(e))
-      .then(holdings => {
-        var h = Object.keys(holdings).map(key => [key, holdings[key]]);
-        // let hodlings = [] // [BTC, holding_amt, tick_obj]
-        // h = h.map(entry => {
-        //   for (let j = 0; j < Object.keys(this.props.ticker).length; j++) {
-        //     if (entry[0] == Object.keys(this.props.ticker)[j].split('_')[1]) {
-        //       // console.log(h[i][0])
-        //       console.log(Object.keys(this.props.ticker)[j]);
-        //       console.log();
-        //       // h[i].push(Object.keys(this.props.ticker)[j]);
-        //       let a = entry;
-        //       a.push(this.props.ticker[Object.keys(this.props.ticker)[j]]);
-        //       return a
-        //       // entry.push('hi')
-        //       // h[i].push(this.props.ticker[Object.keys(this.props.ticker)[j]]);
-        //       // console.log(h[i]);
-        //       // return 'blah'
-        //     }
-        //   }
-        // })
-        this.setState({ loaded: true })
-        // console.log(h);
-        this.setState({ holdings: h })
-      });
+    // this.normalizeTickerToUSDT(this.props.ticker);
+  }
+
+
+  normalizeTickerToUSDT(ticker) {
+    let btc_usd_rate = parseFloat(ticker['USDT_BTC']['last']);
+    let btc_usd_rate_change = parseFloat(ticker['USDT_BTC']['percentageChange']);
+    let normalizedTicker = []
+    for (let tick in ticker) {
+      if (tick.split("_")[0] == 'BTC') {
+
+        normalizedTicker.push([
+          tick.split("_")[1],
+          parseFloat(ticker[tick]['last']) * btc_usd_rate,
+          (1+parseFloat(ticker[tick]['percentageChange']))*(1+btc_usd_rate_change)
+        ])
+      }
+    }
+    // console.log(normalizedTicker);
   }
 
   renderLoading() {
     return (
       <div>
         <div className="row">
-          <div className="col"><h1>Individual Holdings</h1></div>
+          {/* <div className="col"><h1>Individual Holdings</h1></div> */}
         </div>
         <div className="row">
           <h1>Loading...</h1>
@@ -52,6 +57,8 @@ class HoldingsTiles extends Component {
   }
 
   renderTiles() {
+    // console.log(this.props)
+    this.normalizeTickerToUSDT(this.props.ticker)
     return (
       <div>
         <div className="row">
@@ -71,7 +78,7 @@ class HoldingsTiles extends Component {
   }
 
   render() {
-    if (this.state.loaded) {
+    if (this.state.loaded && this.props.ticker['USDT_BTC']) {
       return this.renderTiles();
     } else {
       return this.renderLoading();

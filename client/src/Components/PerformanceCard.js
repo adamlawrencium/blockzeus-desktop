@@ -12,7 +12,7 @@ class PerformanceCard extends Component {
   componentWillMount() {
     fetchTradeHistory('USDT_BTC').then(h => {
       let historyTimeSeries = h.map(trade => {
-        console.log((Date.parse(trade.date)/1000));
+        // console.log((Date.parse(trade.date)/1000));
       })
     });
   }
