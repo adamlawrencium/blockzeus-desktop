@@ -31,8 +31,7 @@ class HoldingsTiles extends Component {
     let btc_usd_rate_change = parseFloat(ticker['USDT_BTC']['percentageChange']);
     let normalizedTicker = []
     for (let tick in ticker) {
-      if (tick.split("_")[0] == 'BTC') {
-
+      if (tick.split("_")[0] === 'BTC') {
         normalizedTicker.push([
           tick.split("_")[1],
           parseFloat(ticker[tick]['last']) * btc_usd_rate,
@@ -47,10 +46,7 @@ class HoldingsTiles extends Component {
     return (
       <div>
         <div className="row">
-          {/* <div className="col"><h1>Individual Holdings</h1></div> */}
-        </div>
-        <div className="row">
-          <h1>Loading...</h1>
+          <div className="col"><h2>Loading...</h2></div>
         </div>
       </div>
     )

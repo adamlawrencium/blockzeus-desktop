@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Highcharts from 'highcharts';
 import {
-  HighchartsChart, Chart, withHighcharts, PieSeries, Legend, Title
+  HighchartsChart, Chart, withHighcharts, PieSeries, Title
 } from 'react-jsx-highcharts';
 
 

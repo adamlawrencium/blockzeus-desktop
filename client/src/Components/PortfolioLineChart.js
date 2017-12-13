@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Highcharts from 'highcharts/highstock';
 import {
-  HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis, Title, Legend,
-  AreaSplineSeries, SplineSeries, Navigator, RangeSelector, Tooltip
+  HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis,
+  AreaSplineSeries, RangeSelector, Tooltip
 } from 'react-jsx-highstock';
 
 export const createDataPoint = (time = Date.now(), magnitude = 1000, offset = 0) => {
@@ -37,12 +37,11 @@ class PortfolioLineChart extends Component {
     const now = Date.now();
     this.state = {
       data1: createRandomData(now, 1e8),
-      data2: createRandomData(now, 1e8)
     };
   }
 
   render() {
-    const { data1, data2 } = this.state;
+    const { data1 } = this.state;
 
     return (
       <div className="app">
@@ -70,7 +69,7 @@ class PortfolioLineChart extends Component {
             <YAxis.Title>Price</YAxis.Title>
             <AreaSplineSeries id="profit" name="Profit" data={data1} />
           </YAxis>
-{/* 
+          {/* 
           <YAxis id="social" opposite>
             <YAxis.Title>Social Buzz</YAxis.Title>
             <SplineSeries id="twitter" name="Twitter mentions" data={data2} />

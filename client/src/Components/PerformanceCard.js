@@ -12,15 +12,15 @@ class PerformanceCard extends Component {
   componentWillMount() {
     fetchTradeHistory('USDT_BTC').then(h => {
       let historyTimeSeries = h.map(trade => {
-        // console.log((Date.parse(trade.date)/1000));
-      })
+        return console.log((Date.parse(trade.date)/1000));
+      });
+      this.setState({ currentTimeSeries: historyTimeSeries });
+    }).catch(err => {
+      console.log(err)
     });
   }
 
-  componentDidMount() {
-  }
-
-  render() {
+  renderChart() {
     return (
       <div className="card card-section" >
         <div className="card-body">
@@ -29,6 +29,24 @@ class PerformanceCard extends Component {
         </div>
       </div>
     )
+  }
+
+  renderLoading() {
+    return (
+      <div>
+        <div className="row">
+          <div className="col"><h2>Loading...</h2></div>
+        </div>
+      </div>
+    )
+  }
+
+  render() {
+    if (this.state.currentTimeSeries) {
+      return this.renderChart();
+    } else {
+      return this.renderLoading();
+    }
   }
 }
 
