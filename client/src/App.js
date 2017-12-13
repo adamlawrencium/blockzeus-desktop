@@ -26,14 +26,20 @@ class App extends Component {
           <br />
           <div className="row">
             <div className="col-lg-5">
-              <PerformanceCard balances={this.state.balances} ticker={this.state.ticker} />
-            </div>
-            <div className="col-lg-7">
               <AllocationsCard balances={this.state.balances} ticker={this.state.ticker} />
             </div>
+            <div className="col-lg-7">
+              <PerformanceCard balances={this.state.balances} ticker={this.state.ticker} />
+            </div>
           </div>
-          <hr />
-          <HoldingsTiles ticker={this.state.ticker} />
+          {/* <hr /> */}
+          <div className="card card-section" >
+            <div className="card-body">
+              <h2 className="card-title">Individual Holdings</h2>
+              <HoldingsTiles ticker={this.state.ticker} />
+            </div>
+          </div>
+
         </div>
         <br />
       </div>

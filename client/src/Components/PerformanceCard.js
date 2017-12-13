@@ -22,7 +22,7 @@ class PerformanceCard extends Component {
 
   render() {
     return (
-      <div className="card" >
+      <div className="card card-section" >
         <div className="card-body">
           <h2 className="card-title">Portfolio Performance</h2>
           <PortfolioLineChart />

@@ -55,7 +55,7 @@ class HoldingsTiles extends Component {
     return (
       <div>
         <div className="row">
-          <div className="col"><h1>Individual Holdings</h1></div>
+          {/* <div className="col"><h1>Individual Holdings</h1></div> */}
         </div>
         <div className="row">
           {this.state.holdings.filter(h => h[1] > 0).map(holding =>
