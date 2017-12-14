@@ -35,7 +35,7 @@ class App extends Component {
           <div className="card card-section" >
             <div className="card-body">
               <h2 className="card-title">Individual Holdings</h2>
-              {/* <HoldingsTiles ticker={this.state.ticker} /> */}
+              <HoldingsTiles ticker={this.state.ticker} />
             </div>
           </div>
 

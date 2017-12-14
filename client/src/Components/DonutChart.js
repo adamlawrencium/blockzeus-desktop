@@ -7,21 +7,6 @@ import {
 
 class DonutChart extends Component {
 
-  state = {
-    balances: [],
-    loaded: false,
-    totalValue: 0
-  }
-
-  addTotalValue = () => {
-    let total = 0;
-    console.log(this.props.balances)
-    for (let i = 0; i < this.props.balances.length; i++) {
-      total += 1;
-    }
-    return total;
-  }
-
   renderLoading() {
     return <h2>Loading...</h2>
   }

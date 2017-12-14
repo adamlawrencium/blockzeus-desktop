@@ -7,9 +7,7 @@ class AllocationsCard extends Component {
     let total = 0.0;
     for (let i = 0; i < this.props.balances.length; i++) {
       total += this.props.balances[i][1];
-      console.log(total, this.props.balances[i]);
     }
-    console.log(this.props.balances)
     return total.toFixed(2)
   }
 
