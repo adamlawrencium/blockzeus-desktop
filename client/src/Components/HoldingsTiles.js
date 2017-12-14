@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Tile from './Tile';
 
+
+
 class HoldingsTiles extends Component {
   constructor(props) {
     super(props);

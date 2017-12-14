@@ -5,8 +5,8 @@ const Poloniex = require('poloniex-api-node');
 
 let key = 'GTTSHNIZ-V4EYK5K9-4QT6XXS8-EPGJ9G5F'
 let secret = '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f9847e55edb39685c69350c9536c9f0f26d5b70804415859bfb90408ae364c19d'
-let poloniex = new Poloniex(key, secret);
 
+let poloniex = new Poloniex(key, secret);
 
 /*
 "BTC_DASH": {
@@ -26,7 +26,7 @@ router.get('/ticker', function (req, res, next) {
   poloniex.returnTicker().then((ticker) => {
     res.json(ticker);
   }).catch((err) => {
-    console.log(err.message);
+    console.log('ERROR: /ticker:', err);
     res.json(err)
   });
 });
@@ -43,7 +43,7 @@ router.get('/balances', function (req, res, next) {
     res.json(balances);
   }).catch((err) => {
     res.json(err)
-    console.log(err.message);
+    console.log('ERROR: /balances:', err);
   });
 });
 
@@ -61,7 +61,7 @@ router.get('/completeBalances', function (req, res, next) {
     res.json(balances);
   }).catch((err) => {
     res.json(err)
-    console.log(err.message);
+    console.log('ERROR: /completeBalances:', err);
   });
 });
 
@@ -80,12 +80,11 @@ router.get('/completeBalances', function (req, res, next) {
 one month periods
 */
 router.get('/tradeHistory/:currencyPair', function (req, res, next) {
-  poloniex.returnMyTradeHistory(req.params.currencyPair, 1000000000, 9999999999).then((balances) => {
-    console.log(balances)
-    res.json(balances);
+  poloniex.returnMyTradeHistory(req.params.currencyPair, 1000000000, 9999999999).then((trades) => {
+    res.json(trades);
   }).catch((err) => {
     res.json(err.message)
-    console.log(err.message);
+    console.log('ERROR: /tradeHistory:', err);
   });
 });
 
