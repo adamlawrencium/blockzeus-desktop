@@ -57,15 +57,12 @@ class HoldingsTiles extends Component {
 
     for (let i = 0; i < rateAdjustedTiles.length; i++) {
       for (let holding in holdcopy) {
-        console.log(rateAdjustedTiles[i][0]);
-        console.log(holdcopy[holding]);
         if (rateAdjustedTiles[i][0] === holdcopy[holding][0]) {
           rateAdjustedTiles[i].push((holdcopy[holding][1]).toFixed(2))
         }
       }
     }
 
-    console.log(rateAdjustedTiles);
     // this.setState({tiles: rateAdjustedTiles})
     return rateAdjustedTiles;
   }

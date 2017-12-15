@@ -9,8 +9,8 @@ class Tile extends Component {
 
     return (
       <div className="col-lg-3 col-md-4 col-sm-6 col-xs-6">
-        <div className={"card card-section " + "price-"+color}>
-        <h4 class="card-header">{this.props.currency}</h4>
+        <div className={`card card-section price-${color}`}>
+        <h4 className="card-header">{this.props.currency}</h4>
           <div className="card-body">
             {/* <h2>{this.props.currency}</h2> */}
             <p>
