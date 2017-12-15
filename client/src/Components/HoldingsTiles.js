@@ -66,6 +66,7 @@ class HoldingsTiles extends Component {
     }
 
     console.log(rateAdjustedTiles);
+    // this.setState({tiles: rateAdjustedTiles})
     return rateAdjustedTiles;
   }
 
@@ -77,7 +78,7 @@ class HoldingsTiles extends Component {
 
   renderTiles() {
     let holdings = this.createFullTileData(this.props.holdings, this.props.ticker);
-    holdings.map(holding => holding.push())
+    // holdings.map(holding => holding.push())
     return (
       <div className="row">
         {holdings.map(holding =>
