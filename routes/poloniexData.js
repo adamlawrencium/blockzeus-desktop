@@ -117,7 +117,7 @@ From a history all trades, create a portfolio
 router.get('/performance/:currency', async function (req, res) {
   let myTradeHistory = await poloniex.returnMyTradeHistory('USDT_BTC', 1000000000, 9999999999)
   let depositWithdrawalHistory = await poloniex.returnDepositsWithdrawals(1000000000, 9999999999)
-  console.log(myTradeHistory);
+  // console.log(myTradeHistory);
   let portfolio = {}
   portfolio['USDT_BTC'] = { 'trades': [], 'portfolioValue': [] };
   portfolio['USDT_BTC']['trades'] = myTradeHistory;
@@ -148,12 +148,37 @@ router.get('/performance/:currency', async function (req, res) {
       portfolio['USDT_BTC']['events'].push([ts, event, amount]);
     }
   }
-  portfolio['USDT_BTC']['events'].sort((a,b) => b[0] - a[0]);
-  
-  res.json(portfolio)
 
-  // console.log(myTradeHistory);
-  // res.json(depositWithdrawalHistory)
+  portfolio['USDT_BTC']['events'].sort((a, b) => b[0] - a[0]);
+
+  // loop through chartData and create portfolio value timeline
+  // [timestamp, price, quantity, value]
+  let portfolioTimeline = [[1000000000, 0, 0]];
+
+  let chartData = await poloniex.returnChartData('USDT_BTC', 86400, 1000000000, 9999999999);
+  for (let i = 0; i < chartData.length; i++) {
+    let intraPeriodPortfolioChange = 0;
+    for (let eventIndex = 0; eventIndex < portfolio['USDT_BTC']['events'].length; eventIndex++) {
+      // if the event is between two candlesticks, get final value
+      if (portfolio['USDT_BTC']['events'][eventIndex][0] > chartData[i]['date'] &&
+        portfolio['USDT_BTC']['events'][eventIndex][0] <= chartData[i + 1]['date']) { //correct
+        // if buy or deposit, add to portfolio, if sell or withdraw, substract
+        if (portfolio['USDT_BTC']['events'][eventIndex][1] === 'deposit' ||
+          portfolio['USDT_BTC']['events'][eventIndex][1] === 'buy') {
+          intraPeriodPortfolioChange += portfolio['USDT_BTC']['events'][eventIndex][2];
+        } else {
+          intraPeriodPortfolioChange -= portfolio['USDT_BTC']['events'][eventIndex][2];
+        }
+      }
+    }
+    let ts = chartData[i]['date']
+    let price = chartData[i]['close']
+    let quantity = portfolioTimeline[i][2] + intraPeriodPortfolioChange
+    let value = price * quantity;
+    portfolioTimeline.push([ts, price, quantity, value])
+  }
+
+  res.json(portfolioTimeline);
 });
 
 module.exports = router;
