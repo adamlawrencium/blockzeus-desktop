@@ -4,7 +4,7 @@ class Tile extends Component {
   render() {
     return (
       <div className="col-md-3 col-sm-4 col-xs-6">
-        <div className="card">
+        <div className={"card card-section " + "price-"+this.props.risefall}>
           <div className="card-body">
             <h2>{this.props.currency}</h2>
             <p>Price (USD): {this.props.price}</p>

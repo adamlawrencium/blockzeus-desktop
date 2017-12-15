@@ -51,6 +51,13 @@
   border-radius: 2px;
 }
 
+.price-red {
+  background-color: #EBFFEB;
+}
+.price-green {
+  background-color: #FFEBEB;
+}
+
 .hero-top {
     width: 33%;
     height: 3px;

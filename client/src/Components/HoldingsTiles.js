@@ -2,28 +2,14 @@ import React, { Component } from 'react';
 import Tile from './Tile';
 
 class HoldingsTiles extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   fetch('/poloniexData/balances')
-  //     .then(res => res.json())
-  //     .catch(e => console.log(e))
-  //     .then(holdings => {
-  //       var h = Object.keys(holdings).map(key => [key, holdings[key]]);
-  //       this.setState({ loaded: true })
-  //       this.setState({ holdings: h })
-  //     });
-  //   // console.log(props.ticker)
-  // }
 
   flattenTicker(ticker) {
-    // console.log(ticker);
     let tickcopy = Object.assign({}, ticker);
     let flattendTicker = []
     for (let tick in tickcopy) {
       let x = [tick, parseFloat(tickcopy[tick]['last']), parseFloat(tickcopy[tick]['percentChange'])];
       flattendTicker.push(x);
     }
-    // console.log(flattendTicker);
     return flattendTicker;
   }
 
@@ -37,7 +23,7 @@ class HoldingsTiles extends Component {
 
     // create copies of objects and filter non-holdings
     const tickcopy = Object.assign({}, ticker_);
-    const holdcopy = Object.assign({}, holdings_); 
+    const holdcopy = Object.assign({}, holdings_);
     const flattendTicker = this.flattenTicker(tickcopy); // convert obj to array
     let tileData = flattendTicker.filter(tick => {
       for (let holding in holdcopy) {
@@ -48,7 +34,7 @@ class HoldingsTiles extends Component {
       }
       return false
     });
-    
+
     // Normalize all data to USD base.
     let btc_usd_rate = parseFloat(tickcopy['USDT_BTC']['last']);
     let btc_usd_rate_change = parseFloat(tickcopy['USDT_BTC']['percentChange']);
@@ -58,8 +44,7 @@ class HoldingsTiles extends Component {
       let chng_to_usd_base = ((1 + tileData[holding][1]) * (1 + btc_usd_rate_change)).toFixed(2);
       rateAdjustedTiles.push([tileData[holding][0].split('_')[1], rate_to_usd_base.toFixed(4), chng_to_usd_base]);
     }
-    console.log(holdcopy);
-    // Add amount, 
+
     // Manually handle usdt_btc and usdt case
     for (let i in holdcopy) {
       if (holdcopy[i][0] === 'BTC') {
@@ -79,7 +64,7 @@ class HoldingsTiles extends Component {
         }
       }
     }
-    
+
     console.log(rateAdjustedTiles);
     return rateAdjustedTiles;
   }
@@ -102,6 +87,7 @@ class HoldingsTiles extends Component {
             price={holding[1]}
             priceChange={holding[2]}
             value={holding[3]}
+            risefall={holding[2] > 1.0 ? 'red' : 'green'}
           />)}
       </div>
     )
