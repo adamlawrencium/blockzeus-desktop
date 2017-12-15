@@ -12,10 +12,6 @@ class PortfolioLineChart extends Component {
         <HighchartsStockChart>
           <Chart zoomType="x" />
 
-          <Legend>
-            <Legend.Title>Key</Legend.Title>
-          </Legend>
-
           <RangeSelector>
             <RangeSelector.Button count={7} type="day">7d</RangeSelector.Button>
             <RangeSelector.Button count={14} type="day">14d</RangeSelector.Button>
