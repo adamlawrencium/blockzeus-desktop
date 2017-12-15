@@ -1,5 +1,6 @@
 .container {
   /* margin-top: 20px; */
+  font-family: monaco !important
 }
 
 .App-logo {
@@ -42,7 +43,6 @@
 
 .nav-item {
   font-family: Monaco;
-  color: #BEFA5A !important;
   font-size: 1.25rem
 }
 

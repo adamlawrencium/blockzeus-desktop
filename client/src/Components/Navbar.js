@@ -3,19 +3,24 @@ import React, { Component } from 'react';
 export default class Navbar extends Component {
   render() {
     return (
-      <nav className="navbar navbar-expand-lg sticky-top navbar-dark navbar-bz-purple">
-        {/* <div className="hero-top"></div> */}
-        <a className="navbar-brand" href="">BlockZeus</a>
-        <a className="blockzeus-comment">B4Z3</a>
-        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <nav className="navbar navbar-expand-md navbar-dark navbar-bz-purple">
+        <a className="navbar-brand abs" href="#">BlockZeus</a>
+        <a className="blockzeus-comment">// Cryptocurrency Manager</a>
+        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
           <span className="navbar-toggler-icon" />
         </button>
-        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div className="navbar-nav">
-            <a className="nav-item nav-link" href="">Home <span className="sr-only">(current)</span></a>
-            <a className="nav-item nav-link" href="">Security</a>
-            <a className="nav-item nav-link" href="">Upgrade</a>
-          </div>
+        <div className="navbar-collapse collapse" id="collapsingNavbar">
+          <ul className="navbar-nav ml-auto">
+            <li className="nav-item">
+              <a className="nav-link" href data-target="#myModal" data-toggle="modal">About</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href data-target="#myModal" data-toggle="modal">Upgrade</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href data-target="#myModal" data-toggle="modal">Connect to Poloniex</a>
+            </li>
+          </ul>
         </div>
       </nav>
     )

@@ -48,7 +48,7 @@ class HoldingsTiles extends Component {
     // Manually handle usdt_btc and usdt case
     for (let i in holdcopy) {
       if (holdcopy[i][0] === 'BTC') {
-        rateAdjustedTiles.push(["BTC", parseFloat(tickcopy["USDT_BTC"]["last"]).toFixed(4), parseFloat(tickcopy["USDT_BTC"]["percentChange"]).toFixed(2)]);
+        rateAdjustedTiles.push(["BTC", parseFloat(tickcopy["USDT_BTC"]["last"]).toFixed(2), parseFloat(tickcopy["USDT_BTC"]["percentChange"]).toFixed(2)]);
       }
       if (holdcopy[i][0] === 'USDT') {
         rateAdjustedTiles.push(['USDT', '1.00', '1.00']);
@@ -87,7 +87,6 @@ class HoldingsTiles extends Component {
             price={holding[1]}
             priceChange={holding[2]}
             value={holding[3]}
-            risefall={holding[2] > 1.0 ? 'red' : 'green'}
           />)}
       </div>
     )
