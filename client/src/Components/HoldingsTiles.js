@@ -34,77 +34,54 @@ class HoldingsTiles extends Component {
   [currency, amount, usdPrice, usdValue, usdPriceChange]
   */
   createFullTileData(holdings_, ticker_) {
+
+    // create copies of objects and filter non-holdings
     const tickcopy = Object.assign({}, ticker_);
     const holdcopy = Object.assign({}, holdings_); 
-    const flattendTicker = this.flattenTicker(tickcopy);
-    let tileData = flattendTicker.filter(tick => { // only keep ticks that are in holdings
+    const flattendTicker = this.flattenTicker(tickcopy); // convert obj to array
+    let tileData = flattendTicker.filter(tick => {
       for (let holding in holdcopy) {
         // assume a btc market exists for every non-btc market of the same trade currency
         if (holdcopy[holding][0] === tick[0].split('_')[1] && tick[0].split('_')[0] === 'BTC') {
-          // console.log(holdings_[holding], tick[0]);
           return true;
         }
       }
       return false
     });
     
+    // Normalize all data to USD base.
     let btc_usd_rate = parseFloat(tickcopy['USDT_BTC']['last']);
     let btc_usd_rate_change = parseFloat(tickcopy['USDT_BTC']['percentChange']);
-    
     let rateAdjustedTiles = []
     for (let holding in tileData) {
-      console.log(tileData[holding][0]);
-      console.log(tileData[holding][2]);
-      console.log(btc_usd_rate_change);
       let rate_to_usd_base = tileData[holding][1] * btc_usd_rate;
-      let chng_to_usd_base = (1 + tileData[holding][1]) * (1 + btc_usd_rate_change);
-      console.log(chng_to_usd_base);
-      console.log('');
-      rateAdjustedTiles.push([tileData[holding][0], rate_to_usd_base, chng_to_usd_base]);
+      let chng_to_usd_base = ((1 + tileData[holding][1]) * (1 + btc_usd_rate_change)).toFixed(2);
+      rateAdjustedTiles.push([tileData[holding][0].split('_')[1], rate_to_usd_base.toFixed(4), chng_to_usd_base]);
     }
-    console.log(rateAdjustedTiles);
-    return
-    // tileData = tileData.map(t => {
-    //   console.log(t);
-    //   let to_usd_base = 
-    //   t[1] = (t[1]) * btc_usd_rate;
-    //   t[2] = (1 + (t[1])) * (1 + btc_usd_rate_change);
-    // });
-    console.log(tileData);
-    // Manually handle usdt_btc case
+    console.log(holdcopy);
+    // Add amount, 
+    // Manually handle usdt_btc and usdt case
     for (let i in holdcopy) {
       if (holdcopy[i][0] === 'BTC') {
-        tileData.push(["BTC", tickcopy["USDT_BTC"]["last"], tickcopy["USDT_BTC"]["percentChange"]]);
+        rateAdjustedTiles.push(["BTC", parseFloat(tickcopy["USDT_BTC"]["last"]).toFixed(4), parseFloat(tickcopy["USDT_BTC"]["percentChange"]).toFixed(2)]);
+      }
+      if (holdcopy[i][0] === 'USDT') {
+        rateAdjustedTiles.push(['USDT', '1.00', '1.00']);
       }
     }
-    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
-    // console.log(tileData);
-    return 1;
 
-
-    // let holdings = []
-    // for (let tick in ticker) {
-    //   if (tick.split("_")[0] === 'BTC') {
-    //     holdings.push([
-    //       tick.split("_")[1],
-    //       parseFloat(ticker[tick]['last']) * btc_usd_rate,
-    //       (1 + parseFloat(ticker[tick]['percentageChange'])) * (1 + btc_usd_rate_change)
-    //     ]);
-    //   }
-
-    // }
-
-    // let normalizedTicker = []
-    // for (let tick in ticker) {
-    //   if (tick.split("_")[0] === 'BTC') {
-    //     normalizedTicker.push([
-    //       tick.split("_")[1],
-    //       parseFloat(ticker[tick]['last']) * btc_usd_rate,
-    //       (1 + parseFloat(ticker[tick]['percentageChange'])) * (1 + btc_usd_rate_change)
-    //     ]);
-    //   }
-    // }
-    // console.log(normalizedTicker);
+    for (let i = 0; i < rateAdjustedTiles.length; i++) {
+      for (let holding in holdcopy) {
+        console.log(rateAdjustedTiles[i][0]);
+        console.log(holdcopy[holding]);
+        if (rateAdjustedTiles[i][0] === holdcopy[holding][0]) {
+          rateAdjustedTiles[i].push((holdcopy[holding][1]).toFixed(2))
+        }
+      }
+    }
+    
+    console.log(rateAdjustedTiles);
+    return rateAdjustedTiles;
   }
 
   renderLoading() {
@@ -115,7 +92,6 @@ class HoldingsTiles extends Component {
 
   renderTiles() {
     let holdings = this.createFullTileData(this.props.holdings, this.props.ticker);
-    return (<h>hi</h>);
     holdings.map(holding => holding.push())
     return (
       <div className="row">
@@ -123,10 +99,9 @@ class HoldingsTiles extends Component {
           <Tile
             key={holding[0]}
             currency={(holding[0])}
-            amount={holding[1].toFixed(2)}
-            usdPrice={holding[2]}
-            usdValue={holding[3]}
-            usdPriceChange={holding[4]}
+            price={holding[1]}
+            priceChange={holding[2]}
+            value={holding[3]}
           />)}
       </div>
     )
