@@ -61,6 +61,10 @@
 .price-grey {
   background-color: #EBEBEB;
 }
+.alert-link {
+  font-weight: 900;
+  text-decoration: underline;
+}
 
 .card-header {
   font-family: Monaco;

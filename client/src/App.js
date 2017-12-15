@@ -17,8 +17,8 @@ class App extends Component {
     fetchPoloniexTicker()
       .then(ticker => { this.setState({ ticker }) })
       .catch(err => { console.log(err); });
-    
-      fetchPoloniexCompleteBalances()
+
+    fetchPoloniexCompleteBalances()
       .then(balances => { this.setState({ balances }) })
       .catch(err => console.log(err));
   }
@@ -29,6 +29,9 @@ class App extends Component {
         <Navbar />
         <div className="container">
           <br />
+          <div className="alert alert-primary" role="alert">
+            This is a demo! <a href="#" className="alert-link">Sign up</a> and connect to Poloniex to start managing your portfolio!
+          </div>
           <div className="row">
             <div className="col-lg-5">
               <AllocationsCard balances={this.state.balances} ticker={this.state.ticker} />
