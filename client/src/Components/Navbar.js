@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export default class Navbar extends Component {
   render() {
     return (
-        <nav className="navbar navbar-expand-md navbar-dark navbar-bz-purple">
+        <nav className="navbar navbar-expand-md sticky-top navbar-dark navbar-bz-purple">
         <a className="navbar-brand abs" href="">BlockZeus</a>
         <a className="blockzeus-comment">// Cryptocurrency Manager</a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">

@@ -27,7 +27,7 @@ class App extends Component {
     return (
       <div className="App" >
         <Navbar />
-        <div className="container">
+        <div className="container-fluid">
           <br />
           <div className="alert alert-primary" role="alert">
             This is a demo! <a href="#" className="alert-link">Sign up</a> and connect to Poloniex to start managing your portfolio!

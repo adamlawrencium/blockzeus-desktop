@@ -1,9 +1,14 @@
 .container {
   /* margin-top: 20px; */
-  font-family: monaco !important
+  font-family: monaco !important;
 }
 
-.App-logo {
+.container-fluid {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+/* .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
 }
@@ -21,7 +26,7 @@
 
 .App-intro {
   font-size: large;
-}
+} */
 
 .navbar-bz-purple {
   background-color: #483453;
