@@ -33,7 +33,7 @@ class AllocationsCard extends Component {
     return (
       <div className="card card-section" >
         <div className="card-body">
-          <h2 className="card-title">Digital Asset Allocations</h2>
+          <h2 className="card-title">Crypto Allocations</h2>
           {this.props.ticker['USDT_BTC'] && Object.keys(this.props.balances).length ? (
             this.renderChart()
           ) : (

@@ -58,6 +58,13 @@
   background-color: #FFEBEB;
 }
 
+.price-grey {
+  background-color: #EBEBEB;
+}
+
+.card-header {
+  font-family: Monaco;
+}
 .hero-top {
     width: 33%;
     height: 3px;
