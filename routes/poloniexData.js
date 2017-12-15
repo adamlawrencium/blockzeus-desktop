@@ -156,12 +156,12 @@ router.get('/performance/', async function (req, res) {
   let portfolioTimeline = [[1000000000, 0, 0, 0]];
 
   let chartData = await poloniex.returnChartData('USDT_BTC', 86400, 1000000000, 9999999999);
-  for (let i = 0; i < chartData.length; i++) {
+  for (let i = 1; i < chartData.length; i++) {
     let intraPeriodPortfolioChange = 0;
     for (let eventIndex = 0; eventIndex < portfolio['USDT_BTC']['events'].length; eventIndex++) {
       // if the event is between two candlesticks, get final value
-      if (portfolio['USDT_BTC']['events'][eventIndex][0] > chartData[i]['date'] &&
-        portfolio['USDT_BTC']['events'][eventIndex][0] <= chartData[i + 1]['date']) { //correct
+      if (portfolio['USDT_BTC']['events'][eventIndex][0] > chartData[i-1]['date'] &&
+        portfolio['USDT_BTC']['events'][eventIndex][0] <= chartData[i]['date']) { //correct
         // if buy or deposit, add to portfolio, if sell or withdraw, substract
         if (portfolio['USDT_BTC']['events'][eventIndex][1] === 'deposit' ||
           portfolio['USDT_BTC']['events'][eventIndex][1] === 'buy') {
@@ -171,9 +171,9 @@ router.get('/performance/', async function (req, res) {
         }
       }
     }
-    let ts = chartData[i]['date']
-    let price = chartData[i]['close']
-    let quantity = portfolioTimeline[i][2] + intraPeriodPortfolioChange
+    let ts = chartData[i-1]['date']
+    let price = chartData[i-1]['close']
+    let quantity = portfolioTimeline[i-1][2] + intraPeriodPortfolioChange
     let value = price * quantity;
     portfolioTimeline.push([ts, price, quantity, value])
   }
