@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Highcharts from 'highcharts';
 import {
-  HighchartsChart, Chart, withHighcharts, PieSeries, Title
+  HighchartsChart, Chart, withHighcharts, PieSeries, Title, Tooltip
 } from 'react-jsx-highcharts';
 
 
@@ -25,10 +25,10 @@ class DonutChart extends Component {
       <HighchartsChart plotOptions={plotOptions}>
         <Chart />
         <Title verticalAlign="middle">{`${this.props.total} USD`}</Title>
-        {/* <Legend /> */}
+        <Tooltip />
         <PieSeries
           id="holdings"
-          name="holdings"
+          name="USD Value"
           data={balances}
           showInLegend={true}
           innerSize="66%"

@@ -155,7 +155,7 @@ router.get('/performance/', async function (req, res) {
   // [timestamp, price, quantity, value]
   let portfolioTimeline = [[1000000000, 0, 0, 0]];
 
-  let chartData = await poloniex.returnChartData('USDT_BTC', 86400, 1000000000, 9999999999);
+  let chartData = await poloniex.returnChartData('USDT_BTC', 14400, 1000000000, 9999999999);
   for (let i = 1; i < chartData.length; i++) {
     let intraPeriodPortfolioChange = 0;
     for (let eventIndex = 0; eventIndex < portfolio['USDT_BTC']['events'].length; eventIndex++) {
