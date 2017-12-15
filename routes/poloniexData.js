@@ -88,5 +88,72 @@ router.get('/tradeHistory/:currencyPair', function (req, res, next) {
   });
 });
 
+/*
+{
+  "date": 1424361600,
+  "high": 0.33,
+  "low": 225,
+  "open": 0.33,
+  "close": 225,
+  "volume": 0.999999,
+  "quoteVolume": 0.00444444,
+  "weightedAverage": 225
+}, 
+period: {300, 900, 1800, 7200, 14400, 86400}
+*/
+router.get('/chartData/:currencyPair/:period', function (req, res) {
+  poloniex.returnChartData(req.params.currencyPair, req.params.period, 1000000000, 9999999999).then(data => {
+    res.json(data);
+  }).catch(err => {
+    res.json(err.message);
+    console.log('ERROR: /chartData:', err);
+  });
+});
+
+
+/*
+From a history all trades, create a portfolio
+*/
+router.get('/performance/:currency', async function (req, res) {
+  let myTradeHistory = await poloniex.returnMyTradeHistory('USDT_BTC', 1000000000, 9999999999)
+  let depositWithdrawalHistory = await poloniex.returnDepositsWithdrawals(1000000000, 9999999999)
+  console.log(myTradeHistory);
+  let portfolio = {}
+  portfolio['USDT_BTC'] = { 'trades': [], 'portfolioValue': [] };
+  portfolio['USDT_BTC']['trades'] = myTradeHistory;
+  portfolio['USDT_BTC']['events'] = []
+
+  // determine timeline of events: [ [timestamp, event, amount], ... ]
+  // loop through: buys & sells, deposits, withdrawals, 
+  // add all events to array, then sort by timestamp
+  for (let i = 0; i < myTradeHistory.length; i++) {
+    let ts = Date.parse(myTradeHistory[i].date) / 1000;
+    let event = myTradeHistory[i].type;
+    let amount = parseFloat(myTradeHistory[i].amount);
+    portfolio['USDT_BTC']['events'].push([ts, event, amount]);
+  }
+  for (let i = 0; i < depositWithdrawalHistory.deposits.length; i++) {
+    if (depositWithdrawalHistory.deposits[i].currency == 'BTC') {
+      let ts = depositWithdrawalHistory.deposits[i].timestamp;
+      let event = 'deposit';
+      let amount = parseFloat(depositWithdrawalHistory.deposits[i].amount);
+      portfolio['USDT_BTC']['events'].push([ts, event, amount]);
+    }
+  }
+  for (let i = 0; i < depositWithdrawalHistory.withdrawals.length; i++) {
+    if (depositWithdrawalHistory.withdrawals[i].currency == 'BTC') {
+      let ts = depositWithdrawalHistory.withdrawals[i].timestamp;
+      let event = 'withdrawal';
+      let amount = parseFloat(depositWithdrawalHistory.withdrawals[i].amount);
+      portfolio['USDT_BTC']['events'].push([ts, event, amount]);
+    }
+  }
+  portfolio['USDT_BTC']['events'].sort((a,b) => b[0] - a[0]);
+  
+  res.json(portfolio)
+
+  // console.log(myTradeHistory);
+  // res.json(depositWithdrawalHistory)
+});
 
 module.exports = router;
