@@ -14,13 +14,18 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetchPoloniexTicker().then(ticker => { this.setState({ ticker }) });
-    fetchPoloniexCompleteBalances().then(balances => { this.setState({ balances }) });
+    fetchPoloniexTicker()
+      .then(ticker => { this.setState({ ticker }) })
+      .catch(err => { console.log(err); });
+    
+      fetchPoloniexCompleteBalances()
+      .then(balances => { this.setState({ balances }) })
+      .catch(err => console.log(err));
   }
 
   render() {
     return (
-      <div className="App">
+      <div className="App" >
         <Navbar />
         <div className="container">
           <br />
@@ -32,13 +37,11 @@ class App extends Component {
               <PerformanceCard balances={this.state.balances} ticker={this.state.ticker} />
             </div>
           </div>
-          <div className="card card-section" >
-            <div className="card-body">
-              <h2 className="card-title">Individual Holdings</h2>
-              <HoldingsTiles ticker={this.state.ticker} />
+          <div className="row">
+            <div className="col-lg-12">
+              <HoldingsTiles holdings={this.state.balances} ticker={this.state.ticker} />
             </div>
           </div>
-
         </div>
         <br />
       </div>
