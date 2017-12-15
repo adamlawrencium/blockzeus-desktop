@@ -1,24 +1,21 @@
 import React, { Component } from 'react';
 import PortfolioLineChart from './PortfolioLineChart';
-import { fetchTradeHistory } from '../exchanges/poloniex';
+import { fetchPortfolioPerformance } from '../exchanges/poloniex';
 
 
 class PerformanceCard extends Component {
 
   state = {
-    currentTimeSeries: []
+    portfolioPerformance: []
   }
 
   componentWillMount() {
-    fetchTradeHistory('USDT_BTC').then(h => {
-      let historyTimeSeries = h.map(trade => {
-        return 1
-        // return console.log((Date.parse(trade.date)/1000));
-      });
-      this.setState({ currentTimeSeries: historyTimeSeries });
-    }).catch(err => {
-      console.log(err)
-    });
+    fetchPortfolioPerformance('USDT_BTC').then(portfolioPerformance => {
+      portfolioPerformance.map((p) => p[0] *= 1000);
+      portfolioPerformance.shift();
+      console.log(portfolioPerformance);
+      this.setState({ portfolioPerformance })
+    }).catch(err => console.log(err));
   }
 
   renderChart() {
@@ -26,7 +23,7 @@ class PerformanceCard extends Component {
       <div className="card card-section" >
         <div className="card-body">
           <h2 className="card-title">Portfolio Performance (BTC)</h2>
-          <PortfolioLineChart />
+          <PortfolioLineChart d={this.state.portfolioPerformance} />
         </div>
       </div>
     )
@@ -43,7 +40,7 @@ class PerformanceCard extends Component {
   }
 
   render() {
-    if (this.state.currentTimeSeries) {
+    if (this.state.portfolioPerformance.length !== 0) {
       return this.renderChart();
     } else {
       return this.renderLoading();

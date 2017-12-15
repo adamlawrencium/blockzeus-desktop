@@ -114,7 +114,7 @@ router.get('/chartData/:currencyPair/:period', function (req, res) {
 /*
 From a history all trades, create a portfolio
 */
-router.get('/performance/:currency', async function (req, res) {
+router.get('/performance/', async function (req, res) {
   let myTradeHistory = await poloniex.returnMyTradeHistory('USDT_BTC', 1000000000, 9999999999)
   let depositWithdrawalHistory = await poloniex.returnDepositsWithdrawals(1000000000, 9999999999)
   // console.log(myTradeHistory);
@@ -153,7 +153,7 @@ router.get('/performance/:currency', async function (req, res) {
 
   // loop through chartData and create portfolio value timeline
   // [timestamp, price, quantity, value]
-  let portfolioTimeline = [[1000000000, 0, 0]];
+  let portfolioTimeline = [[1000000000, 0, 0, 0]];
 
   let chartData = await poloniex.returnChartData('USDT_BTC', 86400, 1000000000, 9999999999);
   for (let i = 0; i < chartData.length; i++) {

@@ -44,6 +44,20 @@ export function fetchTradeHistory(pair) {
   });
 }
 
+export function fetchPortfolioPerformance(pair) {
+  return new Promise((resolve, reject) => {
+    fetch('/poloniexData/performance').then(res => {
+      if (!res.ok) {
+        reject(res);
+      } else {
+        res.json().then(data => {
+          resolve(data);
+        });
+      }
+    });
+  });
+}
+
 function poloObjectToArray(obj) {
   let a = [];
   for (let key in obj) {
