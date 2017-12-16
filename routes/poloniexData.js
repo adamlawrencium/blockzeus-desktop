@@ -145,7 +145,7 @@ async function createBuySellTimeline(currency) {
       for (let i = 0; i < myTradeHistory[pair].length; i++) {
         let ts = Date.parse(myTradeHistory[pair][i].date) / 1000;
         let event = myTradeHistory[pair][i].type === 'buy' ? 'sell' : 'buy';
-        let amount = parseFloat(myTradeHistory[pair][i].total);
+        let amount = parseFloat(myTradeHistory[pair][i].total) * 0.9975;
         timeline.push([ts, event, amount, pair])
       }
     }
@@ -155,7 +155,7 @@ async function createBuySellTimeline(currency) {
       for (let i = 0; i < myTradeHistory[pair].length; i++) {
         let ts = Date.parse(myTradeHistory[pair][i].date) / 1000;
         let event = myTradeHistory[pair][i].type === 'buy' ? 'buy' : 'sell';
-        let amount = parseFloat(myTradeHistory[pair][i].amount);
+        let amount = parseFloat(myTradeHistory[pair][i].amount) * 0.9975;
         timeline.push([ts, event, amount, pair])
       }
     }
@@ -170,16 +170,12 @@ To create a proper a portfolio value history for a certain currency, we need two
 2. timeline of buys & sells in ALL markets
 */
 router.get('/performance/', async function (req, res) {
-  let portfolio = {}
-  portfolio['USDT_BTC'] = { 'trades': [], 'portfolioValue': [] };
-  portfolio['USDT_BTC']['events'] = []
-
-  let tl = await createBuySellTimeline('ETH'); // create buy & sell timeline
-  let depositWithdrawls = await createDepositWithdrawalTimeline('ETH'); // create deposit & withdrawal timeline
+  let tl = await createBuySellTimeline('XRP'); // create buy & sell timeline
+  let depositWithdrawls = await createDepositWithdrawalTimeline('XRP'); // create deposit & withdrawal timeline
   let eventTimeline = tl.concat(depositWithdrawls).sort((a, b) => a[0] - b[0]); // join and sort by date
 
   portfolioTimeline = [[1000000000, 0, 0, 0]];
-  let chartData = await poloniex.returnChartData('USDT_BTC', 14400, 1000000000, 9999999999);
+  let chartData = await poloniex.returnChartData('USDT_XRP', 1800, 1000000000, 9999999999);
   for (let i = 1; i < chartData.length; i++) {
     let intraPeriodPortfolioChange = 0;
     for (let eventIndex = 0; eventIndex < eventTimeline.length; eventIndex++) {
@@ -199,7 +195,7 @@ router.get('/performance/', async function (req, res) {
     let price = chartData[i - 1]['close']
     let quantity = portfolioTimeline[i - 1][2] + intraPeriodPortfolioChange
     let value = price * quantity;
-    portfolioTimeline.push([ts, price, quantity, value])
+    portfolioTimeline.push([ts, price, quantity, parseFloat(value.toFixed(2))])
   }
 
   // trim beginning data with no trading activity

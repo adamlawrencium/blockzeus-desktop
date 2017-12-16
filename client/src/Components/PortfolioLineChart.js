@@ -27,7 +27,7 @@ class PortfolioLineChart extends Component {
           </XAxis>
 
           <YAxis id="value">
-            <YAxis.Title>Portfolio Value</YAxis.Title>
+            <YAxis.Title>Portfolio Value (USD)</YAxis.Title>
             <AreaSeries id="value" name="Value" data={this.props.d.map(x => [x[0], x[3]])} />
           </YAxis>
 
