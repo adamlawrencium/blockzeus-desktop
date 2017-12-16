@@ -181,7 +181,7 @@ router.get('/performance/', async function (req, res) {
     for (let eventIndex = 0; eventIndex < eventTimeline.length; eventIndex++) {
       // if the event is between two candlesticks, get final value
       if (eventTimeline[eventIndex][0] > chartData[i - 1]['date'] &&
-      eventTimeline[eventIndex][0] <= chartData[i]['date']) { //correct
+        eventTimeline[eventIndex][0] <= chartData[i]['date']) { //correct
         // if buy or deposit, add to portfolio, if sell or withdraw, substract
         if (eventTimeline[eventIndex][1] === 'deposit' ||
           eventTimeline[eventIndex][1] === 'buy') {
