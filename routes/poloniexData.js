@@ -178,6 +178,14 @@ router.get('/performance/', async function (req, res) {
     portfolioTimeline.push([ts, price, quantity, value])
   }
 
+  // trim beginning data with no trading activity
+  for (let i = 0; i < portfolioTimeline.length; i++) {
+    if (portfolioTimeline[i][2] !== 0) {
+      portfolioTimeline = portfolioTimeline.slice(i,portfolioTimeline.length);
+      break;
+    } 
+  }
+
   res.json(portfolioTimeline);
 });
 

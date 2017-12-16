@@ -12,7 +12,6 @@ class PerformanceCard extends Component {
   componentWillMount() {
     fetchPortfolioPerformance('USDT_BTC').then(portfolioPerformance => {
       portfolioPerformance.map((p) => p[0] *= 1000);
-      portfolioPerformance.shift();
       console.log(portfolioPerformance);
       this.setState({ portfolioPerformance })
     }).catch(err => console.log(err));
@@ -31,8 +30,9 @@ class PerformanceCard extends Component {
 
   renderLoading() {
     return (
-      <div>
-        <div className="row">
+      <div className="card card-section" >
+        <div className="card-body">
+          <h2 className="card-title">Portfolio Performance (BTC)</h2>
           <div className="col"><h2>Loading...</h2></div>
         </div>
       </div>
