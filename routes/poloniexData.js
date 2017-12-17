@@ -130,70 +130,10 @@ router.get('/chartData/:currencyPair/:period', async function (req, res) {
   res.json(chartData);
 });
 
-async function createDepositWithdrawalTimeline(currency) {
-  let history = await polo('depositsWithdrawals');
-  let depositWithdrawaltimeline = [];
-  for (let i = 0; i < history.deposits.length; i++) {
-    if (history.deposits[i].currency == currency) {
-      let ts = history.deposits[i].timestamp;
-      let event = 'deposit';
-      let amount = parseFloat(history.deposits[i].amount);
-      depositWithdrawaltimeline.push([ts, event, amount]);
-    }
-  }
-  for (let i = 0; i < history.withdrawals.length; i++) {
-    if (history.withdrawals[i].currency == currency) {
-      let ts = history.withdrawals[i].timestamp;
-      let event = 'withdrawal';
-      let amount = parseFloat(history.withdrawals[i].amount);
-      depositWithdrawaltimeline.push([ts, event, amount]);
-    }
-  }
-  return depositWithdrawaltimeline;
-}
 
-/*
-Looks through all trades and creates buy/sell timeline based on all currency pairs
-*/
-async function createBuySellTimeline(currency) {
-  let myTradeHistory = await polo('tradeHistory');
-  let timeline = []
-  for (let pair in myTradeHistory) {
-    // currency is base, sell orders add to portfolio, buy orders substract from portfolio
-    if (pair.split("_")[0] === currency) {
-      // loop through all trades of specific pair
-      for (let i = 0; i < myTradeHistory[pair].length; i++) {
-        let ts = Date.parse(myTradeHistory[pair][i].date) / 1000;
-        let event = myTradeHistory[pair][i].type === 'buy' ? 'sell' : 'buy';
-        let amount = parseFloat(myTradeHistory[pair][i].total) * 0.9975;
-        timeline.push([ts, event, amount, pair])
-      }
-    }
-    // currency is trade, sell orders subtract from portfolio, buy orders add to portfolio
-    else if (pair.split("_")[1] === currency) {
-      // loop through all trades of specific pair
-      for (let i = 0; i < myTradeHistory[pair].length; i++) {
-        let ts = Date.parse(myTradeHistory[pair][i].date) / 1000;
-        let event = myTradeHistory[pair][i].type === 'buy' ? 'buy' : 'sell';
-        let amount = parseFloat(myTradeHistory[pair][i].amount) * 0.9975;
-        timeline.push([ts, event, amount, pair])
-      }
-    }
-  }
-  return timeline;
-}
-
-/*
-From a history all trades, create a portfolio
-To create a proper a portfolio value history for a certain currency, we need two things:
-1. timeline of deposits & withdrawals
-2. timeline of buys & sells in ALL markets
-*/
-router.get('/performance/', async function (req, res) {
-  let tl = await createBuySellTimeline('XRP'); // create buy & sell timeline
-  let depositWithdrawls = await createDepositWithdrawalTimeline('XRP'); // create deposit & withdrawal timeline
-  let eventTimeline = tl.concat(depositWithdrawls).sort((a, b) => a[0] - b[0]); // join and sort by date
-
+// Takes in event timeline [[timestamp, buy/sell/deposit/withdrawal, amount], ...]
+// values events against another currency (USD)
+async function createPortfolioValueTimeline(eventTimeline) {
   portfolioTimeline = [[1000000000, 0, 0, 0]];
   let chartData = await polo('chartData', 'USDT_XRP');
   for (let i = 1; i < chartData.length; i++) {
@@ -225,8 +165,88 @@ router.get('/performance/', async function (req, res) {
       break;
     }
   }
+  return portfolioTimeline;
+}
 
-  res.json(portfolioTimeline);
+async function createDepositWithdrawalTimeline(currency) {
+  let history = await polo('depositsWithdrawals');
+  let depositWithdrawaltimeline = [];
+  for (let i = 0; i < history.deposits.length; i++) {
+    if (history.deposits[i].currency == currency) {
+      let ts = history.deposits[i].timestamp;
+      let event = 'deposit';
+      let amount = parseFloat(history.deposits[i].amount);
+      depositWithdrawaltimeline.push([ts, event, amount]);
+    }
+  }
+  for (let i = 0; i < history.withdrawals.length; i++) {
+    if (history.withdrawals[i].currency == currency) {
+      let ts = history.withdrawals[i].timestamp;
+      let event = 'withdrawal';
+      let amount = parseFloat(history.withdrawals[i].amount);
+      depositWithdrawaltimeline.push([ts, event, amount]);
+    }
+  }
+  return depositWithdrawaltimeline;
+}
+
+/*
+Looks through all trades and creates buy/sell timeline based on all currency pairs
+*/
+async function createBuySellTimeline(currency) {
+  let myTradeHistory = await polo('tradeHistory');
+  let timeline = [];
+  for (let pair in myTradeHistory) {
+    // currency is base, sell orders add to portfolio, buy orders substract from portfolio
+    if (pair.split("_")[0] === currency) {
+      // loop through all trades of specific pair
+      for (let i = 0; i < myTradeHistory[pair].length; i++) {
+        let ts = Date.parse(myTradeHistory[pair][i].date) / 1000;
+        let event = myTradeHistory[pair][i].type === 'buy' ? 'sell' : 'buy';
+        let amount = parseFloat(myTradeHistory[pair][i].total) * 0.9975;
+        timeline.push([ts, event, amount, pair])
+      }
+    }
+    // currency is trade, sell orders subtract from portfolio, buy orders add to portfolio
+    else if (pair.split("_")[1] === currency) {
+      // loop through all trades of specific pair
+      for (let i = 0; i < myTradeHistory[pair].length; i++) {
+        let ts = Date.parse(myTradeHistory[pair][i].date) / 1000;
+        let event = myTradeHistory[pair][i].type === 'buy' ? 'buy' : 'sell';
+        let amount = parseFloat(myTradeHistory[pair][i].amount) * 0.9975;
+        timeline.push([ts, event, amount, pair])
+      }
+    }
+  }
+  return timeline;
+}
+
+/*
+From a history all trades, create a portfolio
+To create a proper a portfolio value history for a certain currency, we need two things:
+1. timeline of deposits & withdrawals
+2. timeline of buys & sells in ALL markets
+3. value all the inflow/outflows against (BTC ->) USD
+*/
+router.get('/performance/', async function (req, res) {
+  let tl = await createBuySellTimeline('XRP'); // create buy & sell timeline
+  let depositWithdrawls = await createDepositWithdrawalTimeline('XRP'); // create deposit & withdrawal timeline
+  let eventTimeline = tl.concat(depositWithdrawls).sort((a, b) => a[0] - b[0]); // join and sort by date
+  let portfolioTimeline = [[1000000000, 0, 0, 0]];
+  let portfolioPerformance = await createPortfolioValueTimeline(eventTimeline);
+  res.json(portfolioPerformance);
+});
+
+
+/* Get dollar performance of every holding and sum them up
+for all holdings:
+  1. timeline of deposits & withdrawals
+  2. timeline of buys & sells in ALL markets
+  3. value all the inflow/outflows against (BTC ->) USD
+*/
+router.get('/fullPerformance', async function (req, res) {
+
+  res.json('y0')
 });
 
 module.exports = router;

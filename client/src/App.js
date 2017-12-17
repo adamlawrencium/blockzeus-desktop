@@ -37,7 +37,7 @@ class App extends Component {
               <AllocationsCard balances={this.state.balances} ticker={this.state.ticker} />
             </div>
             <div className="col-lg-7">
-              <PerformanceCard balances={this.state.balances} ticker={this.state.ticker} />
+              <PerformanceCard />
             </div>
           </div>
           <div className="row">
