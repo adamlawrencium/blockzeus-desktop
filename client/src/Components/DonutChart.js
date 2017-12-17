@@ -27,7 +27,6 @@ class DonutChart extends Component {
       b.push([balances[i][0], parseFloat(balances[i][1].toFixed(2))])
     }
 
-
     return (
       <HighchartsChart plotOptions={plotOptions}>
         <Chart />
