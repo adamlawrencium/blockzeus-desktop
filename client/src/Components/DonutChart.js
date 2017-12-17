@@ -20,7 +20,7 @@ class DonutChart extends Component {
         }
       }
     };
-
+    
     return (
       <HighchartsChart plotOptions={plotOptions}>
         <Chart />
@@ -29,7 +29,7 @@ class DonutChart extends Component {
         <PieSeries
           id="holdings"
           name="USD Value"
-          data={balances}
+          data={balances.map(b => b[1] = parseFloat(b[1].toFixed(2)))}
           showInLegend={true}
           innerSize="66%"
         />

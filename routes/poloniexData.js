@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+let sleep = require('sleep');
 
 const Poloniex = require('poloniex-api-node');
 
@@ -8,6 +9,45 @@ let secret = '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f98
 
 let poloniex = new Poloniex(key, secret);
 
+// Route all Poloniex API calls through here
+async function polo(apiCall, params) {
+  let res;
+  // sleep.msleep(1000); // prevent nonce issue with Poloniex
+  console.log(`Making Poloniex API request [${apiCall}]`);
+  for (let i = 0; i < 3; i++) { // retry functionality
+    try {
+      switch (apiCall) {
+        case 'ticker':
+          res = await poloniex.returnTicker();
+          break;
+        case 'chartData':
+          res = await poloniex.returnChartData(params, 86400, 1000000000, 9999999999)
+          break;
+        case 'balances':
+          res = await poloniex.returnBalances();
+          break;
+        case 'completeBalances':
+          res = await poloniex.returnCompleteBalances();
+          break;
+        case 'tradeHistory':
+          res = await poloniex.returnMyTradeHistory('all', 1000000000, 9999999999);
+          break;
+        case 'depositsWithdrawals':
+          res = await poloniex.returnDepositsWithdrawals(1000000000, 9999999999);
+          break;
+        default:
+          return 'Invalid API Call'
+          break;
+      }
+    } catch (err) {
+      console.log('Error happened, retrying...', err);
+      // throw (`Poloniex Error! [${apiCall}]:`, err);
+      continue;
+    }
+
+  }
+  return res;
+}
 /*
 "BTC_DASH": {
   "id": 24,
@@ -22,13 +62,9 @@ let poloniex = new Poloniex(key, secret);
   "low24hr": "0.04607966"
 }, ...
 */
-router.get('/ticker', function (req, res, next) {
-  poloniex.returnTicker().then((ticker) => {
-    res.json(ticker);
-  }).catch((err) => {
-    console.log('ERROR: /ticker:', err);
-    res.json(err)
-  });
+router.get('/ticker', async function (req, res, next) {
+  let ticker = await polo('ticker');
+  res.json(ticker);
 });
 
 /*
@@ -38,13 +74,9 @@ router.get('/ticker', function (req, res, next) {
   ...,
 }
 */
-router.get('/balances', function (req, res, next) {
-  poloniex.returnBalances().then((balances) => {
-    res.json(balances);
-  }).catch((err) => {
-    res.json(err)
-    console.log('ERROR: /balances:', err);
-  });
+router.get('/balances', async function (req, res, next) {
+  let balances = await polo('balances');
+  res.json(balances);
 });
 
 /*
@@ -56,13 +88,9 @@ router.get('/balances', function (req, res, next) {
   }, ...
 }
 */
-router.get('/completeBalances', function (req, res, next) {
-  poloniex.returnCompleteBalances().then((balances) => {
-    res.json(balances);
-  }).catch((err) => {
-    res.json(err)
-    console.log('ERROR: /completeBalances:', err);
-  });
+router.get('/completeBalances', async function (req, res, next) {
+  let completeBalances = await polo('completeBalances');
+  res.json(completeBalances);
 });
 
 /*
@@ -79,13 +107,9 @@ router.get('/completeBalances', function (req, res, next) {
 ]
 one month periods
 */
-router.get('/tradeHistory/:currencyPair', function (req, res, next) {
-  poloniex.returnMyTradeHistory(req.params.currencyPair, 1000000000, 9999999999).then((trades) => {
-    res.json(trades);
-  }).catch((err) => {
-    res.json(err.message)
-    console.log('ERROR: /tradeHistory:', err);
-  });
+router.get('/tradeHistory/:currencyPair', async function (req, res, next) {
+  let tradeHistory = await polo('tradeHistory');
+  res.json(tradeHistory);
 });
 
 /*
@@ -101,17 +125,13 @@ router.get('/tradeHistory/:currencyPair', function (req, res, next) {
 }, 
 period: {300, 900, 1800, 7200, 14400, 86400}
 */
-router.get('/chartData/:currencyPair/:period', function (req, res) {
-  poloniex.returnChartData(req.params.currencyPair, req.params.period, 1000000000, 9999999999).then(data => {
-    res.json(data);
-  }).catch(err => {
-    res.json(err.message);
-    console.log('ERROR: /chartData:', err);
-  });
+router.get('/chartData/:currencyPair/:period', async function (req, res) {
+  let chartData = await polo('chartData', req.params.currencyPair);
+  res.json(chartData);
 });
 
 async function createDepositWithdrawalTimeline(currency) {
-  let history = await poloniex.returnDepositsWithdrawals(1000000000, 9999999999)
+  let history = await polo('depositsWithdrawals');
   let depositWithdrawaltimeline = [];
   for (let i = 0; i < history.deposits.length; i++) {
     if (history.deposits[i].currency == currency) {
@@ -136,7 +156,7 @@ async function createDepositWithdrawalTimeline(currency) {
 Looks through all trades and creates buy/sell timeline based on all currency pairs
 */
 async function createBuySellTimeline(currency) {
-  let myTradeHistory = (await poloniex.returnMyTradeHistory('all', 1000000000, 9999999999));
+  let myTradeHistory = await polo('tradeHistory');
   let timeline = []
   for (let pair in myTradeHistory) {
     // currency is base, sell orders add to portfolio, buy orders substract from portfolio
@@ -175,7 +195,7 @@ router.get('/performance/', async function (req, res) {
   let eventTimeline = tl.concat(depositWithdrawls).sort((a, b) => a[0] - b[0]); // join and sort by date
 
   portfolioTimeline = [[1000000000, 0, 0, 0]];
-  let chartData = await poloniex.returnChartData('USDT_XRP', 1800, 1000000000, 9999999999);
+  let chartData = await polo('chartData', 'USDT_XRP');
   for (let i = 1; i < chartData.length; i++) {
     let intraPeriodPortfolioChange = 0;
     for (let eventIndex = 0; eventIndex < eventTimeline.length; eventIndex++) {
