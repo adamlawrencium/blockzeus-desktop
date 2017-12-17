@@ -20,7 +20,14 @@ class DonutChart extends Component {
         }
       }
     };
-    
+
+    // 2-decimal rounding of USD values in chart
+    let b = [];
+    for (let i in balances) {
+      b.push([balances[i][0], parseFloat(balances[i][1].toFixed(2))])
+    }
+
+
     return (
       <HighchartsChart plotOptions={plotOptions}>
         <Chart />
@@ -29,7 +36,7 @@ class DonutChart extends Component {
         <PieSeries
           id="holdings"
           name="USD Value"
-          data={balances.map(b => b[1] = parseFloat(b[1].toFixed(2)))}
+          data={b}
           showInLegend={true}
           innerSize="66%"
         />
