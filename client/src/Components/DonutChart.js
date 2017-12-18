@@ -15,7 +15,7 @@ class DonutChart extends Component {
       pie: {
         allowPointSelect: true,
         dataLabels: {
-          distance: -30,
+          distance: 15,
           enabled: true
         }
       }

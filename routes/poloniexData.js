@@ -105,12 +105,37 @@ To create a proper a portfolio value history for a certain currency, we need two
 3. value all the inflow/outflows against (BTC ->) USD
 */
 router.get('/performance/', async function (req, res) {
-  let tl = await createBuySellTimeline('XRP'); // create buy & sell timeline
-  let depositWithdrawls = await createDepositWithdrawalTimeline('XRP'); // create deposit & withdrawal timeline
+  let tl = await createBuySellTimeline('BCH'); // create buy & sell timeline
+  let depositWithdrawls = await createDepositWithdrawalTimeline('BCH'); // create deposit & withdrawal timeline
   let eventTimeline = tl.concat(depositWithdrawls).sort((a, b) => a[0] - b[0]); // join and sort by date
-  let portfolioPerformance = await createPortfolioValueTimeline(eventTimeline);
+  let portfolioPerformance = await createPortfolioValueTimeline(eventTimeline, 'BCH');
   res.json(portfolioPerformance);
 });
+
+router.get('/test', async function (req, res) {
+  res.json((await getHistoricallyOwnedCurrencies()))
+});
+
+async function getHistoricallyOwnedCurrencies() {
+  let hoc = [];
+  let [dw, bs] = await Promise.all([polo('depositsWithdrawals'), polo('tradeHistory')]);
+  // Add deposits and withdrawals
+  for (let i = 0; i < dw.deposits.length; i++) {
+    hoc.push(dw.deposits[i].currency)
+  }
+  if (dw.withdrawals) {
+    for (let i = 0; i < dw.withdrawals.length; i++) {
+      hoc.push(dw.withdrawals[i].currency)
+    }
+  }
+  // Add buys and sells
+  for (let pair in bs) {
+    hoc.push(pair.split('_')[0])
+    hoc.push(pair.split('_')[1])
+  }
+  hoc = Array.from(new Set(hoc));
+  console.log(hoc);
+}
 
 
 /* Get dollar performance of every holding and sum them up
@@ -169,7 +194,6 @@ router.get('/fullPerformance', async function (req, res) {
 // Route all Poloniex API calls through here
 async function polo(apiCall, params) {
   let res;
-  // sleep.msleep(1000); // prevent nonce issue with Poloniex
   console.log(`Making Poloniex API request [${apiCall}]`);
   for (let i = 0; i < 3; i++) { // retry functionality
     try {
@@ -198,15 +222,14 @@ async function polo(apiCall, params) {
       }
     } catch (err) {
       console.log('Error happened, retrying...', err);
-      // throw (`Poloniex Error! [${apiCall}]:`, err);
+      sleep.msleep(300); // abide by rate limits and avoid nonce issue
       continue;
     }
-
   }
   return res;
 }
 
-
+// Takes in chartData and coverts the prices to a USDT base
 async function convertChartDataToUSDTBase(pair, chartData) {
   let ticker = await polo('ticker');
   let convertedChartData = []
@@ -219,6 +242,9 @@ async function convertChartDataToUSDTBase(pair, chartData) {
   }
   else if (pair.split('_')[0] === 'ETH') {
     usdtbase = await polo('chartData', 'USDT_ETH');
+  }
+  else if (pair.split('_')[0] === 'XMR') {
+    usdtbase = await polo('chartData', 'USDT_XMR');
   }
   // make arrays same length
   let cdlen = chartData.length; let usdtBtclen = usdtbase.length;
@@ -236,9 +262,19 @@ async function convertChartDataToUSDTBase(pair, chartData) {
 
 // Takes in event timeline [[timestamp, buy/sell/deposit/withdrawal, amount], ...]
 // values events against another currency (USD)
-async function createPortfolioValueTimeline(eventTimeline) {
+async function createPortfolioValueTimeline(eventTimeline, currency) {
   portfolioTimeline = [[1000000000, 0, 0, 0]];
-  let chartData = await polo('chartData', 'USDT_XRP');
+  // see if there exists a USDT_Currency market
+  // if not, see if BTC_Currency market exists, then convert it to USDT and run the following:
+  let chartData;
+  let ticker = await polo('ticker');
+  if (ticker[`USDT_${currency}`]) {
+    chartData = await polo('chartData', `USDT_${currency}`);
+  } else if (ticker[`BTC_${currency}`]) {
+    chartData = await polo('chartData', `BTC_${currency}`);
+    chartData = convertChartDataToUSDTBase(`BTC_${currency}`, chartData);
+  }
+
   for (let i = 1; i < chartData.length; i++) {
     let intraPeriodPortfolioChange = 0;
     for (let eventIndex = 0; eventIndex < eventTimeline.length; eventIndex++) {
