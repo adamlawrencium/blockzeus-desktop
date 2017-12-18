@@ -134,7 +134,7 @@ async function getHistoricallyOwnedCurrencies() {
     hoc.push(pair.split('_')[1])
   }
   hoc = Array.from(new Set(hoc));
-  console.log(hoc);
+  return hoc;
 }
 
 
@@ -146,48 +146,19 @@ for all holdings:
 */
 router.get('/fullPerformance', async function (req, res) {
   // Get all historically owned currencies by looking at past buys/sells/deposits/withdrawals
-  let historicallyOwnedCurrencies = [];
-  let depositsWithdrawals = await createDepositWithdrawalTimeline('all');
-
-  // get historical data for each currency
-  let allChartData = {}
-  let allPairs = (await polo('ticker'));
-  for (let i in depositsWithdrawals) {
-    let currency = depositsWithdrawals[i][3];
-    if (!allChartData[currency]) {  // if hasn't been added already
-      if (allPairs['BTC_' + currency]) { // if bitcoin market exists
-        allChartData[currency] = await polo('chartData', 'BTC_' + currency);
-      }
-      else if (allPairs['USDT_' + currency]) { // if bitcoin market exists
-        allChartData[currency] = await polo('chartData', 'USDT_' + currency);
-      }
-    }
+  let hoc = await getHistoricallyOwnedCurrencies();
+  let fullPerformance = {}
+  for (let currency in hoc) {
+    if (hoc[currency] === 'USDT') {continue;}
+    let tl = await createBuySellTimeline(hoc[currency]); // create buy & sell timeline
+    let depositWithdrawls = await createDepositWithdrawalTimeline(hoc[currency]); // create deposit & withdrawal timeline
+    let eventTimeline = tl.concat(depositWithdrawls).sort((a, b) => a[0] - b[0]); // join and sort by date
+    let portfolioPerformance = await createPortfolioValueTimeline(eventTimeline, hoc[currency]);
+    fullPerformance[currency] = portfolioPerformance;
   }
 
-  res.json(allChartData);
+  res.json(fullPerformance);
 
-  // let [dsWs, bsSs] = await Promise.all([polo('depositsWithdrawals'), polo('tradeHistory')]);
-  // if (dsWs.deposits) {historicallyOwnedCurrencies.push(dsWs.deposits.map(d => d.currency));}
-  // if (dsWs.withdrawals) {historicallyOwnedCurrencies.push(dsWs.withdrawals.map(w => w.currency));}
-  // // for (let pair in bsSs) {historicallyOwnedCurrencies.push(pair.split('_')[1])}
-  // // historicallyOwnedCurrencies = Array.from(new Set(historicallyOwnedCurrencies));
-  // res.json(historicallyOwnedCurrencies);
-  // return;
-  // let holdings = await polo('balances');
-  // for (let holding in holdings) { 
-  //   if (parseFloat(holdings[holding]) > 0) {
-  //     console.log(holding);
-  //     let buysellTimeline = await createBuySellTimeline(holding);
-  //     let depositWithdrawals = await createDepositWithdrawalTimeline(holding);
-  //     let eventTimeline = buysellTimeline.concat(depositWithdrawals);
-  //     eventTimeline.sort((a,b) => a[0] - b[0]);
-  //     res.json(eventTimeline)
-  //     return;
-  //     // now determine which candlestick we can value our event timeline against.
-  //     // first try the USDT market, then try Bitcoin
-  //   }
-  // }
-  // res.json('y0')
 });
 
 
@@ -268,6 +239,7 @@ async function createPortfolioValueTimeline(eventTimeline, currency) {
   // if not, see if BTC_Currency market exists, then convert it to USDT and run the following:
   let chartData;
   let ticker = await polo('ticker');
+  console.log('createPortfolioValueTimeline:', currency);
   if (ticker[`USDT_${currency}`]) {
     chartData = await polo('chartData', `USDT_${currency}`);
   } else if (ticker[`BTC_${currency}`]) {
