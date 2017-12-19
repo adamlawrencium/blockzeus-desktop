@@ -82,15 +82,16 @@ class PortfolioLineChart extends Component {
 
           <YAxis id="value">
             <YAxis.Title>Portfolio Value (USD)</YAxis.Title>
-            {!this.props.loaded ? (
-              <LineSeries color="#ffffff" key={'x'} id={'x'} name={'x'} data={[[0, 0]]} />
-            ): (
-            this.formatForChart().map(series => {
-              console.log(series);
-              return <LineSeries  key={series[0]} id={series[0]} name={series[0]} data={series[1]} />
-            })
-            )}
 
+            {!this.props.loaded ? (
+              <LineSeries color="#ffffff" key={'x'} id={'x'} name={'x'} data={[[0, 1337]]} />
+            ) : (
+                this.formatForChart().map(series => {
+                  console.log(series);
+                  return <LineSeries key={series[0]} id={series[0]} name={series[0]} data={series[1]} />
+                })
+              )
+            }
 
           </YAxis>
 
