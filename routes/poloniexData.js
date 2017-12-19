@@ -136,6 +136,17 @@ async function getHistoricallyOwnedCurrencies(dw, bs) {
   return hoc;
 }
 
+function createUSDTValueTimeline(eventTimeline) {
+  let portfolioTimeline = []
+  for (let event in eventTimeline) {
+    let ts = eventTimeline[event][0] * 1000;
+    let price = 1;
+    let quantity = eventTimeline[event][2];
+    let value = price * quantity;
+    portfolioTimeline.push([ts, price, quantity, parseFloat(value.toFixed(2))])
+  }
+  return portfolioTimeline;
+}
 
 /* Get dollar performance of every holding and sum them up
 for all holdings:
@@ -149,12 +160,10 @@ router.get('/fullPerformance', async function (req, res) {
   let hoc = await getHistoricallyOwnedCurrencies(dw, bs); // # depositswithdrawals, buys/sells
   let fullPerformance = {}
   for (let i = 0; i < hoc.length; i++) {
-    if (hoc[i] === 'USDT') { continue; }
     console.log('Creating Performance Timeline:', hoc[i]);
     let tl = await createBuySellTimeline(hoc[i], bs); // create buy & sell timeline, # buys/sells
     let depositWithdrawls = await createDepositWithdrawalTimeline(hoc[i], dw); // create deposit & withdrawal timeline # depositswithdrawals
     let eventTimeline = tl.concat(depositWithdrawls).sort((a, b) => a[0] - b[0]); // join and sort by date
-    // if (hoc[i] === 'BLK') { console.log(eventTimeline); }
     let portfolioPerformance = await createPortfolioValueTimeline(eventTimeline, hoc[i], ticker); // #ticker and chart data
     fullPerformance[hoc[i]] = portfolioPerformance;
   }
@@ -222,16 +231,11 @@ async function convertChartDataToUSDTBase(pair, chartData, ticker) {
   // make arrays same length
   let cdlen = chartData.length; let usdtBtclen = usdtbase.length;
   if (usdtBtclen >= cdlen) {
-    console.log('usd is longer');
-    console.log(usdtBtclen, cdlen );
     usdtbase = usdtbase.slice(usdtBtclen - cdlen, usdtBtclen);
   } else {
-    console.log('btc_other is longer');
-    console.log(usdtBtclen, cdlen );
     chartData = chartData.slice(cdlen - usdtBtclen, cdlen)
   }
   if (pair.split('_')[1] === 'GAS') {
-    console.log(usdtbase);
   }
   for (let i = 0; i < usdtbase.length; i++) {
     convertedChartData.push({
@@ -242,6 +246,21 @@ async function convertChartDataToUSDTBase(pair, chartData, ticker) {
   return convertedChartData;
 }
 
+// Create a fake dataset from the reasonable beginning of Polo time to Now
+function createDummyUSDTData() {
+  let dummyData = [];
+  dummyData.push({
+    date: 1409961600,
+    close: 1
+  });
+  for (let i = 1409961600; i < Math.round((new Date()).getTime() / 1000); i += 14400) {
+    dummyData.push({
+      date: i,
+      close: i
+    })
+  }
+  return dummyData;
+}
 
 // Takes in event timeline [[timestamp, buy/sell/deposit/withdrawal, amount], ...]
 // values events against another currency (USD)
@@ -255,6 +274,8 @@ async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
   } else if (ticker[`BTC_${currency}`]) {
     chartData = await polo('chartData', `BTC_${currency}`);
     chartData = await convertChartDataToUSDTBase(`BTC_${currency}`, chartData, ticker);
+  } else if (currency === 'USDT') {
+    chartData = createDummyUSDTData();
   }
 
 
@@ -274,7 +295,7 @@ async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
       }
     }
     let ts = chartData[i - 1]['date'] * 1000;
-    let price = chartData[i - 1]['close']
+    let price = currency === 'USDT' ? 1 : chartData[i - 1]['close']
     let quantity = portfolioTimeline[i - 1][2] + intraPeriodPortfolioChange
     let value = price * quantity;
     portfolioTimeline.push([ts, price, quantity, parseFloat(value.toFixed(2))])
