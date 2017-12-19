@@ -50,7 +50,7 @@ class PerformanceCard extends Component {
   }
 
   render() {
-    if (this.state.loaded === true) {
+    if (1) {
       return this.renderChart();
     } else {
       return this.renderLoading();
