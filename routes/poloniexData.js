@@ -173,7 +173,7 @@ async function polo(apiCall, params) {
           res = await poloniex.returnTicker();
           break;
         case 'chartData':
-          res = await poloniex.returnChartData(params, 86400, 1000000000, 9999999999)
+          res = await poloniex.returnChartData(params, 14400, 1000000000, 9999999999)
           break;
         case 'balances':
           res = await poloniex.returnBalances();
