@@ -116,9 +116,8 @@ router.get('/test', async function (req, res) {
   res.json((await getHistoricallyOwnedCurrencies()))
 });
 
-async function getHistoricallyOwnedCurrencies() {
+async function getHistoricallyOwnedCurrencies(dw, bs) {
   let hoc = [];
-  let [dw, bs] = await Promise.all([polo('depositsWithdrawals'), polo('tradeHistory')]);
   // Add deposits and withdrawals
   for (let i = 0; i < dw.deposits.length; i++) {
     hoc.push(dw.deposits[i].currency)
@@ -146,14 +145,16 @@ for all holdings:
 */
 router.get('/fullPerformance', async function (req, res) {
   // Get all historically owned currencies by looking at past buys/sells/deposits/withdrawals
-  let hoc = await getHistoricallyOwnedCurrencies();
+  const [dw, bs, ticker] = await Promise.all([polo('depositsWithdrawals'), polo('tradeHistory'), polo('ticker')]);
+  let hoc = await getHistoricallyOwnedCurrencies(dw, bs); // # depositswithdrawals, buys/sells
   let fullPerformance = {}
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 3; i++) {
+    console.log('Creating Performance Timeline:', hoc[i]);
     if (hoc[i] === 'USDT') {continue;}
-    let tl = await createBuySellTimeline(hoc[i]); // create buy & sell timeline
-    let depositWithdrawls = await createDepositWithdrawalTimeline(hoc[i]); // create deposit & withdrawal timeline
+    let tl = await createBuySellTimeline(hoc[i], bs); // create buy & sell timeline, # buys/sells
+    let depositWithdrawls = await createDepositWithdrawalTimeline(hoc[i], dw); // create deposit & withdrawal timeline # depositswithdrawals
     let eventTimeline = tl.concat(depositWithdrawls).sort((a, b) => a[0] - b[0]); // join and sort by date
-    let portfolioPerformance = await createPortfolioValueTimeline(eventTimeline, hoc[i]);
+    let portfolioPerformance = await createPortfolioValueTimeline(eventTimeline, hoc[i], ticker); // #ticker and chart data
     fullPerformance[hoc[i]] = portfolioPerformance;
   }
 
@@ -233,13 +234,11 @@ async function convertChartDataToUSDTBase(pair, chartData) {
 
 // Takes in event timeline [[timestamp, buy/sell/deposit/withdrawal, amount], ...]
 // values events against another currency (USD)
-async function createPortfolioValueTimeline(eventTimeline, currency) {
+async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
   portfolioTimeline = [[1000000000, 0, 0, 0]];
   // see if there exists a USDT_Currency market
   // if not, see if BTC_Currency market exists, then convert it to USDT and run the following:
   let chartData;
-  let ticker = await polo('ticker');
-  console.log('createPortfolioValueTimeline:', currency);
   if (ticker[`USDT_${currency}`]) {
     chartData = await polo('chartData', `USDT_${currency}`);
   } else if (ticker[`BTC_${currency}`]) {
@@ -279,23 +278,22 @@ async function createPortfolioValueTimeline(eventTimeline, currency) {
   return portfolioTimeline;
 }
 
-async function createDepositWithdrawalTimeline(currency) {
-  let history = await polo('depositsWithdrawals');
+async function createDepositWithdrawalTimeline(currency, dw) {
   let depositWithdrawaltimeline = [];
-  for (let i = 0; i < history.deposits.length; i++) {
-    if (history.deposits[i].currency == currency || currency === 'all') {
-      let ts = history.deposits[i].timestamp;
+  for (let i = 0; i < dw.deposits.length; i++) {
+    if (dw.deposits[i].currency == currency || currency === 'all') {
+      let ts = dw.deposits[i].timestamp;
       let event = 'deposit';
-      let amount = parseFloat(history.deposits[i].amount);
-      depositWithdrawaltimeline.push([ts, event, amount, history.deposits[i].currency]);
+      let amount = parseFloat(dw.deposits[i].amount);
+      depositWithdrawaltimeline.push([ts, event, amount, dw.deposits[i].currency]);
     }
   }
-  for (let i = 0; i < history.withdrawals.length; i++) {
-    if (history.withdrawals[i].currency == currency || currency === 'all') {
-      let ts = history.withdrawals[i].timestamp;
+  for (let i = 0; i < dw.withdrawals.length; i++) {
+    if (dw.withdrawals[i].currency == currency || currency === 'all') {
+      let ts = dw.withdrawals[i].timestamp;
       let event = 'withdrawal';
-      let amount = parseFloat(history.withdrawals[i].amount);
-      depositWithdrawaltimeline.push([ts, event, amount, history.deposits[i].currency]);
+      let amount = parseFloat(dw.withdrawals[i].amount);
+      depositWithdrawaltimeline.push([ts, event, amount, dw.deposits[i].currency]);
     }
   }
   return depositWithdrawaltimeline;
@@ -304,33 +302,31 @@ async function createDepositWithdrawalTimeline(currency) {
 /*
 Looks through all trades and creates buy/sell timeline based on all currency pairs
 */
-async function createBuySellTimeline(currency) {
-  let myTradeHistory = await polo('tradeHistory');
+async function createBuySellTimeline(currency, bs) {
   let timeline = [];
-  for (let pair in myTradeHistory) {
+  for (let pair in bs) {
     // currency is base, sell orders add to portfolio, buy orders substract from portfolio
     if (pair.split("_")[0] === currency) {
       // loop through all trades of specific pair
-      for (let i = 0; i < myTradeHistory[pair].length; i++) {
-        let ts = Date.parse(myTradeHistory[pair][i].date) / 1000;
-        let event = myTradeHistory[pair][i].type === 'buy' ? 'sell' : 'buy';
-        let amount = parseFloat(myTradeHistory[pair][i].total) * 0.9975;
+      for (let i = 0; i < bs[pair].length; i++) {
+        let ts = Date.parse(bs[pair][i].date) / 1000;
+        let event = bs[pair][i].type === 'buy' ? 'sell' : 'buy';
+        let amount = parseFloat(bs[pair][i].total) * 0.9975;
         timeline.push([ts, event, amount, pair])
       }
     }
     // currency is trade, sell orders subtract from portfolio, buy orders add to portfolio
     else if (pair.split("_")[1] === currency) {
       // loop through all trades of specific pair
-      for (let i = 0; i < myTradeHistory[pair].length; i++) {
-        let ts = Date.parse(myTradeHistory[pair][i].date) / 1000;
-        let event = myTradeHistory[pair][i].type === 'buy' ? 'buy' : 'sell';
-        let amount = parseFloat(myTradeHistory[pair][i].amount) * 0.9975;
+      for (let i = 0; i < bs[pair].length; i++) {
+        let ts = Date.parse(bs[pair][i].date) / 1000;
+        let event = bs[pair][i].type === 'buy' ? 'buy' : 'sell';
+        let amount = parseFloat(bs[pair][i].amount) * 0.9975;
         timeline.push([ts, event, amount, pair])
       }
     }
   }
   return timeline;
 }
-
 
 module.exports = router;
