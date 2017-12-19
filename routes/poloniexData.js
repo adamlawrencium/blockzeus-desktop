@@ -113,7 +113,7 @@ router.get('/performance/', async function (req, res) {
 });
 
 router.get('/test', async function (req, res) {
-  res.json((await getHistoricallyOwnedCurrencies()))
+  res.json((await polo('chartData', 'BTC_GAS')))
 });
 
 async function getHistoricallyOwnedCurrencies(dw, bs) {
@@ -149,12 +149,12 @@ router.get('/fullPerformance', async function (req, res) {
   let hoc = await getHistoricallyOwnedCurrencies(dw, bs); // # depositswithdrawals, buys/sells
   let fullPerformance = {}
   for (let i = 0; i < hoc.length; i++) {
-    if (hoc[i] === 'USDT') {continue;}
+    if (hoc[i] === 'USDT') { continue; }
     console.log('Creating Performance Timeline:', hoc[i]);
     let tl = await createBuySellTimeline(hoc[i], bs); // create buy & sell timeline, # buys/sells
     let depositWithdrawls = await createDepositWithdrawalTimeline(hoc[i], dw); // create deposit & withdrawal timeline # depositswithdrawals
     let eventTimeline = tl.concat(depositWithdrawls).sort((a, b) => a[0] - b[0]); // join and sort by date
-    if (hoc[i] === 'BLK') {console.log(eventTimeline);}
+    // if (hoc[i] === 'BLK') { console.log(eventTimeline); }
     let portfolioPerformance = await createPortfolioValueTimeline(eventTimeline, hoc[i], ticker); // #ticker and chart data
     fullPerformance[hoc[i]] = portfolioPerformance;
   }
@@ -222,12 +222,22 @@ async function convertChartDataToUSDTBase(pair, chartData, ticker) {
   // make arrays same length
   let cdlen = chartData.length; let usdtBtclen = usdtbase.length;
   if (usdtBtclen >= cdlen) {
-    usdtbase = usdtbase.slice(usdtBtclen - cdlen, cdlen);
+    console.log('usd is longer');
+    console.log(usdtBtclen, cdlen );
+    usdtbase = usdtbase.slice(usdtBtclen - cdlen, usdtBtclen);
   } else {
+    console.log('btc_other is longer');
+    console.log(usdtBtclen, cdlen );
     chartData = chartData.slice(cdlen - usdtBtclen, cdlen)
   }
+  if (pair.split('_')[1] === 'GAS') {
+    console.log(usdtbase);
+  }
   for (let i = 0; i < usdtbase.length; i++) {
-    convertedChartData.push([usdtbase[i].date, chartData[i].close * usdtbase[i].close]);
+    convertedChartData.push({
+      date: usdtbase[i].date,
+      close: chartData[i].close * usdtbase[i].close
+    });
   }
   return convertedChartData;
 }
@@ -244,9 +254,8 @@ async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
     chartData = await polo('chartData', `USDT_${currency}`);
   } else if (ticker[`BTC_${currency}`]) {
     chartData = await polo('chartData', `BTC_${currency}`);
-    chartData = convertChartDataToUSDTBase(`BTC_${currency}`, chartData, ticker);
+    chartData = await convertChartDataToUSDTBase(`BTC_${currency}`, chartData, ticker);
   }
-
 
 
   for (let i = 1; i < chartData.length; i++) {

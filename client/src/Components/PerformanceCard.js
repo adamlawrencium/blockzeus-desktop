@@ -15,10 +15,10 @@ class PerformanceCard extends Component {
   }
 
   componentWillMount() {
-    fetchPortfolioPerformance('USDT_BTC').then(portfolioPerformance => {
-      portfolioPerformance.map((p) => p[0] *= 1000);
-      this.setState({ portfolioPerformance });
-    }).catch(err => console.log(err));
+    // fetchPortfolioPerformance('USDT_BTC').then(portfolioPerformance => {
+    //   portfolioPerformance.map((p) => p[0] *= 1000);
+    //   this.setState({ portfolioPerformance });
+    // }).catch(err => console.log(err));
 
     fetchFullPortfolioPerformance().then(fullPerformance => {
       this.setState({ fullPerformance });
