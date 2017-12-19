@@ -9,6 +9,8 @@ let secret = '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f98
 
 let poloniex = new Poloniex(key, secret);
 
+let totalTraded = 0;
+
 /*
 "BTC_DASH": {
   "id": 24,
@@ -168,6 +170,7 @@ router.get('/fullPerformance', async function (req, res) {
     fullPerformance[hoc[i]] = portfolioPerformance;
   }
 
+  console.log(totalTraded);
   res.json(fullPerformance);
 
 });
@@ -298,6 +301,7 @@ async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
     let price = currency === 'USDT' ? 1 : chartData[i - 1]['close']
     let quantity = portfolioTimeline[i - 1][2] + intraPeriodPortfolioChange
     let value = price * quantity;
+    totalTraded += value - portfolioTimeline[i-1][3]; 
     portfolioTimeline.push([ts, price, quantity, parseFloat(value.toFixed(2))])
   }
 
