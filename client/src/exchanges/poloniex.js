@@ -58,6 +58,18 @@ export function fetchPortfolioPerformance(pair) {
   });
 }
 
+export async function fetchFullPortfolioPerformance() {
+  return new Promise(async (resolve, reject) => {
+    fetch('poloniexData/fullPerformance').then(async res => {
+      if (res.ok) {
+        resolve((await res.json()));
+      } else {
+        reject(res);
+      }
+    })
+  })
+}
+
 function poloObjectToArray(obj) {
   let a = [];
   for (let key in obj) {

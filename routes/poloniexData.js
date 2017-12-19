@@ -148,13 +148,13 @@ router.get('/fullPerformance', async function (req, res) {
   // Get all historically owned currencies by looking at past buys/sells/deposits/withdrawals
   let hoc = await getHistoricallyOwnedCurrencies();
   let fullPerformance = {}
-  for (let currency in hoc) {
-    if (hoc[currency] === 'USDT') {continue;}
-    let tl = await createBuySellTimeline(hoc[currency]); // create buy & sell timeline
-    let depositWithdrawls = await createDepositWithdrawalTimeline(hoc[currency]); // create deposit & withdrawal timeline
+  for (let i = 0; i < 2; i++) {
+    if (hoc[i] === 'USDT') {continue;}
+    let tl = await createBuySellTimeline(hoc[i]); // create buy & sell timeline
+    let depositWithdrawls = await createDepositWithdrawalTimeline(hoc[i]); // create deposit & withdrawal timeline
     let eventTimeline = tl.concat(depositWithdrawls).sort((a, b) => a[0] - b[0]); // join and sort by date
-    let portfolioPerformance = await createPortfolioValueTimeline(eventTimeline, hoc[currency]);
-    fullPerformance[currency] = portfolioPerformance;
+    let portfolioPerformance = await createPortfolioValueTimeline(eventTimeline, hoc[i]);
+    fullPerformance[hoc[i]] = portfolioPerformance;
   }
 
   res.json(fullPerformance);
@@ -262,7 +262,7 @@ async function createPortfolioValueTimeline(eventTimeline, currency) {
         }
       }
     }
-    let ts = chartData[i - 1]['date']
+    let ts = chartData[i - 1]['date'] * 1000;
     let price = chartData[i - 1]['close']
     let quantity = portfolioTimeline[i - 1][2] + intraPeriodPortfolioChange
     let value = price * quantity;

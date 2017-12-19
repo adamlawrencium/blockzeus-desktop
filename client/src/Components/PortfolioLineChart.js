@@ -1,16 +1,39 @@
 import React, { Component } from 'react';
 import Highcharts from 'highcharts/highstock';
 import {
-  HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis, Legend,
+  HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis, Legend, Loading,
   AreaSeries, RangeSelector, Tooltip, Navigator
 } from 'react-jsx-highstock';
 
 class PortfolioLineChart extends Component {
+
+  formatForChart() {
+    console.log(this.props);
+    let data = this.props.data;
+    console.log(data);
+    let highchartsSeries = [];
+    for (let series in data) {
+      // console.log(series);
+      // console.log(data[series]);
+      // console.log(data.series);
+      let s = {}
+      s[series] = data[series].map(x => [x[0], x[2]]);
+      highchartsSeries.push(s);
+      // highchartsSeries.push({
+      //   series: data[series].map(x => [x[0], x[2]])
+      // });
+    }
+    console.log(highchartsSeries);
+    return highchartsSeries
+  }
+
   render() {
     return (
       <div className="app">
         <HighchartsStockChart>
           <Chart zoomType="x" />
+
+          <Loading isLoading={!this.props.loaded}>Fetching data...</Loading>
 
           <RangeSelector>
             <RangeSelector.Button count={7} type="day">7d</RangeSelector.Button>
@@ -28,7 +51,12 @@ class PortfolioLineChart extends Component {
 
           <YAxis id="value">
             <YAxis.Title>Portfolio Value (USD)</YAxis.Title>
-            <AreaSeries id="value" name="Value" data={this.props.d.map(x => [x[0], x[3]])} />
+
+            {this.formatForChart().map(series => {
+              console.log(series);
+              return <AreaSeries key={series[0]} id={series[0]} name={series[0]} data={series[1]} />
+            })}
+
           </YAxis>
 
           <Navigator>
