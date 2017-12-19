@@ -13,7 +13,10 @@ class AllocationsCard extends Component {
 
   renderLoading() {
     return (
-      <h2>Loading...</h2>
+      <div style={{textAlign:"center"}}>
+        <div className="loader">Loading...</div>
+        <h4>Loading your portfolio allocations...</h4>
+      </div>
     )
   }
 
@@ -24,7 +27,7 @@ class AllocationsCard extends Component {
         balances[i][1] *= parseFloat(this.props.ticker['USDT_BTC'].last);
       }
     }
-    balances.sort((a,b) => {return b[1] - a[1]})
+    balances.sort((a, b) => { return b[1] - a[1] })
     return (
       <DonutChart balances={balances} total={this.totalUSDValue()} />
     )

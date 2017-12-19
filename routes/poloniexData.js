@@ -148,12 +148,13 @@ router.get('/fullPerformance', async function (req, res) {
   const [dw, bs, ticker] = await Promise.all([polo('depositsWithdrawals'), polo('tradeHistory'), polo('ticker')]);
   let hoc = await getHistoricallyOwnedCurrencies(dw, bs); // # depositswithdrawals, buys/sells
   let fullPerformance = {}
-  for (let i = 0; i < 3; i++) {
-    console.log('Creating Performance Timeline:', hoc[i]);
+  for (let i = 0; i < hoc.length; i++) {
     if (hoc[i] === 'USDT') {continue;}
+    console.log('Creating Performance Timeline:', hoc[i]);
     let tl = await createBuySellTimeline(hoc[i], bs); // create buy & sell timeline, # buys/sells
     let depositWithdrawls = await createDepositWithdrawalTimeline(hoc[i], dw); // create deposit & withdrawal timeline # depositswithdrawals
     let eventTimeline = tl.concat(depositWithdrawls).sort((a, b) => a[0] - b[0]); // join and sort by date
+    if (hoc[i] === 'BLK') {console.log(eventTimeline);}
     let portfolioPerformance = await createPortfolioValueTimeline(eventTimeline, hoc[i], ticker); // #ticker and chart data
     fullPerformance[hoc[i]] = portfolioPerformance;
   }
@@ -166,7 +167,7 @@ router.get('/fullPerformance', async function (req, res) {
 // Route all Poloniex API calls through here
 async function polo(apiCall, params) {
   let res;
-  console.log(`Making Poloniex API request [${apiCall}]`);
+  console.log(`Making Poloniex API request [${apiCall}, ${params}]`);
   for (let i = 0; i < 3; i++) { // retry functionality
     try {
       switch (apiCall) {
@@ -202,8 +203,8 @@ async function polo(apiCall, params) {
 }
 
 // Takes in chartData and coverts the prices to a USDT base
-async function convertChartDataToUSDTBase(pair, chartData) {
-  let ticker = await polo('ticker');
+async function convertChartDataToUSDTBase(pair, chartData, ticker) {
+  // let ticker = await polo('ticker');
   let convertedChartData = []
   let usdtbase = [];
   if (pair.split('_')[0] === 'USDT') {
@@ -243,8 +244,10 @@ async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
     chartData = await polo('chartData', `USDT_${currency}`);
   } else if (ticker[`BTC_${currency}`]) {
     chartData = await polo('chartData', `BTC_${currency}`);
-    chartData = convertChartDataToUSDTBase(`BTC_${currency}`, chartData);
+    chartData = convertChartDataToUSDTBase(`BTC_${currency}`, chartData, ticker);
   }
+
+
 
   for (let i = 1; i < chartData.length; i++) {
     let intraPeriodPortfolioChange = 0;

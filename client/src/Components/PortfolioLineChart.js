@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Highcharts from 'highcharts/highstock';
 import {
-  HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis, Legend, Loading, Scrollbar,
+  HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis, Legend, Loading, Scrollbar, AreaSeries,
   LineSeries, RangeSelector, Tooltip, Navigator
 } from 'react-jsx-highstock';
 
@@ -13,6 +13,7 @@ class PortfolioLineChart extends Component {
       let highchartsSeries = [];
       // remove price and quantity data, leave ts and value
       for (let series in data) {
+        if (series === 'BLK') {continue;}
         highchartsSeries.push([series, data[series].map(x => [x[0], parseFloat(x[3].toFixed(2))])]);
       }
       return highchartsSeries
@@ -88,7 +89,7 @@ class PortfolioLineChart extends Component {
             ) : (
                 this.formatForChart().map(series => {
                   console.log(series);
-                  return <LineSeries key={series[0]} id={series[0]} name={series[0]} data={series[1]} />
+                  return <AreaSeries key={series[0]} id={series[0]} name={series[0]} data={series[1]} />
                 })
               )
             }
