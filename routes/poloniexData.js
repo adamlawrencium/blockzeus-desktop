@@ -197,7 +197,7 @@ async function polo(apiCall, params) {
           res = await poloniex.returnTicker();
           break;
         case 'chartData':
-          res = await poloniex.returnChartData(params, 14400, 1000000000, 9999999999);
+          res = await poloniex.returnChartData(params, 1800, 1000000000, 9999999999);
           // res = await DBPoloniex.find({ currencyPair: params }, { 'date': 1, 'close': 1 }).sort({ date: -1 })
           break;
         case 'balances':
