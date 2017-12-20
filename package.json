@@ -6,10 +6,15 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "assert": "^1.4.1",
     "body-parser": "~1.17.1",
+    "connect-mongo": "^2.0.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",
+    "dotenv": "^4.0.0",
     "express": "~4.15.2",
+    "jsonfile": "^4.0.0",
+    "mongoose": "^4.13.7",
     "morgan": "~1.8.1",
     "poloniex-api-node": "^1.6.5",
     "pug": "~2.0.0-beta11",

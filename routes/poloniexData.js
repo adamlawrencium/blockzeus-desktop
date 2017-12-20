@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 let sleep = require('sleep');
+const DBPoloniex = require('../models/PoloniexData');
 
 const Poloniex = require('poloniex-api-node');
 
@@ -114,8 +115,16 @@ router.get('/performance/', async function (req, res) {
   res.json(portfolioPerformance);
 });
 
+
+// A TEST ROUTE
 router.get('/test', async function (req, res) {
-  res.json((await polo('chartData', 'BTC_GAS')))
+  DBPoloniex.find({ currencyPair: 'USDT_BTC' }).sort({ date: -1 }).limit(1000)
+  .then(async (tickDataFromDB) => {
+    res.json(tickDataFromDB)
+  })
+  .catch((err) => {
+    reject_(err);
+  });
 });
 
 async function getHistoricallyOwnedCurrencies(dw, bs) {
