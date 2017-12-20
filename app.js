@@ -4,12 +4,36 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+const dotenv = require('dotenv');
+const assert = require('assert');
+// const MongoStore = require('connect-mongo')(session);
+const mongoose = require('mongoose');
+
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 var poloniexData = require('./routes/poloniexData');
 
+
+/**
+ * Load environment variables from .env file, where API keys and passwords are configured.
+ */
+dotenv.load({ path: '.env' });
+
+
 var app = express();
+
+/**
+ * Connect to MongoDB.
+ */
+mongoose.Promise = global.Promise;
+mongoose.connect(process.env.MONGO_HEROKU || process.env.MONGOLAB_URI, { useMongoClient: true });
+mongoose.connection.on('error', (err) => {
+  console.error(err);
+  console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
+  process.exit();
+});
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
