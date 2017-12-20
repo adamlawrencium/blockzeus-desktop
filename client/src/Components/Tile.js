@@ -21,7 +21,7 @@ class Tile extends Component {
               Value (USD): {this.props.value}
             </p>
             {/* <p>Value (USD): {this.props.value}</p> */}
-            <a href="google.com" className="btn btn-primary">Buy/Sell</a>
+            <a href="google.com" className="btn btn-outline-primary btn-sm btn-block">Buy/Sell</a>
           </div>
         </div>
       </div>

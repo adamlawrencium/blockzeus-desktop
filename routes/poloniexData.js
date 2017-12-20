@@ -118,13 +118,14 @@ router.get('/performance/', async function (req, res) {
 
 // A TEST ROUTE
 router.get('/test', async function (req, res) {
-  DBPoloniex.find({ currencyPair: 'USDT_BTC' }).sort({ date: -1 }).limit(1000)
-  .then(async (tickDataFromDB) => {
-    res.json(tickDataFromDB)
-  })
-  .catch((err) => {
-    reject_(err);
-  });
+  // res.json((await polo('chartData', 'USDT_BTC')));
+  DBPoloniex.find({ currencyPair: 'USDT_BTC' }, { 'date': 1, 'close': 1 }).sort({ date: -1 })
+    .then(async (tickDataFromDB) => {
+      res.json(tickDataFromDB)
+    })
+    .catch((err) => {
+      reject_(err);
+    });
 });
 
 async function getHistoricallyOwnedCurrencies(dw, bs) {
@@ -170,7 +171,7 @@ router.get('/fullPerformance', async function (req, res) {
   const [dw, bs, ticker] = await Promise.all([polo('depositsWithdrawals'), polo('tradeHistory'), polo('ticker')]);
   let hoc = await getHistoricallyOwnedCurrencies(dw, bs); // # depositswithdrawals, buys/sells
   let fullPerformance = {}
-  for (let i = 0; i < hoc.length; i++) {
+  for (let i = 0; i < 5; i++) {
     console.log('Creating Performance Timeline:', hoc[i]);
     let tl = await createBuySellTimeline(hoc[i], bs); // create buy & sell timeline, # buys/sells
     let depositWithdrawls = await createDepositWithdrawalTimeline(hoc[i], dw); // create deposit & withdrawal timeline # depositswithdrawals
@@ -196,7 +197,8 @@ async function polo(apiCall, params) {
           res = await poloniex.returnTicker();
           break;
         case 'chartData':
-          res = await poloniex.returnChartData(params, 14400, 1000000000, 9999999999)
+          res = await poloniex.returnChartData(params, 14400, 1000000000, 9999999999);
+          // res = await DBPoloniex.find({ currencyPair: params }, { 'date': 1, 'close': 1 }).sort({ date: -1 })
           break;
         case 'balances':
           res = await poloniex.returnBalances();
@@ -310,7 +312,7 @@ async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
     let price = currency === 'USDT' ? 1 : chartData[i - 1]['close']
     let quantity = portfolioTimeline[i - 1][2] + intraPeriodPortfolioChange
     let value = price * quantity;
-    totalTraded += value - portfolioTimeline[i-1][3]; 
+    totalTraded += value - portfolioTimeline[i - 1][3];
     portfolioTimeline.push([ts, price, quantity, parseFloat(value.toFixed(2))])
   }
 
