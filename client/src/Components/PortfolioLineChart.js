@@ -67,12 +67,12 @@ class PortfolioLineChart extends Component {
           <Loading isLoading={!this.props.loaded}>Fetching portfolio data...</Loading>
 
           <RangeSelector buttonTheme={buttonTheme}>
-            <RangeSelector.Button count={1} type="day">1d</RangeSelector.Button>
-            <RangeSelector.Button count={14} type="day">14d</RangeSelector.Button>
-            <RangeSelector.Button count={3} type="month">3m</RangeSelector.Button>
-            <RangeSelector.Button count={1} type="year">1yr</RangeSelector.Button>
+            <RangeSelector.Button count={1} type="day">1D</RangeSelector.Button>
+            <RangeSelector.Button count={7} type="day">1W</RangeSelector.Button>
+            <RangeSelector.Button count={3} type="month">3M</RangeSelector.Button>
+            <RangeSelector.Button count={1} type="year">1Y</RangeSelector.Button>
             <RangeSelector.Button type="all">All</RangeSelector.Button>
-            <RangeSelector.Input boxBorderColor="#483453" />
+            {/* <RangeSelector.Input boxBorderColor="#483453" /> */}
           </RangeSelector>
 
           <Tooltip />
