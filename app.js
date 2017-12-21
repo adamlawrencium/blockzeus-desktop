@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const assert = require('assert');
+const http = require('http');
 // const MongoStore = require('connect-mongo')(session);
 const mongoose = require('mongoose');
 
@@ -78,3 +79,7 @@ app.use(function(err, req, res, next) {
 process.on('unhandledRejection', r => console.log(r));
 
 module.exports = app;
+
+setInterval(() => {
+  http.get('http://blockzeus.herokuapp.com');
+}, 300000); // every 5 minutes (300000)
