@@ -171,7 +171,7 @@ router.get('/fullPerformance', async function (req, res) {
   const [dw, bs, ticker] = await Promise.all([polo('depositsWithdrawals'), polo('tradeHistory'), polo('ticker')]);
   let hoc = await getHistoricallyOwnedCurrencies(dw, bs); // # depositswithdrawals, buys/sells
   let fullPerformance = {}
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < hoc.length; i++) {
     console.log('Creating Performance Timeline:', hoc[i]);
     let tl = await createBuySellTimeline(hoc[i], bs); // create buy & sell timeline, # buys/sells
     let depositWithdrawls = await createDepositWithdrawalTimeline(hoc[i], dw); // create deposit & withdrawal timeline # depositswithdrawals
