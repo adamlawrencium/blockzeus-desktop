@@ -10,6 +10,10 @@ let secret = '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f98
 
 let poloniex = new Poloniex(key, secret);
 
+// Initialize most commonly used data.
+let USDT_BTC;
+polo('chartData', 'USDT_BTC').then(data => USDT_BTC = data)
+
 let totalTraded = 0;
 
 /*
@@ -118,14 +122,15 @@ router.get('/performance/', async function (req, res) {
 
 // A TEST ROUTE
 router.get('/test', async function (req, res) {
+  console.log(USDT_BTC);
   // res.json((await polo('chartData', 'USDT_BTC')));
-  DBPoloniex.find({ currencyPair: 'USDT_BTC' }, { 'date': 1, 'close': 1 }).sort({ date: -1 })
-    .then(async (tickDataFromDB) => {
-      res.json(tickDataFromDB)
-    })
-    .catch((err) => {
-      reject_(err);
-    });
+  // DBPoloniex.find({ currencyPair: 'USDT_BTC' }, { 'date': 1, 'close': 1 }).sort({ date: -1 })
+  //   .then(async (tickDataFromDB) => {
+  //     res.json(tickDataFromDB)
+  //   })
+  //   .catch((err) => {
+  //     reject_(err);
+  //   });
 });
 
 async function getHistoricallyOwnedCurrencies(dw, bs) {
@@ -171,7 +176,7 @@ router.get('/fullPerformance', async function (req, res) {
   const [dw, bs, ticker] = await Promise.all([polo('depositsWithdrawals'), polo('tradeHistory'), polo('ticker')]);
   let hoc = await getHistoricallyOwnedCurrencies(dw, bs); // # depositswithdrawals, buys/sells
   let performances = [];
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 6; i++) {
     console.log('Creating Performance Timeline:', hoc[i]);
     let tl = createBuySellTimeline(hoc[i], bs); // create buy & sell timeline, # buys/sells
     let depositWithdrawls = createDepositWithdrawalTimeline(hoc[i], dw); // create deposit & withdrawal timeline # depositswithdrawals
@@ -180,7 +185,7 @@ router.get('/fullPerformance', async function (req, res) {
   }
   performances = await Promise.all(performances);
   let fullPerformance = {}
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 6; i++) {
     fullPerformance[hoc[i]] = performances[i];
   }
   res.json(fullPerformance);
@@ -192,6 +197,7 @@ async function polo(apiCall, params) {
   let res;
   console.log(`Making Poloniex API request [${apiCall}, ${params}]`);
   for (let i = 0; i < 3; i++) { // retry functionality
+    let done = false;
     try {
       switch (apiCall) {
         case 'ticker':
@@ -199,19 +205,24 @@ async function polo(apiCall, params) {
           break;
         case 'chartData':
           res = await poloniex.returnChartData(params, 86400, 1000000000, 9999999999);
-          // res = await DBPoloniex.find({ currencyPair: params }, { 'date': 1, 'close': 1 }).sort({ date: -1 })
+          console.log('Received', params, 'data.');
+          done = true;
           break;
         case 'balances':
           res = await poloniex.returnBalances();
+          done = true;
           break;
         case 'completeBalances':
           res = await poloniex.returnCompleteBalances();
+          done = true;
           break;
         case 'tradeHistory':
           res = await poloniex.returnMyTradeHistory('all', 1000000000, 9999999999);
+          done = true;
           break;
         case 'depositsWithdrawals':
           res = await poloniex.returnDepositsWithdrawals(1000000000, 9999999999);
+          done = true;
           break;
         default:
           return 'BZ: Invalid API Call'
@@ -222,6 +233,7 @@ async function polo(apiCall, params) {
       sleep.msleep(300); // abide by rate limits and avoid nonce issue
       continue;
     }
+    if (done) break;
   }
   return res;
 }
@@ -235,7 +247,7 @@ async function convertChartDataToUSDTBase(pair, chartData, ticker) {
     return chartData;
   }
   else if (pair.split('_')[0] === 'BTC') {
-    usdtbase = await polo('chartData', 'USDT_BTC');
+    usdtbase = USDT_BTC;
   }
   else if (pair.split('_')[0] === 'ETH') {
     usdtbase = await polo('chartData', 'USDT_ETH');
