@@ -170,19 +170,20 @@ router.get('/fullPerformance', async function (req, res) {
   // Get all historically owned currencies by looking at past buys/sells/deposits/withdrawals
   const [dw, bs, ticker] = await Promise.all([polo('depositsWithdrawals'), polo('tradeHistory'), polo('ticker')]);
   let hoc = await getHistoricallyOwnedCurrencies(dw, bs); // # depositswithdrawals, buys/sells
-  let fullPerformance = {}
-  for (let i = 0; i < 6; i++) {
+  let performances = [];
+  for (let i = 0; i < 5; i++) {
     console.log('Creating Performance Timeline:', hoc[i]);
-    let tl = await createBuySellTimeline(hoc[i], bs); // create buy & sell timeline, # buys/sells
-    let depositWithdrawls = await createDepositWithdrawalTimeline(hoc[i], dw); // create deposit & withdrawal timeline # depositswithdrawals
+    let tl = createBuySellTimeline(hoc[i], bs); // create buy & sell timeline, # buys/sells
+    let depositWithdrawls = createDepositWithdrawalTimeline(hoc[i], dw); // create deposit & withdrawal timeline # depositswithdrawals
     let eventTimeline = tl.concat(depositWithdrawls).sort((a, b) => a[0] - b[0]); // join and sort by date
-    let portfolioPerformance = await createPortfolioValueTimeline(eventTimeline, hoc[i], ticker); // #ticker and chart data
-    fullPerformance[hoc[i]] = portfolioPerformance;
+    performances.push(createPortfolioValueTimeline(eventTimeline, hoc[i], ticker));
   }
-
-  console.log(totalTraded);
+  performances = await Promise.all(performances);
+  let fullPerformance = {}
+  for (let i = 0; i < 5; i++) {
+    fullPerformance[hoc[i]] = performances[i];
+  }
   res.json(fullPerformance);
-
 });
 
 
@@ -197,7 +198,7 @@ async function polo(apiCall, params) {
           res = await poloniex.returnTicker();
           break;
         case 'chartData':
-          res = await poloniex.returnChartData(params, 1800, 1000000000, 9999999999);
+          res = await poloniex.returnChartData(params, 86400, 1000000000, 9999999999);
           // res = await DBPoloniex.find({ currencyPair: params }, { 'date': 1, 'close': 1 }).sort({ date: -1 })
           break;
         case 'balances':
@@ -323,10 +324,11 @@ async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
       break;
     }
   }
+  // console.log(portfolioTimeline);
   return portfolioTimeline;
 }
 
-async function createDepositWithdrawalTimeline(currency, dw) {
+function createDepositWithdrawalTimeline(currency, dw) {
   let depositWithdrawaltimeline = [];
   for (let i = 0; i < dw.deposits.length; i++) {
     if (dw.deposits[i].currency == currency || currency === 'all') {
@@ -350,7 +352,7 @@ async function createDepositWithdrawalTimeline(currency, dw) {
 /*
 Looks through all trades and creates buy/sell timeline based on all currency pairs
 */
-async function createBuySellTimeline(currency, bs) {
+function createBuySellTimeline(currency, bs) {
   let timeline = [];
   for (let pair in bs) {
     // currency is base, sell orders add to portfolio, buy orders substract from portfolio
