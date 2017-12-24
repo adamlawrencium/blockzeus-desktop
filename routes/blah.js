@@ -176,7 +176,8 @@ router.get('/fullPerformance', async function (req, res) {
   const [dw, bs, ticker] = await Promise.all([polo('depositsWithdrawals'), polo('tradeHistory'), polo('ticker')]);
   let hoc = await getHistoricallyOwnedCurrencies(dw, bs); // # depositswithdrawals, buys/sells
   let performances = [];
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 10; i++) {
+    sleep.msleep(170)
     console.log('Creating Performance Timeline:', hoc[i]);
     let tl = createBuySellTimeline(hoc[i], bs); // create buy & sell timeline, # buys/sells
     let depositWithdrawls = createDepositWithdrawalTimeline(hoc[i], dw); // create deposit & withdrawal timeline # depositswithdrawals
@@ -185,120 +186,58 @@ router.get('/fullPerformance', async function (req, res) {
   }
   performances = await Promise.all(performances);
   let fullPerformance = {}
-  for (let i = 0; i < 3; i++) {
-    // console.log(performances[i]);
+  for (let i = 0; i < 10; i++) {
     fullPerformance[hoc[i]] = performances[i];
   }
   res.json(fullPerformance);
 });
 
 
-
-
-// Takes in event timeline [[timestamp, buy/sell/deposit/withdrawal, amount], ...]
-// values events against another currency (USD)
-async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
-  portfolioTimeline = [[1000000000, 0, 0, 0]];
-
-  // see if there exists a USDT_Currency market
-  // if not, see if BTC_Currency market exists, then convert it to USDT and run the following:
-  let chartData;
-  if (ticker[`USDT_${currency}`]) {
-    chartData = await polo('chartData', `USDT_${currency}`);
-  } else if (ticker[`BTC_${currency}`]) {
-    chartData = await polo('chartData', `BTC_${currency}`);
-    chartData = await convertChartDataToUSDTBase(`BTC_${currency}`, chartData, ticker);
-  } else if (currency === 'USDT') {
-    chartData = createDummyUSDTData();
-  }
-
-  console.log(currency, chartData[2342]);
-
-  for (let i = 1; i < chartData.length; i++) {
-    let intraPeriodPortfolioChange = 0;
-    for (let eventIndex = 0; eventIndex < eventTimeline.length; eventIndex++) {
-      // if the event is between two candlesticks, get final value
-      if (eventTimeline[eventIndex][0] > chartData[i - 1]['date'] &&
-        eventTimeline[eventIndex][0] <= chartData[i]['date']) { //correct
-        // if buy or deposit, add to portfolio, if sell or withdraw, substract
-        if (eventTimeline[eventIndex][1] === 'deposit' ||
-          eventTimeline[eventIndex][1] === 'buy') {
-          intraPeriodPortfolioChange += eventTimeline[eventIndex][2];
-        } else {
-          intraPeriodPortfolioChange -= eventTimeline[eventIndex][2];
-        }
+// Route all Poloniex API calls through here
+async function polo(apiCall, params) {
+  let res;
+  console.log(`Making Poloniex API request [${apiCall}, ${params}]`);
+  for (let i = 0; i < 7; i++) { // retry functionality
+    let done = false;
+    try {
+      switch (apiCall) {
+        case 'ticker':
+          res = await poloniex.returnTicker();
+          break;
+        case 'chartData':
+          res = await poloniex.returnChartData(params, 86400, 1000000000, 9999999999);
+          console.log('Received', params, 'data.');
+          done = true;
+          break;
+        case 'balances':
+          res = await poloniex.returnBalances();
+          done = true;
+          break;
+        case 'completeBalances':
+          res = await poloniex.returnCompleteBalances();
+          done = true;
+          break;
+        case 'tradeHistory':
+          res = await poloniex.returnMyTradeHistory('all', 1000000000, 9999999999);
+          done = true;
+          break;
+        case 'depositsWithdrawals':
+          res = await poloniex.returnDepositsWithdrawals(1000000000, 9999999999);
+          done = true;
+          break;
+        default:
+          return 'BZ: Invalid API Call'
+          break;
       }
+    } catch (err) {
+      console.log('Error happened, retrying...', err);
+      sleep.msleep(300); // abide by rate limits and avoid nonce issue
+      continue;
     }
-    let ts = chartData[i - 1]['date'] * 1000;
-    let price = currency === 'USDT' ? 1 : chartData[i - 1]['close']
-    let quantity = portfolioTimeline[i - 1][2] + intraPeriodPortfolioChange
-    let value = price * quantity;
-    totalTraded += value - portfolioTimeline[i - 1][3];
-    portfolioTimeline.push([ts, price, quantity, parseFloat(value.toFixed(2))])
+    if (done) break;
   }
-
-  // trim beginning data with no trading activity
-  for (let i = 0; i < portfolioTimeline.length; i++) {
-    if (portfolioTimeline[i][2] !== 0) {
-      portfolioTimeline = portfolioTimeline.slice(i, portfolioTimeline.length);
-      break;
-    }
-  }
-  // console.log(portfolioTimeline);
-  return portfolioTimeline;
+  return res;
 }
-
-function createDepositWithdrawalTimeline(currency, dw) {
-  let depositWithdrawaltimeline = [];
-  for (let i = 0; i < dw.deposits.length; i++) {
-    if (dw.deposits[i].currency == currency || currency === 'all') {
-      let ts = dw.deposits[i].timestamp;
-      let event = 'deposit';
-      let amount = parseFloat(dw.deposits[i].amount);
-      depositWithdrawaltimeline.push([ts, event, amount, dw.deposits[i].currency]);
-    }
-  }
-  for (let i = 0; i < dw.withdrawals.length; i++) {
-    if (dw.withdrawals[i].currency == currency || currency === 'all') {
-      let ts = dw.withdrawals[i].timestamp;
-      let event = 'withdrawal';
-      let amount = parseFloat(dw.withdrawals[i].amount);
-      depositWithdrawaltimeline.push([ts, event, amount, dw.withdrawals[i].currency]);
-    }
-  }
-  return depositWithdrawaltimeline;
-}
-
-/*
-Looks through all trades and creates buy/sell timeline based on all currency pairs
-*/
-function createBuySellTimeline(currency, bs) {
-  let timeline = [];
-  for (let pair in bs) {
-    // currency is base, sell orders add to portfolio, buy orders substract from portfolio
-    if (pair.split("_")[0] === currency) {
-      // loop through all trades of specific pair
-      for (let i = 0; i < bs[pair].length; i++) {
-        let ts = Date.parse(bs[pair][i].date) / 1000;
-        let event = bs[pair][i].type === 'buy' ? 'sell' : 'buy';
-        let amount = parseFloat(bs[pair][i].total) * 0.9975;
-        timeline.push([ts, event, amount, pair])
-      }
-    }
-    // currency is trade, sell orders subtract from portfolio, buy orders add to portfolio
-    else if (pair.split("_")[1] === currency) {
-      // loop through all trades of specific pair
-      for (let i = 0; i < bs[pair].length; i++) {
-        let ts = Date.parse(bs[pair][i].date) / 1000;
-        let event = bs[pair][i].type === 'buy' ? 'buy' : 'sell';
-        let amount = parseFloat(bs[pair][i].amount) * 0.9975;
-        timeline.push([ts, event, amount, pair])
-      }
-    }
-  }
-  return timeline;
-}
-
 
 // Takes in chartData and coverts the prices to a USDT base
 async function convertChartDataToUSDTBase(pair, chartData, ticker) {
@@ -351,50 +290,106 @@ function createDummyUSDTData() {
   return dummyData;
 }
 
-// Route all Poloniex API calls through here
-async function polo(apiCall, params) {
-  let res;
-  console.log(`Making Poloniex API request [${apiCall}, ${params}]`);
-  for (let i = 0; i < 7; i++) { // retry functionality
-    let done = false;
-    try {
-      switch (apiCall) {
-        case 'ticker':
-          res = await poloniex.returnTicker();
-          break;
-        case 'chartData':
-          res = await poloniex.returnChartData(params, 14400, 1000000000, 9999999999);
-          console.log('Received', params, 'data.');
-          done = true;
-          break;
-        case 'balances':
-          res = await poloniex.returnBalances();
-          done = true;
-          break;
-        case 'completeBalances':
-          res = await poloniex.returnCompleteBalances();
-          done = true;
-          break;
-        case 'tradeHistory':
-          res = await poloniex.returnMyTradeHistory('all', 1000000000, 9999999999);
-          done = true;
-          break;
-        case 'depositsWithdrawals':
-          res = await poloniex.returnDepositsWithdrawals(1000000000, 9999999999);
-          done = true;
-          break;
-        default:
-          return 'BZ: Invalid API Call'
-          break;
-      }
-    } catch (err) {
-      console.log('Error happened, retrying...', err);
-      sleep.msleep(300); // abide by rate limits and avoid nonce issue
-      continue;
-    }
-    if (done) break;
+// Takes in event timeline [[timestamp, buy/sell/deposit/withdrawal, amount], ...]
+// values events against another currency (USD)
+async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
+  portfolioTimeline = [[1000000000, 0, 0, 0]];
+  // see if there exists a USDT_Currency market
+  // if not, see if BTC_Currency market exists, then convert it to USDT and run the following:
+  let chartData;
+  if (ticker[`USDT_${currency}`]) {
+    chartData = await polo('chartData', `USDT_${currency}`);
+  } else if (ticker[`BTC_${currency}`]) {
+    chartData = await polo('chartData', `BTC_${currency}`);
+    chartData = await convertChartDataToUSDTBase(`BTC_${currency}`, chartData, ticker);
+  } else if (currency === 'USDT') {
+    chartData = createDummyUSDTData();
   }
-  return res;
+
+
+  for (let i = 1; i < chartData.length; i++) {
+    let intraPeriodPortfolioChange = 0;
+    for (let eventIndex = 0; eventIndex < eventTimeline.length; eventIndex++) {
+      // if the event is between two candlesticks, get final value
+      if (eventTimeline[eventIndex][0] > chartData[i - 1]['date'] &&
+        eventTimeline[eventIndex][0] <= chartData[i]['date']) { //correct
+        // if buy or deposit, add to portfolio, if sell or withdraw, substract
+        if (eventTimeline[eventIndex][1] === 'deposit' ||
+          eventTimeline[eventIndex][1] === 'buy') {
+          intraPeriodPortfolioChange += eventTimeline[eventIndex][2];
+        } else {
+          intraPeriodPortfolioChange -= eventTimeline[eventIndex][2];
+        }
+      }
+    }
+    let ts = chartData[i - 1]['date'] * 1000;
+    let price = currency === 'USDT' ? 1 : chartData[i - 1]['close']
+    let quantity = portfolioTimeline[i - 1][2] + intraPeriodPortfolioChange
+    let value = price * quantity;
+    totalTraded += value - portfolioTimeline[i - 1][3];
+    portfolioTimeline.push([ts, price, quantity, parseFloat(value.toFixed(2))])
+  }
+
+  // trim beginning data with no trading activity
+  for (let i = 0; i < portfolioTimeline.length; i++) {
+    if (portfolioTimeline[i][2] !== 0) {
+      portfolioTimeline = portfolioTimeline.slice(i, portfolioTimeline.length);
+      break;
+    }
+  }
+  // console.log(portfolioTimeline);
+  return portfolioTimeline;
+}
+
+function createDepositWithdrawalTimeline(currency, dw) {
+  let depositWithdrawaltimeline = [];
+  for (let i = 0; i < dw.deposits.length; i++) {
+    if (dw.deposits[i].currency == currency || currency === 'all') {
+      let ts = dw.deposits[i].timestamp;
+      let event = 'deposit';
+      let amount = parseFloat(dw.deposits[i].amount);
+      depositWithdrawaltimeline.push([ts, event, amount, dw.deposits[i].currency]);
+    }
+  }
+  for (let i = 0; i < dw.withdrawals.length; i++) {
+    if (dw.withdrawals[i].currency == currency || currency === 'all') {
+      let ts = dw.withdrawals[i].timestamp;
+      let event = 'withdrawal';
+      let amount = parseFloat(dw.withdrawals[i].amount);
+      depositWithdrawaltimeline.push([ts, event, amount, dw.deposits[i].currency]);
+    }
+  }
+  return depositWithdrawaltimeline;
+}
+
+/*
+Looks through all trades and creates buy/sell timeline based on all currency pairs
+*/
+function createBuySellTimeline(currency, bs) {
+  let timeline = [];
+  for (let pair in bs) {
+    // currency is base, sell orders add to portfolio, buy orders substract from portfolio
+    if (pair.split("_")[0] === currency) {
+      // loop through all trades of specific pair
+      for (let i = 0; i < bs[pair].length; i++) {
+        let ts = Date.parse(bs[pair][i].date) / 1000;
+        let event = bs[pair][i].type === 'buy' ? 'sell' : 'buy';
+        let amount = parseFloat(bs[pair][i].total) * 0.9975;
+        timeline.push([ts, event, amount, pair])
+      }
+    }
+    // currency is trade, sell orders subtract from portfolio, buy orders add to portfolio
+    else if (pair.split("_")[1] === currency) {
+      // loop through all trades of specific pair
+      for (let i = 0; i < bs[pair].length; i++) {
+        let ts = Date.parse(bs[pair][i].date) / 1000;
+        let event = bs[pair][i].type === 'buy' ? 'buy' : 'sell';
+        let amount = parseFloat(bs[pair][i].amount) * 0.9975;
+        timeline.push([ts, event, amount, pair])
+      }
+    }
+  }
+  return timeline;
 }
 
 module.exports = router;

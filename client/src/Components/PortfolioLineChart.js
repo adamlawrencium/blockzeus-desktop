@@ -10,11 +10,11 @@ class PortfolioLineChart extends Component {
   formatForChart() {
     if (this.props.data) {
       let data = this.props.data;
+      console.log(data);
       let highchartsSeries = [];
       // remove price and quantity data, leave ts and value
       for (let series in data) {
-        if (series === 'BLK') {continue;}
-        highchartsSeries.push([series, data[series].map(x => [x[0], parseFloat(x[3].toFixed(2))])]);
+        highchartsSeries.push([series, data[series].map(x => [x[0], x[1]])]);
       }
       return highchartsSeries
     }
@@ -66,17 +66,17 @@ class PortfolioLineChart extends Component {
 
           <Loading isLoading={!this.props.loaded}>Fetching portfolio data...</Loading>
 
-          <RangeSelector buttonTheme={buttonTheme}>
+          {/* <RangeSelector buttonTheme={buttonTheme}>
             <RangeSelector.Button count={1} type="day">1D</RangeSelector.Button>
             <RangeSelector.Button count={7} type="day">1W</RangeSelector.Button>
             <RangeSelector.Button count={3} type="month">3M</RangeSelector.Button>
             <RangeSelector.Button count={1} type="year">1Y</RangeSelector.Button>
             <RangeSelector.Button type="all">All</RangeSelector.Button>
-            {/* <RangeSelector.Input boxBorderColor="#483453" /> */}
-          </RangeSelector>
+            <RangeSelector.Input boxBorderColor="#483453" />
+          </RangeSelector> */}
 
           <Tooltip />
-
+          <Legend />
           <XAxis>
             {/* <Scrollbar /> */}
           </XAxis>
@@ -88,8 +88,11 @@ class PortfolioLineChart extends Component {
               <LineSeries color="#ffffff" key={'x'} id={'x'} name={'x'} data={[[0, 1337]]} />
             ) : (
                 this.formatForChart().map(series => {
-                  console.log(series);
-                  return <AreaSeries key={series[0]} id={series[0]} name={series[0]} data={series[1]} />
+                  return <AreaSeries
+                    key={series[0]}
+                    id={series[0]}
+                    name={series[0]}
+                    data={series[1]} />
                 })
               )
             }
@@ -97,7 +100,14 @@ class PortfolioLineChart extends Component {
           </YAxis>
 
           <Navigator>
-            <Navigator.Series seriesid="value" />
+            { this.props.loaded && (
+              Object.keys(this.props.data).map(series => {
+                console.log(series);
+                return <Navigator.Series key={series} seriesId={series} />
+              })
+            // <Navigator.Series seriesId='BTC' />
+            // <Navigator.Series seriesId='ETH' />
+            )}
           </Navigator>
 
         </HighchartsStockChart>
