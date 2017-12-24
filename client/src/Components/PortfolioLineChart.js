@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Highcharts from 'highcharts/highstock';
 import {
-  HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis, Legend, Loading, Scrollbar, AreaSeries,
+  HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis, Legend, Loading, Scrollbar, AreaSeries, AreaSplineSeries,
   LineSeries, RangeSelector, Tooltip, Navigator
 } from 'react-jsx-highstock';
 
@@ -14,7 +14,7 @@ class PortfolioLineChart extends Component {
       let highchartsSeries = [];
       // remove price and quantity data, leave ts and value
       for (let series in data) {
-        highchartsSeries.push([series, data[series].map(x => [x[0], x[1]])]);
+        highchartsSeries.push([series, data[series].map(x => [x[0], x[3]])]);
       }
       return highchartsSeries
     }
@@ -27,7 +27,7 @@ class PortfolioLineChart extends Component {
 
   render() {
     const plotOptions = {
-      area: {
+      areaSpline: {
         stacking: 'normal',
         lineColor: '#666666',
         lineWidth: 1,
@@ -66,20 +66,20 @@ class PortfolioLineChart extends Component {
 
           <Loading isLoading={!this.props.loaded}>Fetching portfolio data...</Loading>
 
-          {/* <RangeSelector buttonTheme={buttonTheme}>
+          <RangeSelector buttonTheme={buttonTheme}>
             <RangeSelector.Button count={1} type="day">1D</RangeSelector.Button>
             <RangeSelector.Button count={7} type="day">1W</RangeSelector.Button>
             <RangeSelector.Button count={3} type="month">3M</RangeSelector.Button>
             <RangeSelector.Button count={1} type="year">1Y</RangeSelector.Button>
             <RangeSelector.Button type="all">All</RangeSelector.Button>
-            <RangeSelector.Input boxBorderColor="#483453" />
-          </RangeSelector> */}
+            {/* <RangeSelector.Input boxBorderColor="#483453" /> */}
+          </RangeSelector>
 
           <Tooltip />
+
           <Legend />
-          <XAxis>
-            {/* <Scrollbar /> */}
-          </XAxis>
+
+          <XAxis/>
 
           <YAxis id="value">
             <YAxis.Title>Portfolio Value (USD)</YAxis.Title>
@@ -88,7 +88,7 @@ class PortfolioLineChart extends Component {
               <LineSeries color="#ffffff" key={'x'} id={'x'} name={'x'} data={[[0, 1337]]} />
             ) : (
                 this.formatForChart().map(series => {
-                  return <AreaSeries
+                  return <AreaSplineSeries
                     key={series[0]}
                     id={series[0]}
                     name={series[0]}
