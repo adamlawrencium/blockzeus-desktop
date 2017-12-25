@@ -1,21 +1,20 @@
-'use strict';
+const express = require('express');
 
-var express = require('express');
-var router = express.Router();
-let sleep = require('sleep');
+const router = express.Router();
+const sleep = require('sleep');
 const DBPoloniex = require('../models/PoloniexData');
 
 const Poloniex = require('poloniex-api-node');
 
-let key = 'GTTSHNIZ-V4EYK5K9-4QT6XXS8-EPGJ9G5F'
-let secret = '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f9847e55edb39685c69350c9536c9f0f26d5b70804415859bfb90408ae364c19d'
+const key = 'GTTSHNIZ-V4EYK5K9-4QT6XXS8-EPGJ9G5F';
+const secret = '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f9847e55edb39685c69350c9536c9f0f26d5b70804415859bfb90408ae364c19d';
 
-let poloniex = new Poloniex(key, secret);
+const poloniex = new Poloniex(key, secret);
 
 const PERIOD = 86400;
 // Initialize most commonly used data.
 let USDT_BTC;
-polo('chartData', 'USDT_BTC').then(data => USDT_BTC = data)
+polo('chartData', 'USDT_BTC').then(data => USDT_BTC = data);
 
 let totalTraded = 0;
 
@@ -33,8 +32,8 @@ let totalTraded = 0;
   "low24hr": "0.04607966"
 }, ...
 */
-router.get('/ticker', async function (req, res, next) {
-  let ticker = await polo('ticker');
+router.get('/ticker', async (req, res, next) => {
+  const ticker = await polo('ticker');
   res.json(ticker);
 });
 
@@ -45,8 +44,8 @@ router.get('/ticker', async function (req, res, next) {
   ...,
 }
 */
-router.get('/balances', async function (req, res, next) {
-  let balances = await polo('balances');
+router.get('/balances', async (req, res, next) => {
+  const balances = await polo('balances');
   res.json(balances);
 });
 
@@ -59,8 +58,8 @@ router.get('/balances', async function (req, res, next) {
   }, ...
 }
 */
-router.get('/completeBalances', async function (req, res, next) {
-  let completeBalances = await polo('completeBalances');
+router.get('/completeBalances', async (req, res, next) => {
+  const completeBalances = await polo('completeBalances');
   res.json(completeBalances);
 });
 
@@ -78,8 +77,8 @@ router.get('/completeBalances', async function (req, res, next) {
 ]
 one month periods
 */
-router.get('/tradeHistory/:currencyPair', async function (req, res, next) {
-  let tradeHistory = await polo('tradeHistory');
+router.get('/tradeHistory/:currencyPair', async (req, res, next) => {
+  const tradeHistory = await polo('tradeHistory');
   res.json(tradeHistory);
 });
 
@@ -93,18 +92,18 @@ router.get('/tradeHistory/:currencyPair', async function (req, res, next) {
   "volume": 0.999999,
   "quoteVolume": 0.00444444,
   "weightedAverage": 225
-}, 
+},
 period: {300, 900, 1800, 7200, 14400, 86400}
 */
-router.get('/chartData/:pair/:period', async function (req, res) {
-  let chartData = await polo('chartData', req.params.pair);
+router.get('/chartData/:pair/:period', async (req, res) => {
+  const chartData = await polo('chartData', req.params.pair);
   res.json(chartData);
 });
-router.get('/usdtBaseChartData/:pair', async function (req, res) {
+router.get('/usdtBaseChartData/:pair', async (req, res) => {
   let chartData = await polo('chartData', req.params.pair);
   chartData = await convertChartDataToUSDTBase(req.params.pair, chartData);
-  res.json(chartData)
-})
+  res.json(chartData);
+});
 
 
 /*
@@ -114,17 +113,17 @@ To create a proper a portfolio value history for a certain currency, we need two
 2. timeline of buys & sells in ALL markets
 3. value all the inflow/outflows against (BTC ->) USD
 */
-router.get('/performance/', async function (req, res) {
-  let tl = await createBuySellTimeline('BCH'); // create buy & sell timeline
-  let depositWithdrawls = await createDepositWithdrawalTimeline('BCH'); // create deposit & withdrawal timeline
-  let eventTimeline = tl.concat(depositWithdrawls).sort((a, b) => a[0] - b[0]); // join and sort by date
-  let portfolioPerformance = await createPortfolioValueTimeline(eventTimeline, 'BCH');
+router.get('/performance/', async (req, res) => {
+  const tl = await createBuySellTimeline('BCH'); // create buy & sell timeline
+  const depositWithdrawls = await createDepositWithdrawalTimeline('BCH'); // create deposit & withdrawal timeline
+  const eventTimeline = tl.concat(depositWithdrawls).sort((a, b) => a[0] - b[0]); // join and sort by date
+  const portfolioPerformance = await createPortfolioValueTimeline(eventTimeline, 'BCH');
   res.json(portfolioPerformance);
 });
 
 
 // A TEST ROUTE
-router.get('/test', async function (req, res) {
+router.get('/test', async (req, res) => {
   console.log(USDT_BTC);
   // res.json((await polo('chartData', 'USDT_BTC')));
   // DBPoloniex.find({ currencyPair: 'USDT_BTC' }, { 'date': 1, 'close': 1 }).sort({ date: -1 })
@@ -142,20 +141,20 @@ for all holdings:
 2. timeline of buys & sells in ALL markets
 3. value all the inflow/outflows against (BTC ->) USD
 */
-router.get('/fullPerformance', async function (req, res) {
+router.get('/fullPerformance', async (req, res) => {
   // Get all historically owned currencies by looking at past buys/sells/deposits/withdrawals
   const [dw, bs, ticker] = await Promise.all([polo('depositsWithdrawals'), polo('tradeHistory'), polo('ticker')]);
-  let hoc = await getHistoricallyOwnedCurrencies(dw, bs); // # depositswithdrawals, buys/sells
+  const hoc = await getHistoricallyOwnedCurrencies(dw, bs); // # depositswithdrawals, buys/sells
   let performances = [];
   for (let i = 0; i < 5; i++) {
     console.log('Creating Performance Timeline:', hoc[i]);
-    let tl = createBuySellTimeline(hoc[i], bs); // create buy & sell timeline, # buys/sells
-    let depositWithdrawls = createDepositWithdrawalTimeline(hoc[i], dw); // create deposit & withdrawal timeline # depositswithdrawals
-    let eventTimeline = tl.concat(depositWithdrawls).sort((a, b) => a[0] - b[0]); // join and sort by date
+    const tl = createBuySellTimeline(hoc[i], bs); // create buy & sell timeline, # buys/sells
+    const depositWithdrawls = createDepositWithdrawalTimeline(hoc[i], dw); // create deposit & withdrawal timeline # depositswithdrawals
+    const eventTimeline = tl.concat(depositWithdrawls).sort((a, b) => a[0] - b[0]); // join and sort by date
     performances.push(createPortfolioValueTimeline(eventTimeline, hoc[i], ticker));
   }
   performances = await Promise.all(performances);
-  let fullPerformance = {}
+  const fullPerformance = {};
   for (let i = 0; i < 5; i++) {
     // console.log(performances[i]);
     fullPerformance[hoc[i]] = performances[i];
@@ -187,8 +186,8 @@ async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
     let intraPeriodPortfolioChange = 0;
     for (let eventIndex = 0; eventIndex < eventTimeline.length; eventIndex++) {
       // if the event is between two candlesticks, get final value
-      if (eventTimeline[eventIndex][0] > chartData[i - 1]['date'] &&
-        eventTimeline[eventIndex][0] <= chartData[i]['date']) { //correct
+      if (eventTimeline[eventIndex][0] > chartData[i - 1].date &&
+        eventTimeline[eventIndex][0] <= chartData[i].date) { // correct
         // if buy or deposit, add to portfolio, if sell or withdraw, substract
         if (eventTimeline[eventIndex][1] === 'deposit' ||
           eventTimeline[eventIndex][1] === 'buy') {
@@ -198,12 +197,12 @@ async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
         }
       }
     }
-    let ts = chartData[i - 1]['date'] * 1000;
-    let price = currency === 'USDT' ? 1 : chartData[i - 1]['close']
-    let quantity = portfolioTimeline[i - 1][2] + intraPeriodPortfolioChange
-    let value = price * quantity;
+    const ts = chartData[i - 1].date * 1000;
+    const price = currency === 'USDT' ? 1 : chartData[i - 1].close;
+    const quantity = portfolioTimeline[i - 1][2] + intraPeriodPortfolioChange;
+    const value = price * quantity;
     totalTraded += value - portfolioTimeline[i - 1][3];
-    portfolioTimeline.push([ts, price, quantity, parseFloat(value.toFixed(2))])
+    portfolioTimeline.push([ts, price, quantity, parseFloat(value.toFixed(2))]);
   }
 
   if (currency === 'LTC') {
@@ -227,44 +226,44 @@ async function getHistoricallyOwnedCurrencies(dw, bs) {
   let hoc = [];
   // Add deposits and withdrawals
   for (let i = 0; i < dw.deposits.length; i++) {
-    hoc.push(dw.deposits[i].currency)
+    hoc.push(dw.deposits[i].currency);
   }
   if (dw.withdrawals) {
     for (let i = 0; i < dw.withdrawals.length; i++) {
-      hoc.push(dw.withdrawals[i].currency)
+      hoc.push(dw.withdrawals[i].currency);
     }
   }
   // Add buys and sells
-  for (let pair in bs) {
-    hoc.push(pair.split('_')[0])
-    hoc.push(pair.split('_')[1])
+  for (const pair in bs) {
+    hoc.push(pair.split('_')[0]);
+    hoc.push(pair.split('_')[1]);
   }
   hoc = Array.from(new Set(hoc));
   return hoc;
 }
 
 function createUSDTValueTimeline(eventTimeline) {
-  let portfolioTimeline = []
-  for (let event in eventTimeline) {
-    let ts = eventTimeline[event][0] * 1000;
-    let price = 1;
-    let quantity = eventTimeline[event][2];
-    let value = price * quantity;
-    portfolioTimeline.push([ts, price, quantity, parseFloat(value.toFixed(2))])
+  const portfolioTimeline = [];
+  for (const event in eventTimeline) {
+    const ts = eventTimeline[event][0] * 1000;
+    const price = 1;
+    const quantity = eventTimeline[event][2];
+    const value = price * quantity;
+    portfolioTimeline.push([ts, price, quantity, parseFloat(value.toFixed(2))]);
   }
   return portfolioTimeline;
 }
 
 function createDepositWithdrawalTimeline(currency, dw) {
-  let depositWithdrawaltimeline = [];
+  const depositWithdrawaltimeline = [];
   for (let i = 0; i < dw.deposits.length; i++) {
     if (dw.deposits[i].currency == currency || currency === 'all') {
       if (currency === 'LTC') {
         console.log(dw);
       }
-      let ts = dw.deposits[i].timestamp;
-      let event = 'deposit';
-      let amount = parseFloat(dw.deposits[i].amount);
+      const ts = dw.deposits[i].timestamp;
+      const event = 'deposit';
+      const amount = parseFloat(dw.deposits[i].amount);
       depositWithdrawaltimeline.push([ts, event, amount, dw.deposits[i].currency]);
     }
   }
@@ -273,9 +272,9 @@ function createDepositWithdrawalTimeline(currency, dw) {
       if (currency === 'LTC') {
         console.log(dw);
       }
-      let ts = dw.withdrawals[i].timestamp;
-      let event = 'withdrawal';
-      let amount = parseFloat(dw.withdrawals[i].amount);
+      const ts = dw.withdrawals[i].timestamp;
+      const event = 'withdrawal';
+      const amount = parseFloat(dw.withdrawals[i].amount);
       depositWithdrawaltimeline.push([ts, event, amount, dw.withdrawals[i].currency]);
     }
   }
@@ -286,28 +285,28 @@ function createDepositWithdrawalTimeline(currency, dw) {
 Looks through all trades and creates buy/sell timeline based on all currency pairs
 */
 function createBuySellTimeline(currency, bs) {
-  let timeline = [];
-  for (let pair in bs) {
+  const timeline = [];
+  for (const pair in bs) {
     // currency is base, sell orders add to portfolio, buy orders substract from portfolio
-    if (pair.split("_")[0] === currency) {
+    if (pair.split('_')[0] === currency) {
       if (currency === 'LTC') {
         console.log(bs);
       }
       // loop through all trades of specific pair
       for (let i = 0; i < bs[pair].length; i++) {
-        let ts = Date.parse(bs[pair][i].date) / 1000;
-        let event = bs[pair][i].type === 'buy' ? 'sell' : 'buy';
-        let amount = parseFloat(bs[pair][i].total) * 0.9975;
+        const ts = Date.parse(bs[pair][i].date) / 1000;
+        const event = bs[pair][i].type === 'buy' ? 'sell' : 'buy';
+        const amount = parseFloat(bs[pair][i].total) * 0.9975;
         timeline.push([ts, event, amount, pair]);
       }
     }
     // currency is trade, sell orders subtract from portfolio, buy orders add to portfolio
-    else if (pair.split("_")[1] === currency) {
+    else if (pair.split('_')[1] === currency) {
       // loop through all trades of specific pair
       for (let i = 0; i < bs[pair].length; i++) {
-        let ts = Date.parse(bs[pair][i].date) / 1000;
-        let event = bs[pair][i].type === 'buy' ? 'buy' : 'sell';
-        let amount = parseFloat(bs[pair][i].amount) * 0.9975;
+        const ts = Date.parse(bs[pair][i].date) / 1000;
+        const event = bs[pair][i].type === 'buy' ? 'buy' : 'sell';
+        const amount = parseFloat(bs[pair][i].amount) * 0.9975;
         timeline.push([ts, event, amount, pair]);
       }
     }
@@ -319,33 +318,30 @@ function createBuySellTimeline(currency, bs) {
 // Takes in chartData and coverts the prices to a USDT base
 async function convertChartDataToUSDTBase(pair, chartData, ticker) {
   // let ticker = await polo('ticker');
-  let convertedChartData = []
+  const convertedChartData = [];
   let usdtbase = [];
   if (pair.split('_')[0] === 'USDT') {
     return chartData;
-  }
-  else if (pair.split('_')[0] === 'BTC') {
+  } else if (pair.split('_')[0] === 'BTC') {
     usdtbase = USDT_BTC;
-  }
-  else if (pair.split('_')[0] === 'ETH') {
+  } else if (pair.split('_')[0] === 'ETH') {
     usdtbase = await polo('chartData', 'USDT_ETH');
-  }
-  else if (pair.split('_')[0] === 'XMR') {
+  } else if (pair.split('_')[0] === 'XMR') {
     usdtbase = await polo('chartData', 'USDT_XMR');
   }
   // make arrays same length
-  let cdlen = chartData.length; let usdtBtclen = usdtbase.length;
+  const cdlen = chartData.length; const usdtBtclen = usdtbase.length;
   if (usdtBtclen >= cdlen) {
     usdtbase = usdtbase.slice(usdtBtclen - cdlen, usdtBtclen);
   } else {
-    chartData = chartData.slice(cdlen - usdtBtclen, cdlen)
+    chartData = chartData.slice(cdlen - usdtBtclen, cdlen);
   }
   if (pair.split('_')[1] === 'GAS') {
   }
   for (let i = 0; i < usdtbase.length; i++) {
     convertedChartData.push({
       date: usdtbase[i].date,
-      close: chartData[i].close * usdtbase[i].close
+      close: chartData[i].close * usdtbase[i].close,
     });
   }
   return convertedChartData;
@@ -353,16 +349,16 @@ async function convertChartDataToUSDTBase(pair, chartData, ticker) {
 
 // Create a fake dataset from the reasonable beginning of Polo time to Now
 function createDummyUSDTData() {
-  let dummyData = [];
+  const dummyData = [];
   dummyData.push({
     date: 1409961600,
-    close: 1
+    close: 1,
   });
   for (let i = 1409961600; i < Math.round((new Date()).getTime() / 1000); i += PERIOD) {
     dummyData.push({
       date: i,
-      close: i
-    })
+      close: i,
+    });
   }
   return dummyData;
 }
@@ -400,7 +396,7 @@ async function polo(apiCall, params) {
           done = true;
           break;
         default:
-          return 'BZ: Invalid API Call'
+          return 'BZ: Invalid API Call';
           break;
       }
     } catch (err) {
