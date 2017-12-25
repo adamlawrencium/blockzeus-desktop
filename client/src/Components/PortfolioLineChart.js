@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import Highcharts from 'highcharts/highstock';
+import { theme } from './lineChartTheme';
 import {
   HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis, Legend, Loading, Scrollbar, AreaSeries, AreaSplineSeries,
-  LineSeries, RangeSelector, Tooltip, Navigator
+  LineSeries, RangeSelector, Tooltip, Navigator, SplineSeries
 } from 'react-jsx-highstock';
+
+Highcharts.theme = theme;
+Highcharts.setOptions(Highcharts.theme);
 
 class PortfolioLineChart extends Component {
 
@@ -26,15 +30,15 @@ class PortfolioLineChart extends Component {
   }
 
   render() {
+
     const plotOptions = {
-      areaSpline: {
+      area: {
+        connectNulls: true
+      },
+      spline: {
         stacking: 'normal',
-        lineColor: '#666666',
-        lineWidth: 1,
-        marker: {
-          lineWidth: 1,
-          lineColor: '#666666'
-        }
+        // lineColor: '#666666',
+        // lineWidth: 1,
       }
     }
 
@@ -79,13 +83,13 @@ class PortfolioLineChart extends Component {
 
           <Legend />
 
-          <XAxis/>
+          <XAxis />
 
           <YAxis id="value">
             <YAxis.Title>Portfolio Value (USD)</YAxis.Title>
 
             {!this.props.loaded ? (
-              <LineSeries color="#ffffff" key={'x'} id={'x'} name={'x'} data={[[0, 1337]]} />
+              <SplineSeries color="#ffffff" key={'x'} id={'x'} name={'x'} data={[[0, 1337]]} />
             ) : (
                 this.formatForChart().map(series => {
                   return <AreaSplineSeries
@@ -100,13 +104,13 @@ class PortfolioLineChart extends Component {
           </YAxis>
 
           <Navigator>
-            { this.props.loaded && (
+            {this.props.loaded && (
               Object.keys(this.props.data).map(series => {
                 console.log(series);
                 return <Navigator.Series key={series} seriesId={series} />
               })
-            // <Navigator.Series seriesId='BTC' />
-            // <Navigator.Series seriesId='ETH' />
+              // <Navigator.Series seriesId='BTC' />
+              // <Navigator.Series seriesId='ETH' />
             )}
           </Navigator>
 
