@@ -3,44 +3,41 @@ import Highcharts from 'highcharts/highstock';
 import { theme } from './lineChartTheme';
 import {
   HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis, Legend, Loading, Scrollbar, AreaSeries, AreaSplineSeries,
-  LineSeries, RangeSelector, Tooltip, Navigator, SplineSeries
+  LineSeries, RangeSelector, Tooltip, Navigator, SplineSeries,
 } from 'react-jsx-highstock';
 
 Highcharts.theme = theme;
 Highcharts.setOptions(Highcharts.theme);
 
 class PortfolioLineChart extends Component {
-
   formatForChart() {
     if (this.props.data) {
-      let data = this.props.data;
+      const data = this.props.data;
       console.log(data);
-      let highchartsSeries = [];
+      const highchartsSeries = [];
       // remove price and quantity data, leave ts and value
-      for (let series in data) {
+      for (const series in data) {
         highchartsSeries.push([series, data[series].map(x => [x[0], x[3]])]);
       }
-      return highchartsSeries
+      return highchartsSeries;
     }
-    else {
-      return [
-        ['BTC', [[1466049600000, 0], [1512230400000, 2]]]
-      ]
-    }
+
+    return [
+      ['BTC', [[1466049600000, 0], [1512230400000, 2]]],
+    ];
   }
 
   render() {
-
     const plotOptions = {
       area: {
-        connectNulls: true
+        connectNulls: true,
       },
       spline: {
         stacking: 'normal',
         // lineColor: '#666666',
         // lineWidth: 1,
-      }
-    }
+      },
+    };
 
     const buttonTheme = { // styles for the buttons
       fill: 'none',
@@ -48,7 +45,7 @@ class PortfolioLineChart extends Component {
       'stroke-width': 0,
       style: {
         color: '#483453',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
       },
       states: {
         hover: {
@@ -56,11 +53,11 @@ class PortfolioLineChart extends Component {
         select: {
           fill: '#483453',
           style: {
-            color: 'white'
-          }
-        }
-      }
-    }
+            color: 'white',
+          },
+        },
+      },
+    };
 
 
     return (
@@ -89,15 +86,14 @@ class PortfolioLineChart extends Component {
             <YAxis.Title>Portfolio Value (USD)</YAxis.Title>
 
             {!this.props.loaded ? (
-              <SplineSeries color="#ffffff" key={'x'} id={'x'} name={'x'} data={[[0, 1337]]} />
+              <SplineSeries color="#ffffff" key="x" id="x" name="x" data={[[0, 1337]]} />
             ) : (
-                this.formatForChart().map(series => {
-                  return <AreaSplineSeries
-                    key={series[0]}
-                    id={series[0]}
-                    name={series[0]}
-                    data={series[1]} />
-                })
+                this.formatForChart().map(series => (<AreaSplineSeries
+                  key={series[0]}
+                  id={series[0]}
+                  name={series[0]}
+                  data={series[1]}
+                />))
               )
             }
 
@@ -105,9 +101,9 @@ class PortfolioLineChart extends Component {
 
           <Navigator>
             {this.props.loaded && (
-              Object.keys(this.props.data).map(series => {
+              Object.keys(this.props.data).map((series) => {
                 console.log(series);
-                return <Navigator.Series key={series} seriesId={series} />
+                return <Navigator.Series key={series} seriesId={series} />;
               })
               // <Navigator.Series seriesId='BTC' />
               // <Navigator.Series seriesId='ETH' />
