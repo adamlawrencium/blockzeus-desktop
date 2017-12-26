@@ -12,7 +12,7 @@ Highcharts.setOptions(Highcharts.theme);
 class PortfolioLineChart extends Component {
   formatForChart() {
     if (this.props.data) {
-      const data = this.props.data;
+      const { data } = this.props;
       console.log(data);
       const highchartsSeries = [];
       // remove price and quantity data, leave ts and value
@@ -32,7 +32,7 @@ class PortfolioLineChart extends Component {
       area: {
         connectNulls: true,
       },
-      spline: {
+      areaspline: {
         stacking: 'normal',
         // lineColor: '#666666',
         // lineWidth: 1,
@@ -73,7 +73,7 @@ class PortfolioLineChart extends Component {
             <RangeSelector.Button count={3} type="month">3M</RangeSelector.Button>
             <RangeSelector.Button count={1} type="year">1Y</RangeSelector.Button>
             <RangeSelector.Button type="all">All</RangeSelector.Button>
-            {/* <RangeSelector.Input boxBorderColor="#483453" /> */}
+            <RangeSelector.Input boxBorderColor="#483453" />
           </RangeSelector>
 
           <Tooltip />
@@ -105,8 +105,6 @@ class PortfolioLineChart extends Component {
                 console.log(series);
                 return <Navigator.Series key={series} seriesId={series} />;
               })
-              // <Navigator.Series seriesId='BTC' />
-              // <Navigator.Series seriesId='ETH' />
             )}
           </Navigator>
 
