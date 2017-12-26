@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import Highcharts from 'highcharts/highstock';
+// import HighchartsBoost from 'highcharts/modules/boost';
+
 import { theme } from './lineChartTheme';
 import {
   HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis, Legend, Loading, Scrollbar, AreaSeries, AreaSplineSeries,
   LineSeries, RangeSelector, Tooltip, Navigator, SplineSeries,
 } from 'react-jsx-highstock';
 
+// HighchartsBoost(Highcharts);
 Highcharts.theme = theme;
 Highcharts.setOptions(Highcharts.theme);
 
@@ -16,9 +19,12 @@ class PortfolioLineChart extends Component {
       console.log(data);
       const highchartsSeries = [];
       // remove price and quantity data, leave ts and value
-      for (const series in data) {
+      Object.keys(data).forEach((series) => {
         highchartsSeries.push([series, data[series].map(x => [x[0], x[3]])]);
-      }
+      });
+      // for (const series in data) {
+      //   highchartsSeries.push([series, data[series].map(x => [x[0], x[3]])]);
+      // }
       return highchartsSeries;
     }
 
@@ -30,6 +36,9 @@ class PortfolioLineChart extends Component {
   render() {
     const plotOptions = {
       area: {
+        // dataGrouping: {
+        //   groupPixelWidth: 5,
+        // },
         stacking: 'normal',
         // lineColor: '#666666',
         // lineWidth: 1,
@@ -67,6 +76,7 @@ class PortfolioLineChart extends Component {
           <RangeSelector buttonTheme={buttonTheme}>
             <RangeSelector.Button count={1} type="day">1D</RangeSelector.Button>
             <RangeSelector.Button count={7} type="day">1W</RangeSelector.Button>
+            <RangeSelector.Button count={1} type="month">1M</RangeSelector.Button>
             <RangeSelector.Button count={3} type="month">3M</RangeSelector.Button>
             <RangeSelector.Button count={1} type="year">1Y</RangeSelector.Button>
             <RangeSelector.Button type="all">All</RangeSelector.Button>
@@ -90,6 +100,7 @@ class PortfolioLineChart extends Component {
                   id={series[0]}
                   name={series[0]}
                   data={series[1]}
+                  boostThreashold={300}
                 />))
               )
             }

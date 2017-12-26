@@ -9,7 +9,7 @@ const router = express.Router();
 const key = 'GTTSHNIZ-V4EYK5K9-4QT6XXS8-EPGJ9G5F';
 const secret = '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f9847e55edb39685c69350c9536c9f0f26d5b70804415859bfb90408ae364c19d';
 
-const poloniex = new Poloniex(key, secret);
+const poloniex = new Poloniex(key, secret, { socketTimeout: 3000 });
 // let polo;
 const PERIOD = 14400;
 // Initialize most commonly used data.
@@ -141,7 +141,7 @@ router.get('/fullPerformance', async (req, res) => {
   ]);
   const hoc = await getHistoricallyOwnedCurrencies(dw, bs); // # depositswithdrawals, buys/sells
   let performances = [];
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 7; i++) {
     console.log('Creating Performance Timeline:', hoc[i]);
     const tl = createBuySellTimeline(hoc[i], bs); // create buy & sell timeline, # buys/sells
     const depositWithdrawls = createDepositWithdrawalTimeline(hoc[i], dw); // create deposit & withdrawal timeline # depositswithdrawals
@@ -150,7 +150,7 @@ router.get('/fullPerformance', async (req, res) => {
   }
   performances = await Promise.all(performances);
   const fullPerformance = {};
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 7; i++) {
     // console.log(performances[i]);
     fullPerformance[hoc[i]] = performances[i];
   }
@@ -174,6 +174,7 @@ async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
     chartData = createDummyUSDTData();
   }
 
+  let totalVolume = 0;
   for (let i = 1; i < chartData.length; i++) {
     let intraPeriodPortfolioChange = 0;
     for (let eventIndex = 0; eventIndex < eventTimeline.length; eventIndex++) {
@@ -193,16 +194,19 @@ async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
     const price = currency === 'USDT' ? 1 : parseFloat((chartData[i - 1].close).toFixed(2));
     const quantity = parseFloat((portfolioTimeline[i - 1][2] + intraPeriodPortfolioChange).toFixed(5));
     const value = (price * quantity) < 1.0 ? 0 : parseFloat((price * quantity).toFixed(2));
-    console.log(value);
     portfolioTimeline.push([ts, price, quantity, value]);
+    totalVolume += value;
   }
-
+  console.log(currency, totalVolume);
   // trim beginning data with no trading activity
   for (let i = 0; i < portfolioTimeline.length; i++) {
     if (portfolioTimeline[i][2] !== 0) {
       portfolioTimeline = portfolioTimeline.slice(i, portfolioTimeline.length);
       break;
     }
+  }
+  if (totalVolume === 0) {
+    return
   }
   return portfolioTimeline;
 }
@@ -330,7 +334,7 @@ var lastCall = Date.now();
 async function polo(apiCall, params) {
   let res;
   console.log(`Making Poloniex API request [${apiCall}, ${params}]`);
-  if (Date.now() - lastCall < 160) { sleep.msleep(160); }
+  if (Date.now() - lastCall < 170) { sleep.msleep(170); }
   for (let i = 0; i < 7; i++) { // retry functionality
     lastCall = Date.now();
     let done = false;
