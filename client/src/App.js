@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Navbar from './Components/Navbar';
-import AllocationsCard from './Components/AllocationsCard';
-import PerformanceCard from './Components/PerformanceCard';
-import HoldingsTiles from './Components/HoldingsTiles';
+import Navbar from './Components/Site/Navbar';
+import AllocationsCard from './Components/Allocations/AllocationsCard';
+import PerformanceCard from './Components/Performance/PerformanceCard';
+import HoldingsTiles from './Components/Holdings/HoldingsTiles';
 import { fetchPoloniexTicker, fetchPoloniexCompleteBalances } from './exchanges/poloniex';
 
 import './App.css';

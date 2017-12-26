@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import Highcharts from 'highcharts';
-import { theme } from './lineChartTheme';
+// import { theme } from './lineChartTheme';
 import {
   HighchartsChart, Chart, withHighcharts, PieSeries, Title, Tooltip
 } from 'react-jsx-highcharts';
 
-Highcharts.theme = theme;
-Highcharts.setOptions(Highcharts.theme);
+// Highcharts.theme = theme;
+// Highcharts.setOptions(Highcharts.theme);
 
 
 class DonutChart extends Component {
