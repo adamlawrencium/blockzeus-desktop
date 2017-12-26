@@ -11,7 +11,7 @@ const secret = '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f
 
 const poloniex = new Poloniex(key, secret);
 // let polo;
-const PERIOD = 86400;
+const PERIOD = 14400;
 // Initialize most commonly used data.
 let USDT_BTC;
 polo('chartData', 'USDT_BTC').then(data => USDT_BTC = data);
@@ -192,19 +192,14 @@ async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
     const ts = chartData[i - 1].date * 1000;
     const price = currency === 'USDT' ? 1 : parseFloat((chartData[i - 1].close).toFixed(2));
     const quantity = parseFloat((portfolioTimeline[i - 1][2] + intraPeriodPortfolioChange).toFixed(5));
-    const value = quantity * price < 0.1 ? null : parseFloat(price * quantity.toFixed(2));
+    const value = (price * quantity) < 1.0 ? 0 : parseFloat((price * quantity).toFixed(2));
+    console.log(value);
     portfolioTimeline.push([ts, price, quantity, value]);
   }
 
-  // if (currency === 'LTC') {
-  //   console.log(eventTimeline);
-  // }
   // trim beginning data with no trading activity
   for (let i = 0; i < portfolioTimeline.length; i++) {
     if (portfolioTimeline[i][2] !== 0) {
-      // if (currency === 'LTC') {
-      //   console.log(portfolioTimeline[i]);
-      // }
       portfolioTimeline = portfolioTimeline.slice(i, portfolioTimeline.length);
       break;
     }

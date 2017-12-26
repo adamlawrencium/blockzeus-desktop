@@ -30,9 +30,6 @@ class PortfolioLineChart extends Component {
   render() {
     const plotOptions = {
       area: {
-        connectNulls: true,
-      },
-      areaspline: {
         stacking: 'normal',
         // lineColor: '#666666',
         // lineWidth: 1,
@@ -86,9 +83,9 @@ class PortfolioLineChart extends Component {
             <YAxis.Title>Portfolio Value (USD)</YAxis.Title>
 
             {!this.props.loaded ? (
-              <SplineSeries color="#ffffff" key="x" id="x" name="x" data={[[0, 1337]]} />
+              <AreaSeries color="#ffffff" key="x" id="x" name="x" data={[[0, 1337]]} />
             ) : (
-                this.formatForChart().map(series => (<AreaSplineSeries
+                this.formatForChart().map(series => (<AreaSeries
                   key={series[0]}
                   id={series[0]}
                   name={series[0]}
