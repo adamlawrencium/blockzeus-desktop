@@ -141,7 +141,7 @@ router.get('/fullPerformance', async (req, res) => {
   ]);
   const hoc = await getHistoricallyOwnedCurrencies(dw, bs); // # depositswithdrawals, buys/sells
   let performances = [];
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 10; i++) {
     console.log('Creating Performance Timeline:', hoc[i]);
     const tl = createBuySellTimeline(hoc[i], bs); // create buy & sell timeline, # buys/sells
     const depositWithdrawls = createDepositWithdrawalTimeline(hoc[i], dw); // create deposit & withdrawal timeline # depositswithdrawals
@@ -150,7 +150,7 @@ router.get('/fullPerformance', async (req, res) => {
   }
   performances = await Promise.all(performances);
   const fullPerformance = {};
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 10; i++) {
     // console.log(performances[i]);
     fullPerformance[hoc[i]] = performances[i];
   }
@@ -162,7 +162,6 @@ router.get('/fullPerformance', async (req, res) => {
 // values events against another currency (USD)
 async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
   let portfolioTimeline = [[1000000000, 0, 0, 0]];
-
   // see if there exists a USDT_Currency market
   // if not, see if BTC_Currency market exists, then convert it to USDT and run the following:
   let chartData;
@@ -191,21 +190,21 @@ async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
       }
     }
     const ts = chartData[i - 1].date * 1000;
-    const price = currency === 'USDT' ? 1 : chartData[i - 1].close;
-    const quantity = portfolioTimeline[i - 1][2] + intraPeriodPortfolioChange;
-    const value = price * quantity;
-    portfolioTimeline.push([ts, price, quantity, parseFloat(value.toFixed(2))]);
+    const price = currency === 'USDT' ? 1 : parseFloat((chartData[i - 1].close).toFixed(2));
+    const quantity = parseFloat((portfolioTimeline[i - 1][2] + intraPeriodPortfolioChange).toFixed(5));
+    const value = quantity * price < 0.1 ? null : parseFloat(price * quantity.toFixed(2));
+    portfolioTimeline.push([ts, price, quantity, value]);
   }
 
-  if (currency === 'LTC') {
-    console.log(eventTimeline);
-  }
+  // if (currency === 'LTC') {
+  //   console.log(eventTimeline);
+  // }
   // trim beginning data with no trading activity
   for (let i = 0; i < portfolioTimeline.length; i++) {
     if (portfolioTimeline[i][2] !== 0) {
-      if (currency === 'LTC') {
-        console.log(portfolioTimeline[i]);
-      }
+      // if (currency === 'LTC') {
+      //   console.log(portfolioTimeline[i]);
+      // }
       portfolioTimeline = portfolioTimeline.slice(i, portfolioTimeline.length);
       break;
     }
@@ -332,10 +331,13 @@ function createDummyUSDTData() {
 }
 
 // Route all Poloniex API calls through here
+var lastCall = Date.now();
 async function polo(apiCall, params) {
   let res;
   console.log(`Making Poloniex API request [${apiCall}, ${params}]`);
+  if (Date.now() - lastCall < 160) { sleep.msleep(160); }
   for (let i = 0; i < 7; i++) { // retry functionality
+    lastCall = Date.now();
     let done = false;
     try {
       switch (apiCall) {
@@ -371,7 +373,9 @@ async function polo(apiCall, params) {
       console.log('Error happened, retrying...', err);
       sleep.msleep(300); // abide by rate limits and avoid nonce issue
     }
-    if (done) break;
+    if (done) {
+      break;
+    }
   }
   return res;
 }
