@@ -15,11 +15,11 @@ class App extends Component {
 
   componentDidMount() {
     fetchPoloniexTicker()
-      .then(ticker => { this.setState({ ticker }) })
-      .catch(err => { console.log(err); });
+      .then((ticker) => { this.setState({ ticker }); })
+      .catch((err) => { console.log(err); });
 
     fetchPoloniexCompleteBalances()
-      .then(balances => { this.setState({ balances }) })
+      .then((balances) => { this.setState({ balances }); })
       .catch(err => console.log(err));
   }
 
@@ -30,7 +30,7 @@ class App extends Component {
         <div className="container-fluid">
           <br />
           <div className="alert alert-primary" role="alert">
-            This is a demo! <a href="#" className="alert-link">Sign up</a> and connect to Poloniex to start managing your portfolio!
+            This is a demo! <a href="b" className="alert-link">Sign up</a> and connect to Poloniex to start managing your portfolio!
           </div>
           <div className="row">
             <div className="col-lg-5">

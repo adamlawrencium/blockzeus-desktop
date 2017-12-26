@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import Highcharts from 'highcharts/highstock';
 // import HighchartsBoost from 'highcharts/modules/boost';
-
-import { theme } from './lineChartTheme';
 import {
-  HighchartsStockChart, Chart, withHighcharts, XAxis, YAxis, Legend, Loading, Scrollbar, AreaSeries, AreaSplineSeries,
-  LineSeries, RangeSelector, Tooltip, Navigator, SplineSeries,
+  HighchartsStockChart, Chart, withHighcharts,
+  XAxis, YAxis, Legend,
+  Loading, Scrollbar, AreaSeries,
+  AreaSplineSeries,
+  LineSeries, RangeSelector, Tooltip,
+  Navigator, SplineSeries,
 } from 'react-jsx-highstock';
+import { theme } from './lineChartTheme';
 
 // HighchartsBoost(Highcharts);
 Highcharts.theme = theme;
