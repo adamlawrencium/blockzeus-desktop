@@ -54,19 +54,56 @@ async function poloPoller(pairs) {
   return updates;
 }
 
+/*
+Schema v0.1
+PAIR: "[[UNIXTIMESTAMP, PRICE], [UNIXTIMESTAMP, PRICE], [UNIXTIMESTAMP, PRICE]]"
+PAIR: "[[UNIXTIMESTAMP, PRICE], [UNIXTIMESTAMP, PRICE], [UNIXTIMESTAMP, PRICE]]"
+*/
 async function addToRedis(updates) {
+  Object.keys(updates).forEach((pair) => {
+    const n = JSON.stringify(updates[pair]);
+    // let p = JSON.parse(n);
+    console.log(n);
+    client.set(pair, n, redis.print);
+  });
+}
 
+async function allKeysFromRedis() {
+  client.get('USDT_BTC', (err, data) => {
+    console.log(data);
+  });
 }
 
 // loop through all popular pairs
 // check how up-to-date redis cache is
 // add new poloniex data accordingly
-function driver(pairs) {
-  const updates = poloPoller(pairs);
-
+async function driver(pairs) {
+  // const updates = await poloPoller(pairs);
+  // addToRedis(updates);
+  allKeysFromRedis();
 }
 
 // Consists of all USDT markets and top 10 BTC markets
-const popularPairs = ['USDT_BTC', 'USDT_ETH', 'BTC_XMR', 'BTC_XRP'];
+// const popularPairs = ['USDT_BTC', 'USDT_ETH', 'BTC_XMR', 'BTC_XRP'];
+const popularPairs = ['USDT_BTC'];
 
-driver(popularPairs);
+// driver(popularPairs);
+
+// client.hmset('testpairlist', [
+//   [100, 1000],
+//   [101, 1001],
+//   [102, 1002],
+// ], redis.print);
+
+// client.hgetall('testpairlist', (err, data) => {
+//   console.log(data);
+// });
+
+client.zadd('mysortedset', 100, 40, redis.print);
+client.zadd('mysortedset', 101, 40.3, redis.print);
+client.zadd('mysortedset', 102, 42.7, redis.print);
+client.zadd('mysortedset', 103, 22, redis.print);
+client.zrange('mysortedset', 0, -1, 'WITHSCORES', (err, data) => {
+  console.log(data);
+});
+
