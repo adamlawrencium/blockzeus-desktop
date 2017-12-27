@@ -47,6 +47,7 @@ async function poloPoller(pairs) {
     console.log('received polo');
     const compressed = [];
     data.forEach((element) => {
+      client.zadd(pairs[i], element.date, element.close, redis.print);
       compressed.push([element.date, element.close]);
     });
     updates[pairs[i]] = compressed;
@@ -78,9 +79,9 @@ async function allKeysFromRedis() {
 // check how up-to-date redis cache is
 // add new poloniex data accordingly
 async function driver(pairs) {
-  // const updates = await poloPoller(pairs);
+  const updates = await poloPoller(pairs);
   // addToRedis(updates);
-  allKeysFromRedis();
+  // allKeysFromRedis();
 }
 
 // Consists of all USDT markets and top 10 BTC markets
@@ -99,11 +100,21 @@ const popularPairs = ['USDT_BTC'];
 //   console.log(data);
 // });
 
-client.zadd('mysortedset', 100, 40, redis.print);
-client.zadd('mysortedset', 101, 40.3, redis.print);
-client.zadd('mysortedset', 102, 42.7, redis.print);
-client.zadd('mysortedset', 103, 22, redis.print);
-client.zrange('mysortedset', 0, -1, 'WITHSCORES', (err, data) => {
+// client.zadd('mysortedset', 100, 40, redis.print);
+// client.zadd('mysortedset', 101, 40.3, redis.print);
+// client.zadd('mysortedset', 102, 42.7, redis.print);
+// client.zadd('mysortedset', 103, 22, redis.print);
+client.zrange('USDT_BTC', 0, -1, 'WITHSCORES', (err, data) => {
   console.log(data);
 });
+
+// client.keys('*', function (err, keys) {
+//   if (err) return console.log(err);
+
+//   for(var i = 0, len = keys.length; i < len; i++) {
+//     console.log(keys[i]);
+//   }
+// }); 
+
+// client.del('USDT_BTC', redis.print);
 
