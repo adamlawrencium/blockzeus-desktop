@@ -40,18 +40,22 @@ PAIR: "[[UNIXTIMESTAMP, PRICE], [UNIXTIMESTAMP, PRICE], [UNIXTIMESTAMP, PRICE]]"
 */
 async function addToRedis(updates) {
   // Loop through all pairs
-  Object.keys(updates).forEach((pair) => {
+  Object.keys(updates).forEach(async (pair) => {
     // Add each new [ts, price] to Redis
-    let updateCount = 0;
+    // const updateCount = 0;
+    let c = 0; const d = 0;
+    console.log(updates[pair].length);
+    const redisUpdates = [];
+
     updates[pair].forEach((pairData) => {
+      c += 1
       const ts = pairData[0];
       const price = `${parseFloat(pairData[1]).toFixed(2)}:${ts}`;
-      client.zadd(pair, ts, price, (err, data) => {
-        updateCount += data;
-        // console.log(i, ts, price, err, data);
-      });
+      redisUpdates.push(client.zaddAsync(pair, ts, price));
     });
-    console.log('Updated', updateCount, 'kvs for', pair);
+    await Promise.all(redisUpdates);
+    console.log(c);
+    // console.log('Updated', updateCount, 'kvs for', pair);
   });
 }
 
@@ -59,10 +63,11 @@ async function addToRedis(updates) {
 // Check how up-to-date redis cache is
 // Add new poloniex data accordingly
 async function driver(pairs) {
-  await confirmDataUniformity('USDT_BTC');
+  // await confirmDataUniformity('USDT_BTC');
   const updates = await poloPoller(pairs);
   await addToRedis(updates);
   await confirmDataUniformity('USDT_BTC');
+  process.exit(1);
 }
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
