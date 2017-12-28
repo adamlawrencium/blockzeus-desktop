@@ -3,6 +3,7 @@
 const Poloniex = require('poloniex-api-node');
 const redis = require('redis');
 const bluebird = require('bluebird');
+const assert = require('assert');
 
 const poloniex = new Poloniex();
 
@@ -13,32 +14,8 @@ const client = redis.createClient('redis://h:p4595c78b0d2015e9fffd2b289e6cc6fb0c
 
 process.on('unhandledRejection', r => console.log(r));
 
-// poloniex.returnChartData('BTC_XMR', 86400, 1000000000, 9999999999)
-//   .then((d) => {
-//     const data = d;
-//     const compressed = [];
-//     data.forEach((element) => {
-//       compressed.push([element.date, element.close]);
-//     });
-//     console.log(compressed);
-//   })
-//   .catch((err) => { console.log(err); });
-
-
-// client.getAsync('foo').then((res) => {
-//   console.log(res); // => 'bar'
-// });
-
-// client.set('string key', 'string val', redis.print);
-// client.hset('hash key', 'hashtest 1', 'some value', redis.print);
-// client.hset(['hash key', 'hashtest 2', 'some other value'], redis.print);
-// client.hkeys('hash key', (err, replies) => {
-//   console.log(`${replies.length} replies:`);
-//   replies.forEach((reply, i) => {
-//     console.log(`    ${i}: ${reply}`);
-//   });
-//   client.quit();
-// });
+// TODO Promise.all() this function
+// Returns {USDT_BTC: [[t0, 3], [t1, 3.5], ...], ...}
 async function poloPoller(pairs) {
   const updates = {};
   for (let i = 0; i < pairs.length; i++) {
@@ -46,11 +23,16 @@ async function poloPoller(pairs) {
     const data = await poloniex.returnChartData(pairs[i], 86400, 1000000000, 9999999999);
     console.log('received polo');
     const compressed = [];
+    console.log(data.length);
     data.forEach((element) => {
-      client.zadd(pairs[i], element.date, element.close, redis.print);
-      compressed.push([element.date, element.close]);
+      const ts = element.date;
+      const price = element.close;
+      // console.log(element);
+      // parse only timestamp and price data
+      compressed.push([ts, price]);
     });
     updates[pairs[i]] = compressed;
+    // console.log(compressed.length);
   }
   return updates;
 }
@@ -61,60 +43,60 @@ PAIR: "[[UNIXTIMESTAMP, PRICE], [UNIXTIMESTAMP, PRICE], [UNIXTIMESTAMP, PRICE]]"
 PAIR: "[[UNIXTIMESTAMP, PRICE], [UNIXTIMESTAMP, PRICE], [UNIXTIMESTAMP, PRICE]]"
 */
 async function addToRedis(updates) {
+  // Loop through all pairs
   Object.keys(updates).forEach((pair) => {
-    const n = JSON.stringify(updates[pair]);
-    // let p = JSON.parse(n);
-    console.log(n);
-    client.set(pair, n, redis.print);
+    // Add each new [ts, price] to Redis
+    console.log(updates[pair].length);
+    updates[pair].forEach((pairData) => {
+      const ts = pairData[0];
+      const price = parseFloat(pairData[1]).toFixed(2);
+      // console.log(ts, price);
+      client.zadd(pair, ts, price, (err, data) => {
+        console.log(ts, price, err, data);
+      });
+    });
   });
 }
 
-async function allKeysFromRedis() {
-  client.get('USDT_BTC', (err, data) => {
-    console.log(data);
-  });
-}
-
-// loop through all popular pairs
-// check how up-to-date redis cache is
-// add new poloniex data accordingly
+// Loop through all popular pairs
+// Check how up-to-date redis cache is
+// Add new poloniex data accordingly
 async function driver(pairs) {
   const updates = await poloPoller(pairs);
-  // addToRedis(updates);
-  // allKeysFromRedis();
+  addToRedis(updates);
 }
 
 // Consists of all USDT markets and top 10 BTC markets
 // const popularPairs = ['USDT_BTC', 'USDT_ETH', 'BTC_XMR', 'BTC_XRP'];
 const popularPairs = ['USDT_BTC'];
-
 // driver(popularPairs);
 
-// client.hmset('testpairlist', [
-//   [100, 1000],
-//   [101, 1001],
-//   [102, 1002],
-// ], redis.print);
+/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-// client.hgetall('testpairlist', (err, data) => {
-//   console.log(data);
-// });
+// // // TESTING // // //
+function confirmDataUniformity(pair) {
+  client.zrange('USDT_BTC', 0, -1, 'WITHSCORES', (err, data) => {
+    if (err) {
+      throw Error(err);
+    }
+    const chartData = data.map(element => parseFloat(element));
+    assert.equal(chartData.length % 2, 0); // make sure even number of Redis values
+    const timeseries = [];
+    for (let i = 0; i < chartData.length; i += 2) {
+      const ts = chartData[i + 1];
+      const price = chartData[i];
+      timeseries.push([ts, price]);
+    }
+    console.log(timeseries.length);
+    for (let i = 0; i < timeseries.length - 1; i++) {
+      if (timeseries[i + 1][0] - timeseries[i][0] > 86400) {
+        console.log('Missing value', (timeseries[i + 1][0] + timeseries[i][0]) / 2);
+      }
+    }
+  });
+}
 
-// client.zadd('mysortedset', 100, 40, redis.print);
-// client.zadd('mysortedset', 101, 40.3, redis.print);
-// client.zadd('mysortedset', 102, 42.7, redis.print);
-// client.zadd('mysortedset', 103, 22, redis.print);
-client.zrange('USDT_BTC', 0, -1, 'WITHSCORES', (err, data) => {
-  console.log(data);
-});
+confirmDataUniformity('USDT_BTC');
 
-// client.keys('*', function (err, keys) {
-//   if (err) return console.log(err);
-
-//   for(var i = 0, len = keys.length; i < len; i++) {
-//     console.log(keys[i]);
-//   }
-// }); 
 
 // client.del('USDT_BTC', redis.print);
-
