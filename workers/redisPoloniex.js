@@ -26,7 +26,7 @@ async function poloPoller(pairs) {
     data.forEach((element) => {
       const ts = element.date;
       const price = element.close;
-      compressed.push([ts, price]);
+      compressed.push([ts, price]); 
     });
     updates[pairs[i]] = compressed;
   }
@@ -43,21 +43,17 @@ async function addToRedis(updates) {
   Object.keys(updates).forEach(async (pair) => {
     // Add each new [ts, price] to Redis
     // const updateCount = 0;
-    let c = 0; const d = 0;
-    console.log(updates[pair].length);
+    console.log(updates[pair].slice(updates[pair].length - 10, updates[pair].length));
     const redisUpdates = [];
-
-    updates[pair].forEach((pairData) => {
-      c += 1
-      const ts = pairData[0];
-      const price = `${parseFloat(pairData[1]).toFixed(2)}:${ts}`;
-      redisUpdates.push(client.zaddAsync(pair, ts, price));
+    updates[pair].forEach((tick) => {
+      const ts = tick[0];
+      const price = `${parseFloat(tick[1]).toFixed(2)}:${ts}`;
+      redisUpdates.push(client.zaddAsync(pair, 'NX', ts, price));
     });
     await Promise.all(redisUpdates);
-    console.log(c);
     // console.log('Updated', updateCount, 'kvs for', pair);
   });
-}
+} 
 
 // Loop through all popular pairs
 // Check how up-to-date redis cache is
@@ -94,13 +90,14 @@ function queryRedis(pair) {
 async function confirmDataUniformity(pair) {
   const timeseries = await queryRedis(pair);
   let notgood = 0;
-  for (let i = 0; i < timeseries.length - 1; i++) {
-    // console.log(timeseries[i][0], timeseries[i + 1][0]);
-    if (timeseries[i][0] + INTERVAL !== timeseries[i + 1][0]) {
-      notgood += 1;
-      console.log(timeseries[i]);
-    }
-  }
+  console.log(timeseries.slice(timeseries.length - 10, timeseries.length));
+  // for (let i = 0; i < timeseries.length - 1; i++) {
+  //   // console.log(timeseries[i][0], timeseries[i + 1][0]);
+  //   if (timeseries[i][0] + INTERVAL !== timeseries[i + 1][0]) {
+  //     notgood += 1;
+  //     console.log(timeseries[i]);
+  //   }
+  // } 
   if (notgood) {
     console.log(notgood);
     throw new Error('Data is not uniform.', notgood, 'misforms');
@@ -108,12 +105,11 @@ async function confirmDataUniformity(pair) {
     console.log('Data is time uniform');
   }
 }
-
+ 
 // Consists of all USDT markets and top 10 BTC markets
 // const popularPairs = ['USDT_BTC', 'USDT_ETH', 'BTC_XMR', 'BTC_XRP'];
 const popularPairs = ['USDT_BTC'];
 driver(popularPairs);
-// confirmDataUniformity('USDT_BTC');
 
 // client.del('USDT_BTC', redis.print);
 
