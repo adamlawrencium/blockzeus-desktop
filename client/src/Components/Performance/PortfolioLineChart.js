@@ -7,7 +7,7 @@ import {
   Loading, Scrollbar, AreaSeries,
   AreaSplineSeries,
   LineSeries, RangeSelector, Tooltip,
-  Navigator, SplineSeries,
+  Navigator, SplineSeries, FlagSeries,
 } from 'react-jsx-highstock';
 import { theme } from './lineChartTheme';
 
@@ -36,13 +36,29 @@ class PortfolioLineChart extends Component {
     ];
   }
 
+  renderData() {
+    if (!this.props.loaded) {
+      return <AreaSeries color="#ffffff" key="x" id="x" name="x" data={[[0, 1337]]} />;
+    }
+    const toRender = this.formatForChart().map(series =>
+      (<AreaSeries
+        key={series[0]}
+        id={series[0]}
+        name={series[0]}
+        data={series[1]}
+        boostThreashold={300}
+      />));
+
+    return toRender;
+  }
+
   render() {
     const plotOptions = {
       area: {
         // dataGrouping: {
         //   groupPixelWidth: 5,
         // },
-        stacking: 'normal',
+        // stacking: 'normal',
         // lineColor: '#666666',
         // lineWidth: 1,
       },
@@ -94,20 +110,7 @@ class PortfolioLineChart extends Component {
 
           <YAxis id="value">
             <YAxis.Title>Portfolio Value (USD)</YAxis.Title>
-
-            {!this.props.loaded ? (
-              <AreaSeries color="#ffffff" key="x" id="x" name="x" data={[[0, 1337]]} />
-            ) : (
-                this.formatForChart().map(series => (<AreaSeries
-                  key={series[0]}
-                  id={series[0]}
-                  name={series[0]}
-                  data={series[1]}
-                  boostThreashold={300}
-                />))
-              )
-            }
-
+            {this.renderData()}
           </YAxis>
 
           <Navigator>
