@@ -17,30 +17,26 @@ Highcharts.setOptions(Highcharts.theme);
 
 class PortfolioLineChart extends Component {
   formatForChart() {
-    if (this.props.data) {
-      const { data } = this.props;
-      console.log(data);
-      const highchartsSeries = [];
-      // remove price and quantity data, leave ts and value
-      Object.keys(data).forEach((series) => {
-        highchartsSeries.push([series, data[series].map(x => [x[0], x[3]])]);
-      });
-      // for (const series in data) {
-      //   highchartsSeries.push([series, data[series].map(x => [x[0], x[3]])]);
-      // }
-      return highchartsSeries;
-    }
+    const { data } = this.props;
+    console.log(data);
+    const highchartsSeries = [];
+    Object.keys(data).forEach((series) => {
+      highchartsSeries.push([series, data[series].map((x) => {
+        if (x[3] === 0) {
+          return [x[0], null];
+        }
+        return [x[0], x[3]];
+      })]);
+    });
 
-    return [
-      ['BTC', [[1466049600000, 0], [1512230400000, 2]]],
-    ];
+    return highchartsSeries;
   }
 
   renderData() {
     if (!this.props.loaded) {
       return <AreaSeries color="#ffffff" key="x" id="x" name="x" data={[[0, 1337]]} />;
     }
-    const toRender = this.formatForChart().map(series =>
+    const lines = this.formatForChart().map(series =>
       (<AreaSeries
         key={series[0]}
         id={series[0]}
@@ -49,7 +45,21 @@ class PortfolioLineChart extends Component {
         boostThreashold={300}
       />));
 
-    return toRender;
+    return lines;
+  }
+
+  renderFlags() {
+    console.log(this);
+    const flags = (
+      <FlagSeries
+        id="events"
+        onSeries="XRP"
+        data={[{
+          x: 1514793600000,
+          title: 'W',
+        }]}
+      />);
+    return flags;
   }
 
   render() {
@@ -58,7 +68,7 @@ class PortfolioLineChart extends Component {
         // dataGrouping: {
         //   groupPixelWidth: 5,
         // },
-        // stacking: 'normal',
+        stacking: 'normal',
         // lineColor: '#666666',
         // lineWidth: 1,
       },
@@ -111,6 +121,7 @@ class PortfolioLineChart extends Component {
           <YAxis id="value">
             <YAxis.Title>Portfolio Value (USD)</YAxis.Title>
             {this.renderData()}
+            {/* {this.renderFlags()} */}
           </YAxis>
 
           <Navigator>
@@ -121,6 +132,8 @@ class PortfolioLineChart extends Component {
               })
             )}
           </Navigator>
+
+          <Scrollbar />
 
         </HighchartsStockChart>
       </div>
