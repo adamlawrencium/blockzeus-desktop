@@ -24,7 +24,7 @@ class Tile extends Component {
             <p>
               {/* Price (USD): <span> </span> */}
               <br />
-              24hr Change: {this.props.priceChange}%
+              Change: {this.props.priceChange}%
               <br />
               Value: ${this.props.value}
             </p>

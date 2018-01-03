@@ -10,9 +10,12 @@ import { fetchPoloniexTicker, fetchPoloniexCompleteBalances } from './exchanges/
 import './App.css';
 
 class App extends Component {
-  state = {
-    ticker: {},
-    balances: {},
+  constructor(props) {
+    super(props);
+    this.state = {
+      ticker: {},
+      balances: {},
+    };
   }
 
   componentDidMount() {
@@ -21,7 +24,7 @@ class App extends Component {
       .catch((err) => { console.log(err); });
 
     fetchPoloniexCompleteBalances()
-      .then((balances) => { this.setState({ balances }); })
+      .then((balances) => { this.setState({ balances }); console.log(balances); })
       .catch(err => console.log(err));
   }
 
@@ -30,9 +33,10 @@ class App extends Component {
       <div className="App" >
         <Navbar />
         <div className="container-fluid">
-          <br />
+          
           <div className="alert alert-primary" role="alert">
-            This is a demo! <a href="b" className="alert-link">Sign up</a> and connect to Poloniex to start managing your portfolio!
+            Welcome to BlockZeus! This is a demo — <a href="" className="alert-link">sign up</a> and connect to Poloniex to start managing your portfolio.
+            And psst, leave feedback <a href="" className="alert-link">here</a> :)
           </div>
           <div className="row">
             <div className="col-lg-5">
@@ -42,7 +46,7 @@ class App extends Component {
               <PerformanceCard />
             </div>
           </div>
-          <div className="row">
+          <div className="row" id="poloniex">
             <div className="col-lg-9">
               <HoldingsTiles holdings={this.state.balances} ticker={this.state.ticker} />
             </div>
