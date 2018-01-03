@@ -13,6 +13,7 @@
     "react-jsx-highcharts": "^2.0.3",
     "react-jsx-highstock": "^2.0.3",
     "react-scripts": "1.0.17",
+    "react-twitter-widgets": "^1.7.1",
     "reactstrap": "^5.0.0-alpha.4"
   },
   "scripts": {

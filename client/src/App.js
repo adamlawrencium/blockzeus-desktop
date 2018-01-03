@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import TwitterFeed from './Components/TwitterFeed/TwitterFeed';
 import Navbar from './Components/Site/Navbar';
 import AllocationsCard from './Components/Allocations/AllocationsCard';
 import PerformanceCard from './Components/Performance/PerformanceCard';
@@ -41,8 +42,11 @@ class App extends Component {
             </div>
           </div>
           <div className="row">
-            <div className="col-lg-12">
+            <div className="col-lg-9">
               <HoldingsTiles holdings={this.state.balances} ticker={this.state.ticker} />
+            </div>
+            <div className="col-lg-3">
+              <TwitterFeed />
             </div>
           </div>
         </div>
