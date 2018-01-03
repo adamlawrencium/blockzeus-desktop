@@ -13,6 +13,11 @@
   font-family: 'Avenir Next'
 }
 
+.footer {
+  background-color: #483453;
+  color: whitesmoke;
+}
+
 .navbar-brand {
   font-family: monaco;
   /* font-size: 1.5rem; */
@@ -69,6 +74,10 @@
   to { transform: rotate(360deg); }
 }
 
+.page-footer {
+  background-color: #483453 !important;
+  color: whitesmoke;
+}
 
 .loader,
 .loader:after {
@@ -111,3 +120,4 @@
     transform: rotate(360deg);
   }
 }
+

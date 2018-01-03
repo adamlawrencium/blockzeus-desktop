@@ -13,7 +13,7 @@ class TwitterFeed extends Component {
             }}
             options={{
               username: 'coindesk',
-              height: '600',
+              height: '555',
             }}
             onLoad={() => console.log('Timeline is loaded!')}
           />
