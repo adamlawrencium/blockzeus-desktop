@@ -132,13 +132,13 @@ class HoldingsTiles extends Component {
               {/* Sorting */}
               <span className="float-right">
                 <div className="btn-group btn-group-toggle" data-toggle="buttons">
-                  <label className={`btn btn-secondary ${this.state.tileSortBy === 'size' ? 'active' : ''}`} onClick={() => this.handleSortChange('size')}>
+                  <label className={`btn btn-secondary btn-outline-secondary ${this.state.tileSortBy === 'size' ? 'active' : ''}`} onClick={() => this.handleSortChange('size')}>
                     <input type="radio" name="options" id="option1" autoComplete="off" defaultChecked /> Holding Size
                   </label>
-                  <label className={`btn btn-secondary ${this.state.tileSortBy === 'price' ? 'active' : ''}`} onClick={() => this.handleSortChange('price')}>
+                  <label className={`btn btn-secondary btn-outline-secondary ${this.state.tileSortBy === 'price' ? 'active' : ''}`} onClick={() => this.handleSortChange('price')}>
                     <input type="radio" name="options" id="option2" autoComplete="off" /> Price
                   </label>
-                  <label className={`btn btn-secondary ${this.state.tileSortBy === 'change' ? 'active' : ''}`} onClick={() => this.handleSortChange('change')}>
+                  <label className={`btn btn-secondary btn-outline-secondary ${this.state.tileSortBy === 'change' ? 'active' : ''}`} onClick={() => this.handleSortChange('change')}>
                     <input type="radio" name="options" id="option3" autoComplete="off" /> Change
                   </label>
                 </div>

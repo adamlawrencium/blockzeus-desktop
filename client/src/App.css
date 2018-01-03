@@ -44,9 +44,11 @@
   box-shadow: none !important;
   -webkit-box-shadow: none !important;
   margin-bottom: 1rem;
-  background-color: #483453;
+  /* background-color: #483453; */
 }
-
+.btn-outline-secondary {
+  /* background-color: #483453; */
+}
 .price-red {
   background-color: #EBFFEB;
 }
@@ -65,6 +67,11 @@
 .card-header {
   font-family: Monaco;
 }
+
+.fas {
+  /* margin: 10px; */
+}
+
 .hero-top {
     width: 33%;
     height: 3px;
