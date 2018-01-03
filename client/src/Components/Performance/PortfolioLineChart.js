@@ -18,7 +18,6 @@ Highcharts.setOptions(Highcharts.theme);
 class PortfolioLineChart extends Component {
   formatForChart() {
     const { data } = this.props;
-    console.log(data);
     const highchartsSeries = [];
     Object.keys(data).forEach((series) => {
       highchartsSeries.push([series, data[series].map((x) => {
@@ -127,7 +126,6 @@ class PortfolioLineChart extends Component {
           <Navigator>
             {this.props.loaded && (
               Object.keys(this.props.data).map((series) => {
-                console.log(series);
                 return <Navigator.Series key={series} seriesId={series} />;
               })
             )}

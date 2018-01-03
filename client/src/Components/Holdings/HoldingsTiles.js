@@ -2,12 +2,18 @@ import React, { Component } from 'react';
 import Tile from './Tile';
 
 class HoldingsTiles extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tileSortBy: 'size',
+    };
+  }
 
-  flattenTicker(ticker) {
-    let tickcopy = Object.assign({}, ticker);
-    let flattendTicker = []
-    for (let tick in tickcopy) {
-      let x = [tick, parseFloat(tickcopy[tick]['last']), parseFloat(tickcopy[tick]['percentChange'])];
+  flattenTicker(ticker_) {
+    const ticker = Object.assign({}, ticker_);
+    const flattendTicker = [];
+    for (const tick in ticker) {
+      const x = [tick, parseFloat(ticker[tick].last), parseFloat(ticker[tick].percentChange)];
       flattendTicker.push(x);
     }
     return flattendTicker;
@@ -20,90 +26,119 @@ class HoldingsTiles extends Component {
   [currency, amount, usdPrice, usdValue, usdPriceChange]
   */
   createFullTileData(holdings_, ticker_) {
-
     // create copies of objects and filter non-holdings
-    const tickcopy = Object.assign({}, ticker_);
-    const holdcopy = Object.assign({}, holdings_);
-    const flattendTicker = this.flattenTicker(tickcopy); // convert obj to array
-    let tileData = flattendTicker.filter(tick => {
-      for (let holding in holdcopy) {
-        // assume a btc market exists for every non-btc market of the same trade currency
-        if (holdcopy[holding][0] === tick[0].split('_')[1] && tick[0].split('_')[0] === 'BTC') {
+    const ticker = Object.assign({}, ticker_);
+    const holdings = Object.assign({}, holdings_);
+    const flattendTicker = this.flattenTicker(ticker); // convert obj to array
+    const tileData = flattendTicker.filter((tick) => {
+      for (let holding = 0; holding < Object.keys(holdings).length; holding++) {
+        if (holdings[holding][0] === tick[0].split('_')[1] && tick[0].split('_')[0] === 'BTC') {
           return true;
         }
       }
-      return false
+      return false;
     });
 
     // Normalize all data to USD base.
-    let btc_usd_rate = parseFloat(tickcopy['USDT_BTC']['last']);
-    let btc_usd_rate_change = parseFloat(tickcopy['USDT_BTC']['percentChange']);
-    let rateAdjustedTiles = []
-    for (let holding in tileData) {
-      let rate_to_usd_base = tileData[holding][1] * btc_usd_rate;
-      let chng_to_usd_base = ((1 + tileData[holding][1]) * (1 + btc_usd_rate_change)).toFixed(2);
+    const btc_usd_rate = parseFloat(ticker.USDT_BTC.last);
+    const btc_usd_rate_change = parseFloat(ticker.USDT_BTC.percentChange);
+    const rateAdjustedTiles = [];
+    Object.keys(tileData).forEach((holding) => {
+      const rate_to_usd_base = tileData[holding][1] * btc_usd_rate;
+      const chng_to_usd_base = ((1 + tileData[holding][1]) * (1 + btc_usd_rate_change)).toFixed(2);
       rateAdjustedTiles.push([tileData[holding][0].split('_')[1], rate_to_usd_base.toFixed(4), chng_to_usd_base]);
-    }
+    });
 
     // Manually handle usdt_btc and usdt case
-    for (let i in holdcopy) {
-      if (holdcopy[i][0] === 'BTC') {
-        rateAdjustedTiles.push(["BTC", parseFloat(tickcopy["USDT_BTC"]["last"]).toFixed(2), parseFloat(tickcopy["USDT_BTC"]["percentChange"]).toFixed(2)]);
+    Object.keys(holdings).forEach((i) => {
+      if (holdings[i][0] === 'BTC') {
+        rateAdjustedTiles.push(['BTC', parseFloat(ticker.USDT_BTC.last).toFixed(2), parseFloat(ticker.USDT_BTC.percentChange).toFixed(2)]);
       }
-      if (holdcopy[i][0] === 'USDT') {
+      if (holdings[i][0] === 'USDT') {
         rateAdjustedTiles.push(['USDT', '1.00', '1.00']);
       }
-    }
+    });
 
     for (let i = 0; i < rateAdjustedTiles.length; i++) {
-      for (let holding in holdcopy) {
-        if (rateAdjustedTiles[i][0] === holdcopy[holding][0]) {
-          rateAdjustedTiles[i].push((holdcopy[holding][1]).toFixed(2))
+      Object.keys(holdings).forEach((holding) => {
+        if (rateAdjustedTiles[i][0] === holdings[holding][0]) {
+          rateAdjustedTiles[i].push((holdings[holding][1]).toFixed(2));
         }
-      }
+      });
     }
 
-    // this.setState({tiles: rateAdjustedTiles})
     return rateAdjustedTiles;
+  }
+
+  handleSortChange(sortBy) {
+    this.setState({ tileSortBy: sortBy });
   }
 
   renderLoading() {
     return (
-      <h2>Loading...</h2>
-    )
+      <div className="row">
+        <h2>Loading...</h2>
+      </div>
+    );
   }
 
-  renderTiles() {
-    let holdings = this.createFullTileData(this.props.holdings, this.props.ticker);
-    // holdings.map(holding => holding.push())
+  renderTiles(tileSortBy) {
+    const holdings = this.createFullTileData(this.props.holdings, this.props.ticker);
+    // Sort tiles based on parameter
+    if (tileSortBy === 'size') {
+      holdings.sort((a, b) => { return b[3] - a[3]; });
+    } else if (tileSortBy === 'change') {
+      holdings.sort((a, b) => { return b[2] - a[2]; });
+    } else if (tileSortBy === 'price') {
+      holdings.sort((a, b) => { return b[1] - a[1]; });
+    }
+
     return (
       <div className="row">
         {holdings.map(holding =>
-          <Tile
+          (<Tile
             key={holding[0]}
             currency={(holding[0])}
             price={holding[1]}
             priceChange={holding[2]}
             value={holding[3]}
-          />)}
+          />))}
       </div>
-    )
+    );
   }
 
   render() {
     return (
       <div className="card card-section" >
         <div className="card-body">
-          <h2 className="card-title">Individual Holdings</h2>
-          {this.props.ticker['USDT_BTC'] && Object.keys(this.props.holdings).length ? (
-            this.renderTiles()
+          <div className="row">
+            <div className="col-6"><h2>Individual Holdings</h2></div>
+            <div className="col-6">
+              <span className="float-right">
+                <div className="btn-group btn-group-toggle" data-toggle="buttons">
+                  <label className={`btn btn-secondary ${this.state.tileSortBy === 'size' ? 'active' : ''}`} onClick={() => this.handleSortChange('size')}>
+                    <input type="radio" name="options" id="option1" autoComplete="off" defaultChecked /> Holding Size
+                  </label>
+                  <label className={`btn btn-secondary ${this.state.tileSortBy === 'price' ? 'active' : ''}`} onClick={() => this.handleSortChange('price')}>
+                    <input type="radio" name="options" id="option2" autoComplete="off" /> Price
+                  </label>
+                  <label className={`btn btn-secondary ${this.state.tileSortBy === 'change' ? 'active' : ''}`} onClick={() => this.handleSortChange('change')}>
+                    <input type="radio" name="options" id="option3" autoComplete="off" /> Change
+                  </label>
+                </div>
+              </span>
+            </div>
+          </div>
+
+          {this.props.ticker.USDT_BTC && Object.keys(this.props.holdings).length ? (
+            this.renderTiles(this.state.tileSortBy)
           ) : (
               this.renderLoading()
             )}
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default HoldingsTiles
+export default HoldingsTiles;
