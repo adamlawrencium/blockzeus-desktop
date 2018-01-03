@@ -41,6 +41,12 @@
   border-radius: 2px;
 }
 
+.btn-secondary {
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  margin-bottom: 1rem;
+}
+
 .price-red {
   background-color: #EBFFEB;
 }
