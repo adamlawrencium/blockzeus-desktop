@@ -3,30 +3,38 @@ import React, { Component } from 'react';
 class Tile extends Component {
   render() {
     let color = '';
-    if (this.props.priceChange === '1.00') { color = 'grey' }
-    else if (this.props.priceChange < '1.0') { color = 'red' }
-    else { color = 'green' }
+    if (this.props.priceChange === '1.00') {
+      color = 'grey';
+    } else if (this.props.priceChange < '1.0') {
+      color = 'red';
+    } else {
+      color = 'green';
+    }
 
     return (
       <div className="col-lg-3 col-md-4 col-sm-6 col-xs-6">
         <div className={`card card-section price-${color}`}>
           <h4 className="card-header">{this.props.currency}</h4>
           <div className="card-body">
-            {/* <h2>{this.props.currency}</h2> */}
+            <div className="float-left">
+              Price:
+              <span style={{ float: 'right' }}>{`$${this.props.price}`}</span>
+            </div>
+
             <p>
-              Price (USD): {this.props.price}
+              {/* Price (USD): <span> </span> */}
               <br />
               24hr Change: {this.props.priceChange}%
               <br />
-              Value (USD): {this.props.value}
+              Value: ${this.props.value}
             </p>
             {/* <p>Value (USD): {this.props.value}</p> */}
-            <a href="google.com" className="btn btn-outline-primary btn-sm btn-block">Buy/Sell</a>
+            <a href="#" className="btn btn-outline-primary btn-sm btn-block">Trade</a>
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-export default Tile
+export default Tile;

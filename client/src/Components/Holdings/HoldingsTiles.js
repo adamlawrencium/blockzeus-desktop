@@ -114,6 +114,7 @@ class HoldingsTiles extends Component {
           <div className="row">
             <div className="col-6"><h2>Individual Holdings</h2></div>
             <div className="col-6">
+              {/* Sorting */}
               <span className="float-right">
                 <div className="btn-group btn-group-toggle" data-toggle="buttons">
                   <label className={`btn btn-secondary ${this.state.tileSortBy === 'size' ? 'active' : ''}`} onClick={() => this.handleSortChange('size')}>
