@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TwitterFeed from './Components/TwitterFeed/TwitterFeed';
 import Navbar from './Components/Site/Navbar';
+import Footer from './Components/Site/Footer';
 import AllocationsCard from './Components/Allocations/AllocationsCard';
 import PerformanceCard from './Components/Performance/PerformanceCard';
 import HoldingsTiles from './Components/Holdings/HoldingsTiles';
@@ -50,7 +51,7 @@ class App extends Component {
             </div>
           </div>
         </div>
-        <br />
+        <Footer />
       </div>
     );
   }
