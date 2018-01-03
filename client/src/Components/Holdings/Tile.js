@@ -16,20 +16,21 @@ class Tile extends Component {
         <div className={`card card-section price-${color}`}>
           <h4 className="card-header">{this.props.currency}</h4>
           <div className="card-body">
-            <div className="float-left">
-              Price:
-              <span style={{ float: 'right' }}>{`$${this.props.price}`}</span>
+
+            <div className="col">
+              <div className="row">
+                <p><i className="fas fa-fw fa-chart-pie" />${this.props.value}</p>
+              </div>
+              <div className="row">
+                <p><i className="fas fa-chart-line" />{this.props.priceChange}%</p>
+              </div>
+              <div className="row">
+                <p> <i className="far fa-chart-bar" />${this.props.price}</p>
+              </div>
             </div>
 
-            <p>
-              {/* Price (USD): <span> </span> */}
-              <br />
-              Change: {this.props.priceChange}%
-              <br />
-              Value: ${this.props.value}
-            </p>
             {/* <p>Value (USD): {this.props.value}</p> */}
-            <a href="#" className="btn btn-outline-primary btn-sm btn-block">Trade</a>
+            <a href="https://poloniex.com/exchange#usdt_btc" className="btn btn-outline-primary btn-sm btn-block" target="_blank">Trade</a>
           </div>
         </div>
       </div>
