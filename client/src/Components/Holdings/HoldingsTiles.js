@@ -77,7 +77,22 @@ class HoldingsTiles extends Component {
   renderLoading() {
     return (
       <div className="row">
-        <h2>Loading...</h2>
+        <div className="col-12">
+          <div style={{ textAlign: 'center' }}>
+            <div className="sk-cube-grid">
+              <div className="sk-cube sk-cube1" />
+              <div className="sk-cube sk-cube2" />
+              <div className="sk-cube sk-cube3" />
+              <div className="sk-cube sk-cube4" />
+              <div className="sk-cube sk-cube5" />
+              <div className="sk-cube sk-cube6" />
+              <div className="sk-cube sk-cube7" />
+              <div className="sk-cube sk-cube8" />
+              <div className="sk-cube sk-cube9" />
+            </div>
+            <h4>Loading your individual holdings...</h4>
+          </div>
+        </div>
       </div>
     );
   }
@@ -86,11 +101,11 @@ class HoldingsTiles extends Component {
     const holdings = this.createFullTileData(this.props.holdings, this.props.ticker);
     // Sort tiles based on parameter
     if (tileSortBy === 'size') {
-      holdings.sort((a, b) => { return b[3] - a[3]; });
+      holdings.sort((a, b) => b[3] - a[3]);
     } else if (tileSortBy === 'change') {
-      holdings.sort((a, b) => { return b[2] - a[2]; });
+      holdings.sort((a, b) => b[2] - a[2]);
     } else if (tileSortBy === 'price') {
-      holdings.sort((a, b) => { return b[1] - a[1]; });
+      holdings.sort((a, b) => b[1] - a[1]);
     }
 
     return (
