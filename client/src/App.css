@@ -19,13 +19,13 @@
 }
 
 .navbar-brand {
-  font-family: monaco;
+  font-family: "Roboto mono";
   /* font-size: 1.5rem; */
   margin-right: 1rem;
 }
 
 .blockzeus-comment {
-  font-family: Monaco;
+  font-family: "Roboto mono";
   color: #BEFA5A !important;
   /* font-size: 1.15rem; */
   margin-right: 0rem;
@@ -65,9 +65,10 @@
 }
 
 .card-header {
-  font-family: Monaco;
+  font-family: "Roboto mono";
 }
 .fa-ul {
+  font-family: "Roboto Mono";
   line-height: 2em;
   font-size: 1.2em;
   margin-left: 1.75em;
