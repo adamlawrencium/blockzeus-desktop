@@ -36,7 +36,7 @@ class App extends Component {
           
           <div className="alert alert-primary" role="alert">
             Welcome to BlockZeus! This is a demo — <a href="" className="alert-link">sign up</a> and connect to Poloniex to start managing your portfolio.
-            And psst, leave feedback <a href="" className="alert-link">here</a> :)
+            And psst, leave feedback <a href="https://goo.gl/forms/XcIs6gZS4qBphFeA3" className="alert-link">here</a> :)
           </div>
           <div className="row">
             <div className="col-lg-5">
