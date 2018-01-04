@@ -93,6 +93,13 @@ class PortfolioLineChart extends Component {
       },
     };
 
+    const ycross = {
+      snap: false,
+      label: {
+        enabled: true,
+        format: '${value:.2f}',
+      },
+    };
 
     return (
       <div className="app" >
@@ -117,7 +124,7 @@ class PortfolioLineChart extends Component {
 
           <XAxis />
 
-          <YAxis id="value">
+          <YAxis id="value" crosshair={ycross} >
             <YAxis.Title>Portfolio Value (USD)</YAxis.Title>
             {this.renderData()}
             {/* {this.renderFlags()} */}
@@ -125,9 +132,7 @@ class PortfolioLineChart extends Component {
 
           <Navigator>
             {this.props.loaded && (
-              Object.keys(this.props.data).map((series) => {
-                return <Navigator.Series key={series} seriesId={series} />;
-              })
+              Object.keys(this.props.data).map(series => <Navigator.Series key={series} seriesId={series} />)
             )}
           </Navigator>
 
