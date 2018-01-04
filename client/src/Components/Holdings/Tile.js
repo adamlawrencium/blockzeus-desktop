@@ -19,13 +19,11 @@ class Tile extends Component {
 
             <div className="col">
               <div className="row">
-                <p><i className="fas fa-fw fa-chart-pie" />${this.props.value}</p>
-              </div>
-              <div className="row">
-                <p><i className="fas fa-chart-line" />{this.props.priceChange}%</p>
-              </div>
-              <div className="row">
-                <p> <i className="far fa-chart-bar" />${this.props.price}</p>
+                <ul className="fa-ul">
+                  <li><span className="fa-li bz-metric"><i className="fas fa-chart-pie" /></span>${this.props.value}</li>
+                  <li><span className="fa-li bz-metric"><i className="fas fa-chart-bar" /></span>${this.props.price}</li>
+                  <li><span className="fa-li bz-metric"><i className="fas fa-arrows-alt-v" /></span>{this.props.priceChange}%</li>
+                </ul>
               </div>
             </div>
 

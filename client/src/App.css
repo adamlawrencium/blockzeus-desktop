@@ -67,9 +67,10 @@
 .card-header {
   font-family: Monaco;
 }
-
-.fas {
-  /* margin: 10px; */
+.fa-ul {
+  line-height: 2em;
+  font-size: 1.2em;
+  margin-left: 1.75em;
 }
 
 .hero-top {
