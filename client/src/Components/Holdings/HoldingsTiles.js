@@ -30,7 +30,8 @@ class HoldingsTiles extends Component {
     const ticker = Object.assign({}, ticker_);
     const holdings = Object.assign({}, holdings_);
     const flattendTicker = this.flattenTicker(ticker); // convert obj to array
-    const tileData = flattendTicker.filter((tick) => {
+    // ["pair", price, % change]
+    const filteredTicker = flattendTicker.filter((tick) => {
       for (let holding = 0; holding < Object.keys(holdings).length; holding++) {
         if (holdings[holding][0] === tick[0].split('_')[1] && tick[0].split('_')[0] === 'BTC') {
           return true;
@@ -40,13 +41,13 @@ class HoldingsTiles extends Component {
     });
 
     // Normalize all data to USD base.
-    const btc_usd_rate = parseFloat(ticker.USDT_BTC.last);
-    const btc_usd_rate_change = parseFloat(ticker.USDT_BTC.percentChange);
+    const btcUsdRate = parseFloat(ticker.USDT_BTC.last);
+    const btcUsdRateChange = parseFloat(ticker.USDT_BTC.percentChange);
     const rateAdjustedTiles = [];
-    Object.keys(tileData).forEach((holding) => {
-      const rate_to_usd_base = tileData[holding][1] * btc_usd_rate;
-      const chng_to_usd_base = ((1 + tileData[holding][1]) * (1 + btc_usd_rate_change)).toFixed(2);
-      rateAdjustedTiles.push([tileData[holding][0].split('_')[1], rate_to_usd_base.toFixed(4), chng_to_usd_base]);
+    Object.keys(filteredTicker).forEach((tick) => {
+      const rateUsdBase = filteredTicker[tick][1] * btcUsdRate;
+      const changeUsdBase = ((1 + filteredTicker[tick][1]) * (1 + btcUsdRateChange)).toFixed(2);
+      rateAdjustedTiles.push([filteredTicker[tick][0].split('_')[1], rateUsdBase.toFixed(4), changeUsdBase]);
     });
 
     // Manually handle usdt_btc and usdt case
@@ -67,6 +68,7 @@ class HoldingsTiles extends Component {
       });
     }
 
+    console.log(rateAdjustedTiles);
     return rateAdjustedTiles;
   }
 
