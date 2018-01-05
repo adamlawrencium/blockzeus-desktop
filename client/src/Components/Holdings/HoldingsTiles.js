@@ -47,6 +47,7 @@ class HoldingsTiles extends Component {
     Object.keys(filteredTicker).forEach((tick) => {
       const rateUsdBase = filteredTicker[tick][1] * btcUsdRate;
       const changeUsdBase = ((1 + filteredTicker[tick][1]) * (1 + btcUsdRateChange)).toFixed(2);
+      // const changeUsdBase = filteredTicker[tick][1];
       rateAdjustedTiles.push([filteredTicker[tick][0].split('_')[1], rateUsdBase.toFixed(4), changeUsdBase]);
     });
 
