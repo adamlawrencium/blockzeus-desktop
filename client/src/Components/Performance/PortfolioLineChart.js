@@ -9,7 +9,7 @@ import {
   LineSeries, RangeSelector, Tooltip,
   Navigator, SplineSeries, FlagSeries,
 } from 'react-jsx-highstock';
-import { theme } from './lineChartTheme';
+import { theme } from './theme';
 
 // HighchartsBoost(Highcharts);
 Highcharts.theme = theme;
@@ -36,7 +36,7 @@ class PortfolioLineChart extends Component {
       return <AreaSeries color="#ffffff" key="x" id="x" name="x" data={[[0, 1337]]} />;
     }
     const lines = this.formatForChart().map(series =>
-      (<AreaSeries
+      (<AreaSplineSeries
         key={series[0]}
         id={series[0]}
         name={series[0]}
@@ -64,12 +64,10 @@ class PortfolioLineChart extends Component {
   render() {
     const plotOptions = {
       area: {
-        // dataGrouping: {
-        //   groupPixelWidth: 5,
-        // },
         stacking: 'normal',
-        // lineColor: '#666666',
-        // lineWidth: 1,
+      },
+      areaspline: {
+        stacking: 'normal',
       },
     };
 
@@ -98,6 +96,7 @@ class PortfolioLineChart extends Component {
       label: {
         enabled: true,
         format: '${value:.2f}',
+        backgroundColor: '#482D62',
       },
     };
 
@@ -115,7 +114,7 @@ class PortfolioLineChart extends Component {
             <RangeSelector.Button count={3} type="month">3M</RangeSelector.Button>
             <RangeSelector.Button count={1} type="year">1Y</RangeSelector.Button>
             <RangeSelector.Button type="all">All</RangeSelector.Button>
-            <RangeSelector.Input boxBorderColor="#483453" />
+            {/* <RangeSelector.Input boxBorderColor="#483453" /> */}
           </RangeSelector>
 
           <Tooltip />
