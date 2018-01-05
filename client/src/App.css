@@ -2,7 +2,7 @@
   max-width: 1280px;
   padding-left: 20px;
   padding-right: 20px;
-  font-family: 'Avenir Next', sans-serif;
+  font-family: 'Barlow', sans-serif;
 }
 
 .navbar-bz-purple {
@@ -19,13 +19,15 @@
 }
 
 .navbar-brand {
-  font-family: "Roboto mono";
+  font-family: "Roboto";
+  letter-spacing: 0.1em;
   /* font-size: 1.5rem; */
   margin-right: 1rem;
 }
 
 .blockzeus-comment {
-  font-family: "Roboto mono";
+  font-family: "Barlow";
+  letter-spacing: 0.1em;
   color: #BEFA5A !important;
   /* font-size: 1.15rem; */
   margin-right: 0rem;
