@@ -13,7 +13,7 @@ const mongoose = require('mongoose');
 
 const index = require('./routes/index');
 const users = require('./routes/users');
-const poloniexData = require('./routes/poloniexData');
+const poloniex = require('./routes/poloniex/poloniex');
 
 
 /**
@@ -50,7 +50,7 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/poloniexData', poloniexData);
+app.use('/poloniex/', poloniex);
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
