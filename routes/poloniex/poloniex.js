@@ -149,6 +149,7 @@ router.get('/fullPerformance', async (req, res) => {
     performances.push(createPortfolioValueTimeline(eventTimeline, hoc[i], ticker));
   }
   performances = await Promise.all(performances);
+  console.log('Total Volume:', totalVolume);
   const fullPerformance = {};
   for (let i = 0; i < 7; i++) {
     // console.log(performances[i]);
@@ -157,7 +158,7 @@ router.get('/fullPerformance', async (req, res) => {
   res.json(fullPerformance);
 });
 
-
+var totalVolume = 0;
 // Takes in event timeline [[timestamp, buy/sell/deposit/withdrawal, amount], ...]
 // values events against another currency (USD)
 async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
@@ -174,9 +175,10 @@ async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
     chartData = createDummyUSDTData();
   }
 
-  let totalVolume = 0;
+  const userVolume = [];
   for (let i = 1; i < chartData.length; i++) {
     let intraPeriodPortfolioChange = 0;
+    let intraVolume = 0;
     for (let eventIndex = 0; eventIndex < eventTimeline.length; eventIndex++) {
       // if the event is between two candlesticks, get final value
       if (eventTimeline[eventIndex][0] > chartData[i - 1].date &&
@@ -184,20 +186,25 @@ async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
         // if buy or deposit, add to portfolio, if sell or withdraw, substract
         if (eventTimeline[eventIndex][1] === 'deposit' ||
           eventTimeline[eventIndex][1] === 'buy') {
+          intraVolume += eventTimeline[eventIndex][2];
+          // console.log(eventTimeline[eventIndex][2]);
           intraPeriodPortfolioChange += eventTimeline[eventIndex][2];
         } else {
+          intraVolume += eventTimeline[eventIndex][2];
           intraPeriodPortfolioChange -= eventTimeline[eventIndex][2];
+          // console.log(eventTimeline[eventIndex][2]);
         }
       }
     }
     const ts = chartData[i - 1].date * 1000;
     const price = currency === 'USDT' ? 1 : parseFloat((chartData[i - 1].close).toFixed(2));
+    if (intraVolume > 0) { userVolume.push(intraVolume * price); }
     const quantity = parseFloat((portfolioTimeline[i - 1][2] + intraPeriodPortfolioChange).toFixed(5));
     const value = (price * quantity) < 1.0 ? 0 : parseFloat((price * quantity).toFixed(2));
     portfolioTimeline.push([ts, price, quantity, value]);
-    totalVolume += value;
   }
-  console.log(currency, totalVolume);
+  totalVolume += sumArray(userVolume);
+  // console.log(currency, totalVolume);
   // trim beginning data with no trading activity
   for (let i = 0; i < portfolioTimeline.length; i++) {
     if (portfolioTimeline[i][2] !== 0) {
@@ -329,11 +336,19 @@ function createDummyUSDTData() {
   return dummyData;
 }
 
+function sumArray(arr) {
+  let sum = 0;
+  arr.forEach((element) => {
+    sum += element;
+  });
+  return sum;
+}
+
 // Route all public Poloniex API calls through here
 var lastCall = Date.now();
 async function poloPublic(apiCall, params) {
   let result;
-  const poloPublic_ = new Poloniex({ socketTimeout: 3000 });
+  const poloPublic_ = new Poloniex({ socketTimeout: 5000 });
   console.log(`Making public Poloniex API request [${apiCall}, ${params}]`);
   if (Date.now() - lastCall < 170) { sleep.msleep(170); }
   for (let i = 0; i < 7; i++) { // retry functionality
@@ -409,7 +424,7 @@ async function poloPrivate(poloPrivate_, apiCall) {
 function createPrivatePoloInstance(auth) {
   const key = 'GTTSHNIZ-V4EYK5K9-4QT6XXS8-EPGJ9G5F';
   const secret = '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f9847e55edb39685c69350c9536c9f0f26d5b70804415859bfb90408ae364c19d';
-  return (new Poloniex(key, secret, { socketTimeout: 3000 }));
+  return (new Poloniex(key, secret, { socketTimeout: 5000 }));
 }
 
 module.exports = router;
