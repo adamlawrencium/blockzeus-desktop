@@ -9,7 +9,7 @@
 }
 
 .navbar-bz-purple {
-  background-color: #482D62;
+  background-color: #34407F;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); 
 }
 .navbar {
@@ -17,8 +17,15 @@
   letter-spacing: 0.05em;
 }
 
+.nav-link {
+  color: rgba(250, 250, 250, 0.74);
+}
+.nav-link:hover {
+  color: white;
+}
+
 .navbar-brand {
-  font-family: "Roboto";
+  font-family: "Barlow";
   letter-spacing: 0.1em;
   /* font-size: 1.5rem; */
   margin-right: 1rem;
@@ -91,7 +98,7 @@
 }
 
 .page-footer {
-  background-color: #482D62 !important;
+  background-color: #34407F !important;
   color: whitesmoke;
 }
 

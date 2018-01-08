@@ -130,8 +130,8 @@ class HoldingsTiles extends Component {
       <div className="card card-section" >
         <div className="card-body">
           <div className="row">
-            <div className="col-6"><h2>Individual Holdings</h2></div>
-            <div className="col-6">
+            <div className="col"><h2>Individual Holdings</h2></div>
+            <div className="col">
               {/* Sorting */}
               <span className="float-right">
                 <div className="btn-group btn-group-toggle" data-toggle="buttons">
