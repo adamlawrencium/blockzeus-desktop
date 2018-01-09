@@ -9,14 +9,52 @@ class HoldingsTiles extends Component {
     };
   }
 
+  handleSortChange(sortBy) {
+    this.setState({ tileSortBy: sortBy });
+  }
+
+  /**
+   * Takes in ticker object from Poniex and turns it into an array
+   *
+   * @param {object} ticker_
+   * @returns [[currency, last, %change], ...]
+   * @memberof HoldingsTiles
+   */
   flattenTicker(ticker_) {
     const ticker = Object.assign({}, ticker_);
     const flattendTicker = [];
-    for (const tick in ticker) {
-      const x = [tick, parseFloat(ticker[tick].last), parseFloat(ticker[tick].percentChange)];
+    Object.keys(ticker).forEach((currency) => {
+      const x = [
+        currency,
+        parseFloat(ticker[currency].last),
+        parseFloat(ticker[currency].percentChange),
+      ];
       flattendTicker.push(x);
-    }
+    });
     return flattendTicker;
+  }
+
+  /**
+   * Filter ticker data based on holdings
+   *
+   * @param {2D Array} holdings
+   * @param {Object} ticker
+   * @returns
+   * @memberof HoldingsTiles
+   */
+  filterTicker(holdings, ticker) {
+    const filteredTicker = {};
+    console.log(holdings);
+    holdings.forEach((holding) => {
+      Object.keys(ticker).forEach((currency) => {
+        // Find BTC_X market for each holding
+        if (currency.split('_')[1] === holding[0] && currency.split('_')[0] === 'BTC') {
+          filteredTicker[currency] = ticker[currency];
+        }
+      });
+    });
+    console.log(filteredTicker);
+    return filteredTicker;
   }
 
 
@@ -26,12 +64,19 @@ class HoldingsTiles extends Component {
   [currency, amount, usdPrice, usdValue, usdPriceChange]
   */
   createFullTileData(holdings_, ticker_) {
-    // create copies of objects and filter non-holdings
+    // create copies of objects
     const ticker = Object.assign({}, ticker_);
     const holdings = Object.assign({}, holdings_);
+    console.log(ticker);
+    console.log(holdings);
     const flattendTicker = this.flattenTicker(ticker); // convert obj to array
-    // ["pair", price, % change]
-    const filteredTicker = flattendTicker.filter((tick) => {
+
+    // Filter ticker based on holdings
+    let filteredTicker = this.filterTicker(holdings, ticker);
+    console.log(filteredTicker);
+
+    // Create [["pair", price, % change], ...] based on holdings
+    filteredTicker = flattendTicker.filter((tick) => {
       for (let holding = 0; holding < Object.keys(holdings).length; holding++) {
         if (holdings[holding][0] === tick[0].split('_')[1] && tick[0].split('_')[0] === 'BTC') {
           return true;
@@ -39,6 +84,7 @@ class HoldingsTiles extends Component {
       }
       return false;
     });
+    console.log(filteredTicker);
 
     // Normalize all data to USD base.
     const btcUsdRate = parseFloat(ticker.USDT_BTC.last);
@@ -73,9 +119,6 @@ class HoldingsTiles extends Component {
     return rateAdjustedTiles;
   }
 
-  handleSortChange(sortBy) {
-    this.setState({ tileSortBy: sortBy });
-  }
 
   renderLoading() {
     return (
