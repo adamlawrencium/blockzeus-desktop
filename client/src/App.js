@@ -17,7 +17,6 @@ class App extends Component {
       balances: {},
     };
   }
-
   componentDidMount() {
     fetchPoloniexTicker()
       .then((ticker) => { this.setState({ ticker }); })
@@ -33,28 +32,42 @@ class App extends Component {
       <div className="App" >
         <Navbar />
         <div className="container-fluid">
-
-          <div className="alert alert-primary" role="alert">
-            Welcome to BlockZeus! This is a demo — <a href="" className="alert-link">sign up</a> and connect to Poloniex to start managing your portfolio.
+          {/* DEMO ALERT */}
+          <div className="alert alert-info alert-dismissible fade show" role="alert">
+            This is a demo — <a href="" className="alert-link">sign up</a> and connect to Poloniex to start managing your portfolio.
             And psst, leave feedback <a href="https://goo.gl/forms/XcIs6gZS4qBphFeA3" target="_blank" className="alert-link">here</a> :)
+            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
+
+          {/* INFO ALERT */}
+          <div className="alert alert-primary alert-dismissible fade show" role="alert">
+            <h5 className="alert-heading">Welcome to BlockZeus!</h5>
+            This cryptocurrency manager offers three main features:
+            <li><u>Allocations</u> chart which displays the US Dollar value of each holding.</li>
+            <li><u>Portfolio Value</u> chart that gives you a historial view of your performance.</li>
+            <li><u>Individual Holdings</u> tiles that give you more detailed information on each currency.</li>
+            <button type="button" className="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          {/* CHARTS, TILES & TWITTER FEED */}
           <div className="row">
             <div className="col-lg-5">
-              {/* <AllocationsCard balances={this.state.balances} ticker={this.state.ticker} /> */}
+              <AllocationsCard balances={this.state.balances} ticker={this.state.ticker} />
             </div>
             <div className="col-lg-7">
-              {/* <PerformanceCard /> */}
+              <PerformanceCard />
             </div>
           </div>
           <div className="row" id="poloniex">
             <div className="col-lg-9">
-              <HoldingsTiles
-                holdings={this.state.balances}
-                ticker={Object.assign({}, this.state.ticker)}
-              />
+              <HoldingsTiles holdings={this.state.balances} ticker={this.state.ticker} />
             </div>
             <div className="col-lg-3">
-              {/* <TwitterFeed /> */}
+              <TwitterFeed />
             </div>
           </div>
         </div>

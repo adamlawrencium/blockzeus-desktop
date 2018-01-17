@@ -10,7 +10,6 @@ class Tile extends Component {
     } else {
       color = 'green';
     }
-    console.log(this.props.priceChange, color);
 
     return (
       <div className="col-lg-3 col-md-4 col-xs-6">

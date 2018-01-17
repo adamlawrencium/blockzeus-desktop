@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import DonutChart from './DonutChart';
 
 class AllocationsCard extends Component {
-  totalUSDValue() {
+  totalUSDValue(balances) {
     let total = 0.0;
-    for (let i = 0; i < this.props.balances.length; i++) {
-      total += this.props.balances[i][1];
+    for (let i = 0; i < balances.length; i++) {
+      total += balances[i][1];
+      console.log(balances[i][1]);
     }
     return total.toFixed(2);
   }
@@ -20,23 +21,20 @@ class AllocationsCard extends Component {
   }
 
   renderChart() {
-    const balances_ = this.props.balances;
-    const balances = balances_.slice(); // create a copy
-    // normalize each holding value against the dollar
+    const balances = JSON.parse(JSON.stringify(this.props.balances)); // deep copy
+    // change BTC-valued balances to USD value
     for (let i = 0; i < balances.length; i++) {
       if (balances[i][0] !== 'USDT') {
         balances[i][1] *= parseFloat(this.props.ticker.USDT_BTC.last);
       }
     }
-    // balances.forEach((balance) => {
-    //   if (balance[0] !== 'USDT') {
-    //     balance[1] *= parseFloat(this.props.ticker.USDT_BTC.last);
-    //   }
-    // });
+
+    const total = this.totalUSDValue(balances);
+
     // Sort balances by value of holding
     balances.sort((a, b) => b[1] - a[1]);
     return (
-      <DonutChart balances={balances} total={this.totalUSDValue()} />
+      <DonutChart balances={balances} total={total} />
     );
   }
 
