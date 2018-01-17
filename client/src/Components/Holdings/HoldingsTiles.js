@@ -52,7 +52,6 @@ class HoldingsTiles extends Component {
         }
       });
     });
-    // console.log(filteredTicker);
     return filteredTicker;
   }
 
@@ -71,7 +70,6 @@ class HoldingsTiles extends Component {
 
     // Filter ticker based on holdings
     let filteredTicker = this.filterTicker(holdings, ticker);
-    // console.log(filteredTicker);
 
     // Normalize data to USDT base
     const BTC_USDT_rate = parseFloat(ticker.USDT_BTC.last);
@@ -96,70 +94,16 @@ class HoldingsTiles extends Component {
           priceChange: BTC_USDT_change,
         });
       } else {
-        console.log(BTC_X, holding, BTC_USDT_rate, BTC_X.percentChange);
-        console.log("usdt_x rate:", BTC_USDT_change + parseFloat(BTC_X.percentChange));
-        console.log();
         tiles.push({
           currency: holding[0],
-          dollarValue: BTC_X.last * holding[1],
+          dollarValue: BTC_USDT_rate * holding[1],
           price: BTC_X.last * BTC_USDT_rate,
           priceChange: BTC_USDT_change + parseFloat(BTC_X.percentChange),
         });
       }
     });
-
-    console.log(tiles);
     return tiles;
-
-
-
-
-    // Create [["pair", price, % change], ...] based on holdings
-    const flattendTicker = this.flattenTicker(ticker); // convert obj to array
-    filteredTicker = flattendTicker.filter((tick) => {
-      for (let holding = 0; holding < Object.keys(holdings).length; holding++) {
-        if (holdings[holding][0] === tick[0].split('_')[1] && tick[0].split('_')[0] === 'BTC') {
-          return true;
-        }
-      }
-      return false;
-    });
-    console.log(filteredTicker);
-
-    // Normalize all data to USD base.
-    // const btcUsdRate = parseFloat(ticker.USDT_BTC.last);
-    // const btcUsdRateChange = parseFloat(ticker.USDT_BTC.percentChange);
-
-    const rateAdjustedTiles = [];
-    Object.keys(filteredTicker).forEach((tick) => {
-      const rateUsdBase = filteredTicker[tick][1] * BTC_USDT_rate;
-      const changeUsdBase = ((1 + filteredTicker[tick][1]) * (1 + BTC_USDT_change)).toFixed(2);
-      // const changeUsdBase = filteredTicker[tick][1];
-      rateAdjustedTiles.push([filteredTicker[tick][0].split('_')[1], rateUsdBase.toFixed(4), changeUsdBase]);
-    });
-
-    // Manually handle usdt_btc and usdt case
-    Object.keys(holdings).forEach((i) => {
-      if (holdings[i][0] === 'BTC') {
-        rateAdjustedTiles.push(['BTC', parseFloat(ticker.USDT_BTC.last).toFixed(2), parseFloat(ticker.USDT_BTC.percentChange).toFixed(2)]);
-      }
-      if (holdings[i][0] === 'USDT') {
-        rateAdjustedTiles.push(['USDT', '1.00', '1.00']);
-      }
-    });
-
-    for (let i = 0; i < rateAdjustedTiles.length; i++) {
-      Object.keys(holdings).forEach((holding) => {
-        if (rateAdjustedTiles[i][0] === holdings[holding][0]) {
-          rateAdjustedTiles[i].push((holdings[holding][1]).toFixed(2));
-        }
-      });
-    }
-
-    console.log(rateAdjustedTiles);
-    return rateAdjustedTiles;
   }
-
 
   renderLoading() {
     return (
@@ -188,16 +132,13 @@ class HoldingsTiles extends Component {
     const holdings = this.createFullTileData(this.props.holdings, this.props.ticker);
     // Sort tiles based on parameter
     if (tileSortBy === 'size') {
-      holdings.sort((a, b) => b[3] - a[3]);
+      holdings.sort((a, b) => b.dollarValue - a.dollarValue);
     } else if (tileSortBy === 'change') {
-      holdings.sort((a, b) => b[2] - a[2]);
+      holdings.sort((a, b) => b.priceChange - a.priceChange);
     } else if (tileSortBy === 'price') {
-      holdings.sort((a, b) => b[1] - a[1]);
+      holdings.sort((a, b) => b.price - a.price);
     }
-    console.log(holdings);
-    holdings.forEach((holding) => {
-      console.log(holding);
-    });
+
     return (
       <div className="row">
 
@@ -205,9 +146,9 @@ class HoldingsTiles extends Component {
           (<Tile
             key={holding.currency}
             currency={holding.currency}
-            value={holding.dollarValue}
-            price={holding.price.toFixed(2)}
-            priceChange={(100 * holding.priceChange).toFixed(2)}
+            value={parseFloat(holding.dollarValue.toFixed(2))}
+            price={parseFloat(holding.price.toFixed(2))}
+            priceChange={parseFloat((100 * holding.priceChange).toFixed(2))}
           />))}
       </div>
     );
