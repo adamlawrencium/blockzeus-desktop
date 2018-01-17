@@ -1,11 +1,12 @@
 .App {
   background-color: rgb(250, 250, 250);
 }
+
 .container-fluid {
   max-width: 1280px;
   padding-left: 20px;
   padding-right: 20px;
-  font-family: 'Barlow', sans-serif;
+  font-family: 'Avenir Next', sans-serif;
 }
 
 .navbar-bz-purple {
@@ -13,8 +14,9 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); 
 }
 .navbar {
-  font-family: 'Barlow';
+  font-family: 'Avenir Next';
   letter-spacing: 0.05em;
+  margin-bottom: 1em;
 }
 
 .nav-link {
@@ -40,7 +42,7 @@
 }
 
 .alert-primary {
-  margin-top: 1em;
+  /* margin-top: 1em; */
 }
 
 .card {
@@ -58,10 +60,10 @@
   /* background-color: #483453; */
 }
 .price-red {
-  background-color: #EBFFEB;
+  background-color: #FFEBEB;
 }
 .price-green {
-  background-color: #FFEBEB;
+  background-color: #EBFFEB;
 }
 .price-grey {
   background-color: #EBEBEB;

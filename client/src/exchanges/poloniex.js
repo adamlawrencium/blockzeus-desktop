@@ -21,7 +21,7 @@ export function fetchPoloniexCompleteBalances() {
         reject(res);
       } else {
         res.json().then((data) => {
-          const d = poloObjectToArray(data).filter(x => x[1] > 0);
+          const d = poloObjectToArray(data);
           resolve(d);
         });
       }
@@ -72,6 +72,7 @@ export async function fetchFullPortfolioPerformance() {
 
 function poloObjectToArray(obj) {
   const a = [];
+  console.log(obj);
   for (const key in obj) {
     if (key === 'USDT') {
       a.push([key, parseFloat(obj[key].available)]);
@@ -79,5 +80,6 @@ function poloObjectToArray(obj) {
       a.push([key, parseFloat(obj[key].btcValue)]);
     }
   }
+  console.log(a);
   return a;
 }
