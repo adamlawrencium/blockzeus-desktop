@@ -44,7 +44,6 @@ class HoldingsTiles extends Component {
    */
   filterTicker(holdings, ticker) {
     const filteredTicker = {};
-    console.log(holdings);
     holdings.forEach((holding) => {
       Object.keys(ticker).forEach((currency) => {
         // Find BTC_X market for each holding
@@ -53,29 +52,70 @@ class HoldingsTiles extends Component {
         }
       });
     });
-    console.log(filteredTicker);
+    // console.log(filteredTicker);
     return filteredTicker;
   }
 
-
-  // function modifies and holdings and adds on an additional 24change
-  /*
-  creates an array with:
-  [currency, amount, usdPrice, usdValue, usdPriceChange]
-  */
+  /**
+   * Takes in all holdings and ticker, and creates a 2D array ready to be rendered
+   * by the Tile component.
+   *
+   * @param {2D Array} holdings_ BTC-based holdings [[BTC, .12], [XRP, 948], ...]
+   * @param {Object} ticker_ straight from Poloniex
+   * @returns {2D Array}  [[BTC, USDT-value, price, change], ...]
+   * @memberof HoldingsTiles
+   */
   createFullTileData(holdings_, ticker_) {
-    // create copies of objects
-    const ticker = Object.assign({}, ticker_);
-    const holdings = Object.assign({}, holdings_);
-    console.log(ticker);
-    console.log(holdings);
-    const flattendTicker = this.flattenTicker(ticker); // convert obj to array
+    const ticker = ticker_;
+    const holdings = holdings_.slice();
 
     // Filter ticker based on holdings
     let filteredTicker = this.filterTicker(holdings, ticker);
-    console.log(filteredTicker);
+    // console.log(filteredTicker);
+
+    // Normalize data to USDT base
+    const BTC_USDT_rate = parseFloat(ticker.USDT_BTC.last);
+    const BTC_USDT_change = parseFloat(ticker.USDT_BTC.percentChange);
+
+    const tiles = [];
+    holdings.forEach((holding) => {
+      const BTC_X = filteredTicker[`BTC_${holding[0]}`]; // assume a BTC_X market exists
+
+      if (holding[0] === 'USDT') { // handle market neutral USDT case
+        tiles.push({
+          currency: holding[0],
+          dollarValue: holding[1],
+          price: 1.00,
+          priceChange: 0,
+        });
+      } else if (holding[0] === 'BTC') { // handle BTC case
+        tiles.push({
+          currency: holding[0],
+          dollarValue: BTC_USDT_rate * holding[1],
+          price: BTC_USDT_rate,
+          priceChange: BTC_USDT_change,
+        });
+      } else {
+        console.log(BTC_X, holding, BTC_USDT_rate, BTC_X.percentChange);
+        console.log("usdt_x rate:", BTC_USDT_change + parseFloat(BTC_X.percentChange));
+        console.log();
+        tiles.push({
+          currency: holding[0],
+          dollarValue: BTC_X.last * holding[1],
+          price: BTC_X.last * BTC_USDT_rate,
+          priceChange: BTC_USDT_change + parseFloat(BTC_X.percentChange),
+        });
+      }
+    });
+
+    console.log(tiles);
+    return tiles;
+
+
+
 
     // Create [["pair", price, % change], ...] based on holdings
+    const flattendTicker = this.flattenTicker(ticker); // convert obj to array
     filteredTicker = flattendTicker.filter((tick) => {
       for (let holding = 0; holding < Object.keys(holdings).length; holding++) {
         if (holdings[holding][0] === tick[0].split('_')[1] && tick[0].split('_')[0] === 'BTC') {
@@ -87,12 +127,13 @@ class HoldingsTiles extends Component {
     console.log(filteredTicker);
 
     // Normalize all data to USD base.
-    const btcUsdRate = parseFloat(ticker.USDT_BTC.last);
-    const btcUsdRateChange = parseFloat(ticker.USDT_BTC.percentChange);
+    // const btcUsdRate = parseFloat(ticker.USDT_BTC.last);
+    // const btcUsdRateChange = parseFloat(ticker.USDT_BTC.percentChange);
+
     const rateAdjustedTiles = [];
     Object.keys(filteredTicker).forEach((tick) => {
-      const rateUsdBase = filteredTicker[tick][1] * btcUsdRate;
-      const changeUsdBase = ((1 + filteredTicker[tick][1]) * (1 + btcUsdRateChange)).toFixed(2);
+      const rateUsdBase = filteredTicker[tick][1] * BTC_USDT_rate;
+      const changeUsdBase = ((1 + filteredTicker[tick][1]) * (1 + BTC_USDT_change)).toFixed(2);
       // const changeUsdBase = filteredTicker[tick][1];
       rateAdjustedTiles.push([filteredTicker[tick][0].split('_')[1], rateUsdBase.toFixed(4), changeUsdBase]);
     });
@@ -153,16 +194,20 @@ class HoldingsTiles extends Component {
     } else if (tileSortBy === 'price') {
       holdings.sort((a, b) => b[1] - a[1]);
     }
-
+    console.log(holdings);
+    holdings.forEach((holding) => {
+      console.log(holding);
+    });
     return (
       <div className="row">
+
         {holdings.map(holding =>
           (<Tile
-            key={holding[0]}
-            currency={(holding[0])}
-            price={holding[1]}
-            priceChange={holding[2]}
-            value={holding[3]}
+            key={holding.currency}
+            currency={holding.currency}
+            value={holding.dollarValue}
+            price={holding.price.toFixed(2)}
+            priceChange={(100 * holding.priceChange).toFixed(2)}
           />))}
       </div>
     );

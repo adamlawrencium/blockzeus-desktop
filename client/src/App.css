@@ -1,11 +1,12 @@
 .App {
   background-color: rgb(250, 250, 250);
+  font-family: "Karla" !important;
 }
 .container-fluid {
   max-width: 1280px;
   padding-left: 20px;
   padding-right: 20px;
-  font-family: 'Barlow', sans-serif;
+  font-family: 'Karla', sans-serif;
 }
 
 .navbar-bz-purple {
