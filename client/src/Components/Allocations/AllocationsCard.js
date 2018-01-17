@@ -20,13 +20,19 @@ class AllocationsCard extends Component {
   }
 
   renderChart() {
-    const balances = this.props.balances;
+    const balances_ = this.props.balances;
+    const balances = balances_.slice(); // create a copy
     // normalize each holding value against the dollar
-    balances.forEach((balance) => {
-      if (balance[0] !== 'USDT') {
-        balance[1] *= parseFloat(this.props.ticker.USDT_BTC.last);
+    for (let i = 0; i < balances.length; i++) {
+      if (balances[i][0] !== 'USDT') {
+        balances[i][1] *= parseFloat(this.props.ticker.USDT_BTC.last);
       }
-    });
+    }
+    // balances.forEach((balance) => {
+    //   if (balance[0] !== 'USDT') {
+    //     balance[1] *= parseFloat(this.props.ticker.USDT_BTC.last);
+    //   }
+    // });
     // Sort balances by value of holding
     balances.sort((a, b) => b[1] - a[1]);
     return (
