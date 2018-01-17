@@ -6,6 +6,8 @@ const Poloniex = require('poloniex-api-node');
 const router = express.Router();
 
 const PERIOD = 14400;
+var lastCall = Date.now(); // used for poloniex rate limiting
+
 // Initialize most commonly used data.
 let USDT_BTC;
 poloPublic('chartData', 'USDT_BTC').then(data => USDT_BTC = data);
@@ -54,6 +56,13 @@ router.get('/balances', async (req, res) => {
 router.get('/completeBalances', async (req, res) => {
   const p = createPrivatePoloInstance();
   const completeBalances = await poloPrivate(p, 'completeBalances');
+  // Filter zero available balances
+  Object.keys(completeBalances).forEach((balance) => {
+    if (completeBalances[balance].available === '0.00000000') {
+      delete completeBalances[balance];
+    }
+  });
+  console.log(completeBalances);
   res.json(completeBalances);
 });
 
@@ -345,7 +354,6 @@ function sumArray(arr) {
 }
 
 // Route all public Poloniex API calls through here
-var lastCall = Date.now();
 async function poloPublic(apiCall, params) {
   let result;
   const poloPublic_ = new Poloniex({ socketTimeout: 5000 });

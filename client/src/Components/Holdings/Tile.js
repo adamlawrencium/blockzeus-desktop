@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 class Tile extends Component {
   render() {
     let color = '';
-    if (this.props.priceChange === '1.00') {
+    if (this.props.priceChange === 0) {
       color = 'grey';
-    } else if (this.props.priceChange < '1.0') {
+    } else if (this.props.priceChange < 0) {
       color = 'red';
     } else {
       color = 'green';
