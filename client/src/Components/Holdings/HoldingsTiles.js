@@ -35,7 +35,7 @@ class HoldingsTiles extends Component {
   }
 
   /**
-   * Filter ticker data based on holdings
+   * Filter out currencies that aren't in holdings
    *
    * @param {2D Array} holdings
    * @param {Object} ticker
@@ -65,8 +65,8 @@ class HoldingsTiles extends Component {
    * @memberof HoldingsTiles
    */
   createFullTileData(holdings_, ticker_) {
-    const ticker = ticker_;
-    const holdings = holdings_.slice();
+    const ticker = JSON.parse(JSON.stringify(ticker_)); // deep copy
+    const holdings = JSON.parse(JSON.stringify(holdings_)); // deep copy
 
     // Filter ticker based on holdings
     let filteredTicker = this.filterTicker(holdings, ticker);
