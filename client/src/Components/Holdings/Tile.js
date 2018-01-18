@@ -3,12 +3,16 @@ import React, { Component } from 'react';
 class Tile extends Component {
   render() {
     let color = '';
+    let icon = '';
     if (this.props.priceChange === 0) {
       color = 'grey';
+      icon = 'arrows-alt-h';
     } else if (this.props.priceChange < 0) {
       color = 'red';
+      icon = 'angle-double-down';
     } else {
       color = 'green';
+      icon = 'angle-double-up';
     }
 
     return (
@@ -22,7 +26,7 @@ class Tile extends Component {
                 <ul className="fa-ul">
                   <li><span className="fa-li bz-metric"><i className="fas fa-chart-pie" /></span>${this.props.value}</li>
                   <li><span className="fa-li bz-metric"><i className="fas fa-chart-bar" /></span>${this.props.price}</li>
-                  <li><span className="fa-li bz-metric"><i className="fas fa-arrows-alt-v" /></span>{this.props.priceChange}%</li>
+                  <li><span className="fa-li bz-metric"><i className={`fas fa-${icon}`} /></span>{this.props.priceChange}%</li>
                 </ul>
               </div>
             </div>
