@@ -54,11 +54,11 @@ class App extends Component {
           </div>
 
           {/* CHARTS, TILES & TWITTER FEED */}
-          <div className="row">
-            <div className="col-lg-5">
+          <div className="row d-flex h-100 flex-row">
+            <div className="col-lg-5 d-flex flex-column">
               <AllocationsCard balances={this.state.balances} ticker={this.state.ticker} />
             </div>
-            <div className="col-lg-7">
+            <div className="col-lg-7 d-flex flex-column">
               <PerformanceCard />
             </div>
           </div>

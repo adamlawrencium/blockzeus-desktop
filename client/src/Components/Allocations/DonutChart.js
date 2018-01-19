@@ -17,6 +17,9 @@ class DonutChart extends Component {
     const plotOptions = {
       pie: {
         allowPointSelect: true,
+        animation: {
+          duration: 0
+        },
         dataLabels: {
           distance: 15,
           enabled: true,
