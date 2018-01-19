@@ -328,22 +328,6 @@ async function convertChartDataToUSDTBase(pair, chartData_) {
   return convertedChartData;
 }
 
-// // Create a fake dataset from the reasonable beginning of Polo time to Now
-// function createDummyUSDTData() {
-//   const dummyData = [];
-//   dummyData.push({
-//     date: 1409961600,
-//     close: 1,
-//   });
-//   for (let i = 1409961600; i < Math.round((new Date()).getTime() / 1000); i += PERIOD) {
-//     dummyData.push({
-//       date: i,
-//       close: i,
-//     });
-//   }
-//   return dummyData;
-// }
-
 function sumArray(arr) {
   let sum = 0;
   arr.forEach((element) => {
@@ -351,87 +335,5 @@ function sumArray(arr) {
   });
   return sum;
 }
-
-// // Route all public Poloniex API calls through here
-// async function poloPublic(apiCall, params) {
-//   let result;
-//   const poloPublic_ = new Poloniex({ socketTimeout: 5000 });
-//   console.log(`Making public Poloniex API request [${apiCall}, ${params}]`);
-//   if (Date.now() - lastCall < 170) { sleep.msleep(170); }
-//   for (let i = 0; i < 7; i++) { // retry functionality
-//     lastCall = Date.now();
-//     let done = false;
-//     try {
-//       switch (apiCall) {
-//         case 'ticker':
-//           result = await poloPublic_.returnTicker();
-//           done = true;
-//           break;
-//         case 'chartData':
-//           result = await poloPublic_.returnChartData(params, PERIOD, 1000000000, 9999999999);
-//           console.log('Received', params, 'data.');
-//           done = true;
-//           break;
-//         default:
-//           return 'BZ: Invalid API Call';
-//       }
-//     } catch (err) {
-//       console.log('Error happened, retrying...', err);
-//       sleep.msleep(300); // abide by rate limits and avoid nonce issue
-//     }
-//     if (done) {
-//       break;
-//     }
-//   }
-//   return result;
-// }
-
-// // Takes in a Poloniex instance with private permissions to user
-// // Route all private Poloniex API calls through here
-// async function poloPrivate(poloPrivate_, apiCall) {
-//   let result;
-//   console.log(`Making private Poloniex API request [${apiCall}]`);
-//   if (Date.now() - lastCall < 170) { sleep.msleep(170); }
-//   for (let i = 0; i < 7; i++) { // retry functionality
-//     lastCall = Date.now();
-//     let done = false;
-//     try {
-//       switch (apiCall) {
-//         case 'balances':
-//           result = await poloPrivate_.returnBalances();
-//           done = true;
-//           break;
-//         case 'completeBalances':
-//           result = await poloPrivate_.returnCompleteBalances();
-//           done = true;
-//           break;
-//         case 'tradeHistory':
-//           result = await poloPrivate_.returnMyTradeHistory('all', 1000000000, 9999999999);
-//           done = true;
-//           break;
-//         case 'depositsWithdrawals':
-//           result = await poloPrivate_.returnDepositsWithdrawals(1000000000, 9999999999);
-//           done = true;
-//           break;
-//         default:
-//           return 'BZ: Invalid API Call';
-//       }
-//     } catch (err) {
-//       console.log('Error happened, retrying...', err);
-//       sleep.msleep(300); // abide by rate limits and avoid nonce issue
-//     }
-//     if (done) {
-//       break;
-//     }
-//   }
-//   return result;
-// }
-
-// // Creates an instance of Poloniex for private commands
-// function createPrivatePoloInstance(auth) {
-//   const key = 'GTTSHNIZ-V4EYK5K9-4QT6XXS8-EPGJ9G5F';
-//   const secret = '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f9847e55edb39685c69350c9536c9f0f26d5b70804415859bfb90408ae364c19d';
-//   return (new Poloniex(key, secret, { socketTimeout: 5000 }));
-// }
 
 module.exports = router;
