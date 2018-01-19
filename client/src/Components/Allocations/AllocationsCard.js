@@ -13,7 +13,7 @@ class AllocationsCard extends Component {
 
   renderLoading() {
     return (
-      <div style={{ textAlign: 'center' }}>
+      <div className="text-center py-4">
         <div className="loader" />
         <h4>Loading your portfolio allocations...</h4>
       </div>
@@ -40,15 +40,13 @@ class AllocationsCard extends Component {
 
   render() {
     return (
-      <div className="card card-section" >
-        <div className="card-body">
-          <h2 className="card-title">Allocations</h2>
-          {this.props.ticker.USDT_BTC && Object.keys(this.props.balances).length ? (
-            this.renderChart()
-          ) : (
-              this.renderLoading()
-            )}
-        </div>
+      <div className="card card-body card-section h-100" >
+        <h2 className="card-title">Allocations</h2>
+        {this.props.ticker.USDT_BTC && Object.keys(this.props.balances).length ? (
+          this.renderChart()
+        ) : (
+            this.renderLoading()
+          )}
       </div>
     );
   }
