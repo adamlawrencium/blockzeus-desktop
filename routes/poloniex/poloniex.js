@@ -62,6 +62,9 @@ router.get('/completeBalances', async (req, res) => {
     }
   });
   console.log(completeBalances);
+  // Cache-Control response header
+  // browser will cache this response for 60 seconds
+  res.setHeader('Cache-Control', 'max-age=60')
   res.json(completeBalances);
 });
 
@@ -163,6 +166,9 @@ router.get('/fullPerformance', async (req, res) => {
     // console.log(performances[i]);
     fullPerformance[hoc[i]] = performances[i];
   }
+  // Cache-Control response header
+  // browser will cache this response for 60 seconds
+  res.setHeader('Cache-Control', 'max-age=60')
   res.json(fullPerformance);
 });
 

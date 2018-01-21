@@ -24,7 +24,7 @@ class PerformanceCard extends Component {
 
   renderChart() {
     return (
-      <div className="card card-section" >
+      <div className="card card-section h-100" >
         <div className="card-body">
           <h2 className="card-title">Portfolio Value</h2>
           <PortfolioLineChart loaded={this.state.loaded} data={this.state.fullPerformance} />
@@ -35,7 +35,7 @@ class PerformanceCard extends Component {
 
   renderLoading() {
     return (
-      <div className="card card-section" >
+      <div className="card card-section h-100" >
         <div className="card-body">
           <h2 className="card-title">Portfolio Value</h2>
           <div className="col"><h2>Loading...</h2></div>
