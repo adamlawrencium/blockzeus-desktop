@@ -1,8 +1,7 @@
 const express = require('express');
-const sleep = require('sleep');
-// const DBPoloniex = require('../models/PoloniexData');
-const Poloniex = require('poloniex-api-node');
+const PoloniexDAL = require('./poloniexDAL');
 
+const poloniex = new PoloniexDAL();
 const router = express.Router();
 
 const PERIOD = 14400;
@@ -10,7 +9,7 @@ var lastCall = Date.now(); // used for poloniex rate limiting
 
 // Initialize most commonly used data.
 let USDT_BTC;
-poloPublic('chartData', 'USDT_BTC').then(data => USDT_BTC = data);
+poloniex.public('chartData', 'USDT_BTC').then(data => USDT_BTC = data);
 
 /*
 "BTC_DASH": {
@@ -27,7 +26,7 @@ poloPublic('chartData', 'USDT_BTC').then(data => USDT_BTC = data);
 }, ...
 */
 router.get('/ticker', async (req, res) => {
-  const ticker = await poloPublic('ticker');
+  const ticker = await poloniex.public('ticker');
   res.json(ticker);
 });
 
@@ -39,8 +38,8 @@ router.get('/ticker', async (req, res) => {
 }
 */
 router.get('/balances', async (req, res) => {
-  const p = createPrivatePoloInstance();
-  const balances = await poloPrivate(p, 'balances');
+  const p = poloniex.createPrivatePoloInstance();
+  const balances = await poloniex.private(p, 'balances');
   res.json(balances);
 });
 
@@ -54,8 +53,8 @@ router.get('/balances', async (req, res) => {
 }
 */
 router.get('/completeBalances', async (req, res) => {
-  const p = createPrivatePoloInstance();
-  const completeBalances = await poloPrivate(p, 'completeBalances');
+  const p = poloniex.createPrivatePoloInstance();
+  const completeBalances = await poloniex.private(p, 'completeBalances');
   // Filter zero available balances
   Object.keys(completeBalances).forEach((balance) => {
     if (completeBalances[balance].available === '0.00000000') {
@@ -84,8 +83,8 @@ router.get('/completeBalances', async (req, res) => {
 one month periods
 */
 router.get('/tradeHistory/:currencyPair', async (req, res) => {
-  const p = createPrivatePoloInstance();
-  const tradeHistory = await poloPrivate(p, 'tradeHistory');
+  const p = poloniex.createPrivatePoloInstance();
+  const tradeHistory = await poloniex.public(p, 'tradeHistory');
   res.json(tradeHistory);
 });
 
@@ -103,11 +102,11 @@ router.get('/tradeHistory/:currencyPair', async (req, res) => {
 period: {300, 900, 1800, 7200, 14400, 86400}
 */
 router.get('/chartData/:pair/:period', async (req, res) => {
-  const chartData = await poloPublic('chartData', req.params.pair);
+  const chartData = await poloniex.public('chartData', req.params.pair);
   res.json(chartData);
 });
 router.get('/usdtBaseChartData/:pair', async (req, res) => {
-  let chartData = await poloPublic('chartData', req.params.pair);
+  let chartData = await poloniex.public('chartData', req.params.pair);
   chartData = await convertChartDataToUSDTBase(req.params.pair, chartData);
   res.json(chartData);
 });
@@ -144,12 +143,12 @@ for all holdings:
 router.get('/fullPerformance', async (req, res) => {
   // Get all historically owned currencies by looking at past buys/sells/deposits/withdrawals
 
-  const p = createPrivatePoloInstance();
+  const p = poloniex.createPrivatePoloInstance();
 
   const [dw, bs, ticker] = await Promise.all([
-    poloPrivate(p, 'depositsWithdrawals'),
-    poloPrivate(p, 'tradeHistory'),
-    poloPublic('ticker'),
+    poloniex.private(p, 'depositsWithdrawals'),
+    poloniex.private(p, 'tradeHistory'),
+    poloniex.public('ticker'),
   ]);
   const hoc = await parseHistoricallyOwnedCurrencies(dw, bs); // # depositswithdrawals, buys/sells
   let performances = [];
@@ -182,12 +181,12 @@ async function createPortfolioValueTimeline(eventTimeline, currency, ticker) {
   // if not, see if BTC_Currency market exists, then convert it to USDT and run the following:
   let chartData;
   if (ticker[`USDT_${currency}`]) {
-    chartData = await poloPublic('chartData', `USDT_${currency}`);
+    chartData = await poloniex.public('chartData', `USDT_${currency}`);
   } else if (ticker[`BTC_${currency}`]) {
-    chartData = await poloPublic('chartData', `BTC_${currency}`);
+    chartData = await poloniex.public('chartData', `BTC_${currency}`);
     chartData = await convertChartDataToUSDTBase(`BTC_${currency}`, chartData, ticker);
   } else if (currency === 'USDT') {
-    chartData = createDummyUSDTData();
+    chartData = poloniex.createDummyUSDTData();
   }
 
   const userVolume = [];
@@ -313,9 +312,9 @@ async function convertChartDataToUSDTBase(pair, chartData_) {
   } else if (pair.split('_')[0] === 'BTC') {
     usdtbase = USDT_BTC;
   } else if (pair.split('_')[0] === 'ETH') {
-    usdtbase = await poloPublic('chartData', 'USDT_ETH');
+    usdtbase = await poloniex.public('chartData', 'USDT_ETH');
   } else if (pair.split('_')[0] === 'XMR') {
-    usdtbase = await poloPublic('chartData', 'USDT_XMR');
+    usdtbase = await poloniex.public('chartData', 'USDT_XMR');
   }
   // make arrays same length
   const cdlen = chartData.length; const usdtBtclen = usdtbase.length;
@@ -335,110 +334,12 @@ async function convertChartDataToUSDTBase(pair, chartData_) {
   return convertedChartData;
 }
 
-// Create a fake dataset from the reasonable beginning of Polo time to Now
-function createDummyUSDTData() {
-  const dummyData = [];
-  dummyData.push({
-    date: 1409961600,
-    close: 1,
-  });
-  for (let i = 1409961600; i < Math.round((new Date()).getTime() / 1000); i += PERIOD) {
-    dummyData.push({
-      date: i,
-      close: i,
-    });
-  }
-  return dummyData;
-}
-
 function sumArray(arr) {
   let sum = 0;
   arr.forEach((element) => {
     sum += element;
   });
   return sum;
-}
-
-// Route all public Poloniex API calls through here
-async function poloPublic(apiCall, params) {
-  let result;
-  const poloPublic_ = new Poloniex({ socketTimeout: 5000 });
-  console.log(`Making public Poloniex API request [${apiCall}, ${params}]`);
-  if (Date.now() - lastCall < 170) { sleep.msleep(170); }
-  for (let i = 0; i < 7; i++) { // retry functionality
-    lastCall = Date.now();
-    let done = false;
-    try {
-      switch (apiCall) {
-        case 'ticker':
-          result = await poloPublic_.returnTicker();
-          done = true;
-          break;
-        case 'chartData':
-          result = await poloPublic_.returnChartData(params, PERIOD, 1000000000, 9999999999);
-          console.log('Received', params, 'data.');
-          done = true;
-          break;
-        default:
-          return 'BZ: Invalid API Call';
-      }
-    } catch (err) {
-      console.log('Error happened, retrying...', err);
-      sleep.msleep(300); // abide by rate limits and avoid nonce issue
-    }
-    if (done) {
-      break;
-    }
-  }
-  return result;
-}
-
-// Takes in a Poloniex instance with private permissions to user
-// Route all private Poloniex API calls through here
-async function poloPrivate(poloPrivate_, apiCall) {
-  let result;
-  console.log(`Making private Poloniex API request [${apiCall}]`);
-  if (Date.now() - lastCall < 170) { sleep.msleep(170); }
-  for (let i = 0; i < 7; i++) { // retry functionality
-    lastCall = Date.now();
-    let done = false;
-    try {
-      switch (apiCall) {
-        case 'balances':
-          result = await poloPrivate_.returnBalances();
-          done = true;
-          break;
-        case 'completeBalances':
-          result = await poloPrivate_.returnCompleteBalances();
-          done = true;
-          break;
-        case 'tradeHistory':
-          result = await poloPrivate_.returnMyTradeHistory('all', 1000000000, 9999999999);
-          done = true;
-          break;
-        case 'depositsWithdrawals':
-          result = await poloPrivate_.returnDepositsWithdrawals(1000000000, 9999999999);
-          done = true;
-          break;
-        default:
-          return 'BZ: Invalid API Call';
-      }
-    } catch (err) {
-      console.log('Error happened, retrying...', err);
-      sleep.msleep(300); // abide by rate limits and avoid nonce issue
-    }
-    if (done) {
-      break;
-    }
-  }
-  return result;
-}
-
-// Creates an instance of Poloniex for private commands
-function createPrivatePoloInstance(auth) {
-  const key = 'GTTSHNIZ-V4EYK5K9-4QT6XXS8-EPGJ9G5F';
-  const secret = '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f9847e55edb39685c69350c9536c9f0f26d5b70804415859bfb90408ae364c19d';
-  return (new Poloniex(key, secret, { socketTimeout: 5000 }));
 }
 
 module.exports = router;
