@@ -26,7 +26,7 @@ async function poloPoller(pairs) {
     data.forEach((element) => {
       const ts = element.date;
       const price = element.close;
-      compressed.push([ts, price]); 
+      compressed.push([ts, price]);
     });
     updates[pairs[i]] = compressed;
   }
@@ -53,7 +53,7 @@ async function addToRedis(updates) {
     await Promise.all(redisUpdates);
     // console.log('Updated', updateCount, 'kvs for', pair);
   });
-} 
+}
 
 // Loop through all popular pairs
 // Check how up-to-date redis cache is
@@ -105,7 +105,7 @@ async function confirmDataUniformity(pair) {
     console.log('Data is time uniform');
   }
 }
- 
+
 // Consists of all USDT markets and top 10 BTC markets
 // const popularPairs = ['USDT_BTC', 'USDT_ETH', 'BTC_XMR', 'BTC_XRP'];
 const popularPairs = ['USDT_BTC'];
