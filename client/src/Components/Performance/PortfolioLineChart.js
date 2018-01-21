@@ -47,6 +47,20 @@ class PortfolioLineChart extends Component {
     return lines;
   }
 
+  renderNavigator() {
+    if (!this.props.loaded) return
+
+    // Performant
+    return (<Navigator></Navigator>)
+
+    // TODO - this is too performance intensive
+    return (
+      <Navigator>
+        { Object.keys(this.props.data).map(series => <Navigator.Series key={series} seriesId={series} />) }
+      </Navigator>
+    )
+  }
+
   renderFlags() {
     console.log(this);
     const flags = (
@@ -129,11 +143,7 @@ class PortfolioLineChart extends Component {
             {/* {this.renderFlags()} */}
           </YAxis>
 
-          <Navigator>
-            {this.props.loaded && (
-              Object.keys(this.props.data).map(series => <Navigator.Series key={series} seriesId={series} />)
-            )}
-          </Navigator>
+          { this.renderNavigator() }
 
           <Scrollbar />
 

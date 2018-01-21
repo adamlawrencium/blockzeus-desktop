@@ -1,63 +1,65 @@
 .App {
   background-color: rgb(250, 250, 250);
 }
-
 .container-fluid {
   max-width: 1280px;
   padding-left: 20px;
   padding-right: 20px;
-  font-family: 'Avenir Next', sans-serif;
+  font-family: 'din-next-regular-latin-1', 'Avenir Next', sans-serif;
 }
 
+
+/* NAVIGATION BAR */
 .navbar-bz-purple {
   background-color: #34407F;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); 
 }
 .navbar {
-  font-family: 'Avenir Next';
-  letter-spacing: 0.05em;
+  font-family: 'din-next-regular-latin-1';
+  letter-spacing: 0.08em;
   margin-bottom: 1em;
 }
-
 .nav-link {
   color: rgba(250, 250, 250, 0.74);
 }
 .nav-link:hover {
   color: white;
 }
-
 .navbar-brand {
-  font-family: "Barlow";
+  font-family: "din-next-regular-latin-1";
   letter-spacing: 0.1em;
-  /* font-size: 1.5rem; */
   margin-right: 1rem;
 }
-
 .blockzeus-comment {
-  font-family: "Barlow";
-  letter-spacing: 0.1em;
+  font-family: "din-next-regular-latin-1";
+  letter-spacing: 0.07em;
   color: #BEFA5A !important;
-  /* font-size: 1.15rem; */
+  font-size: 1.15rem;
   margin-right: 0rem;
 }
 
-.alert-primary {
-  /* margin-top: 1em; */
-}
 
+/* TILES */
 .card {
   margin-bottom: 20px;
   border-radius: 2px;
 }
-
+.card-header {
+  font-size: 1.5em;
+  letter-spacing: 0.05em;
+}
+.fa-ul {
+  line-height: 2em;
+  font-size: 1.2em;
+  margin-left: 1.75em;
+}
+.card-section {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+}
 .btn-secondary {
   box-shadow: none !important;
   -webkit-box-shadow: none !important;
   margin-bottom: 1rem;
-}
-
-.btn-outline-secondary {
-  /* background-color: #483453; */
 }
 .price-red {
   background-color: #FFEBEB;
@@ -73,37 +75,8 @@
   text-decoration: underline;
 }
 
-.card-header {
-  font-family: "Roboto mono";
-  font-size: 1.5em;
-}
-.fa-ul {
-  /* font-family: "Roboto Mono"; */
-  line-height: 2em;
-  font-size: 1.2em;
-  margin-left: 1.75em;
-}
 
-.hero-top {
-    width: 33%;
-    height: 3px;
-    background-color: #BEFA5A;
-}
-
-.card-section {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.page-footer {
-  background-color: #34407F !important;
-  color: whitesmoke;
-}
-
+/* DONUT SPINNER LOADING ICON */
 .loader,
 .loader:after {
   border-radius: 50%;
@@ -146,41 +119,13 @@
   }
 }
 
-.spinner {
-  width: 60px;
-  height: 60px;
-  background-color: #a96fca;
 
-  margin: 100px auto;
-  -webkit-animation: sk-rotateplane 1.2s infinite ease-in-out;
-  animation: sk-rotateplane 1.2s infinite ease-in-out;
-}
-
-@-webkit-keyframes sk-rotateplane {
-  0% { -webkit-transform: perspective(120px) }
-  50% { -webkit-transform: perspective(120px) rotateY(180deg) }
-  100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
-}
-
-@keyframes sk-rotateplane {
-  0% { 
-    transform: perspective(120px) rotateX(0deg) rotateY(0deg);
-    -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg) 
-  } 50% { 
-    transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
-    -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg) 
-  } 100% { 
-    transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
-    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
-  }
-}
-
+/* GRID LOADING ICON */
 .sk-cube-grid {
   width: 95px;
   height: 95px;
   margin: 80px auto;
 }
-
 .sk-cube-grid .sk-cube {
   width: 24%;
   height: 27%;
@@ -217,7 +162,6 @@
 .sk-cube-grid .sk-cube9 {
   -webkit-animation-delay: 0.2s;
           animation-delay: 0.2s; }
-
 @-webkit-keyframes sk-cubeGridScaleDelay {
   0%, 70%, 100% {
     -webkit-transform: scale3D(1, 1, 1);
@@ -227,7 +171,6 @@
             transform: scale3D(0, 0, 1); 
   }
 }
-
 @keyframes sk-cubeGridScaleDelay {
   0%, 70%, 100% {
     -webkit-transform: scale3D(1, 1, 1);
@@ -236,4 +179,10 @@
     -webkit-transform: scale3D(0, 0, 1);
             transform: scale3D(0, 0, 1);
   } 
+}
+
+
+.page-footer {
+  background-color: #34407F !important;
+  color: whitesmoke;
 }
