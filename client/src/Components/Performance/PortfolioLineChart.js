@@ -50,6 +50,7 @@ class PortfolioLineChart extends Component {
   renderNavigator() {
     if (!this.props.loaded) return;
 
+    /*
     // Test Data =================
     const d = [
       [1433282400000, 46.85],
@@ -110,50 +111,53 @@ class PortfolioLineChart extends Component {
       [1440021600000, 45.66],
     ];
     // Performant
-    /*
     const series = {
       data: d,
     };
     */
     // Test Data =================
 
+    // This function renders the navigator for the chart, which is a aggregation
+    //  of all currencys values in USD
+
     const timestep = 14400000;
-    let totalValueTimeSeries = [];
+    const totalValueTimeSeries = [];
     let minTimeValue = Number.MAX_VALUE;
     let maxTimeValue = 0;
-    let valueMap = new Map();
+    const valueMap = new Map();
 
 
-    for (var key in this.props.data) {
-        if (this.props.data.hasOwnProperty(key)) {
-
-          // Transforming data of type {'currency':[[Time,~,~,AmtOwnedUSD], ...], ...} (this.props.data)
-          //  to data of type MAP{'Time' : [currencyA_AmtOwnedUSD, currencyB_AmtOwnedUSD, ...]}
-          for (let i = 0; i < this.props.data[key].length; i++){
-            if (valueMap.has(this.props.data[key][i][0])){
-              valueMap.get(this.props.data[key][i][0]).push(this.props.data[key][i][3])
-            }
-            else {
-              valueMap.set(this.props.data[key][i][0], [this.props.data[key][i][3]])
-            }
-          }
-
-          // Finding the minimimum start date and maximum end date for historical data
-          if (this.props.data[key][0][0] < minTimeValue){
-            minTimeValue = this.props.data[key][0][0];
-            maxTimeValue = this.props.data[key][(this.props.data[key].length) - 1][0];
-          }
+    Object.keys(this.props.data).forEach((key) => {
+      // Transforming data of type
+      //  {'currency':[[Time,~,~,AmtOwnedUSD], ...], ...} (this.props.data)
+      //  to data of type
+      //  MAP{'Time' : [currencyA_AmtOwnedUSD, currencyB_AmtOwnedUSD, ...]}
+      for (let i = 0; i < this.props.data[key].length; i += 1) {
+        if (valueMap.has(this.props.data[key][i][0])) {
+          valueMap.get(this.props.data[key][i][0]).push(this.props.data[key][i][3]);
+        } else {
+          valueMap.set(this.props.data[key][i][0], [this.props.data[key][i][3]]);
         }
-    }
-
-    // Transforming ValueMap of data type MAP{'Time' : [currencyA_AmtOwnedUSD, currencyB_AmtOwnedUSD, ...]}
-    //  to data type of [[time, totalUSDAmt], [time, totalUSDAmt], ...]
-    while (minTimeValue <= maxTimeValue){
-      let value = 0.0
-      for (let i = 0; i< valueMap.get(minTimeValue).length;i++){
-        value += valueMap.get(minTimeValue)[i]
       }
-      totalValueTimeSeries.push([minTimeValue, value])
+
+      // Finding the minimimum start date and maximum end date for historical data
+      if (this.props.data[key][0][0] < minTimeValue) {
+        minTimeValue = this.props.data[key][0][0];
+        maxTimeValue = this.props.data[key][(this.props.data[key].length) - 1][0];
+      }
+    });
+
+
+    // Transforming ValueMap of data type
+    //  MAP{'Time' : [currencyA_AmtOwnedUSD, currencyB_AmtOwnedUSD, ...]}
+    //  to data type of
+    //  [[time, totalUSDAmt], [time, totalUSDAmt], ...]
+    while (minTimeValue <= maxTimeValue) {
+      let value = 0.0;
+      for (let i = 0; i < valueMap.get(minTimeValue).length; i += 1) {
+        value += valueMap.get(minTimeValue)[i];
+      }
+      totalValueTimeSeries.push([minTimeValue, value]);
 
       minTimeValue += timestep;
     }
