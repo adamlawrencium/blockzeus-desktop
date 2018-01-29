@@ -49,6 +49,8 @@ class PortfolioLineChart extends Component {
 
   renderNavigator() {
     if (!this.props.loaded) return;
+
+    // Test Data =================
     const d = [
       [1433282400000, 46.85],
       [1433368800000, 46.36],
@@ -108,14 +110,138 @@ class PortfolioLineChart extends Component {
       [1440021600000, 45.66],
     ];
     // Performant
+    /*
     const series = {
       data: d,
     };
+    */
+    // Test Data =================
+
+    const timestep = 14400000;
+    let totalValueTimeSeries = [];
+    let minTimeValue = Number.MAX_VALUE;
+    let maxTimeValue = 0;
+    let valueMap = new Map();
+
+
+    for (var key in this.props.data) {
+        if (this.props.data.hasOwnProperty(key)) {
+
+          // Transforming data of type {'currency':[[Time,~,~,AmtOwnedUSD], ...], ...} (this.props.data)
+          //  to data of type MAP{'Time' : [currencyA_AmtOwnedUSD, currencyB_AmtOwnedUSD, ...]}
+          for (let i = 0; i < this.props.data[key].length; i++){
+            if (valueMap.has(this.props.data[key][i][0])){
+              valueMap.get(this.props.data[key][i][0]).push(this.props.data[key][i][3])
+            }
+            else {
+              valueMap.set(this.props.data[key][i][0], [this.props.data[key][i][3]])
+            }
+          }
+
+          // Finding the minimimum start date and maximum end date for historical data
+          if (this.props.data[key][0][0] < minTimeValue){
+            minTimeValue = this.props.data[key][0][0];
+            maxTimeValue = this.props.data[key][(this.props.data[key].length) - 1][0];
+          }
+        }
+    }
+
+    // Transforming ValueMap of data type MAP{'Time' : [currencyA_AmtOwnedUSD, currencyB_AmtOwnedUSD, ...]}
+    //  to data type of [[time, totalUSDAmt], [time, totalUSDAmt], ...]
+    while (minTimeValue <= maxTimeValue){
+      let value = 0.0
+      for (let i = 0; i< valueMap.get(minTimeValue).length;i++){
+        value += valueMap.get(minTimeValue)[i]
+      }
+      totalValueTimeSeries.push([minTimeValue, value])
+
+      minTimeValue += timestep;
+    }
+
+    // TEMPORARY OTHER SOLUTIONS (ME NO DELETE CAUSE ME SAD)
+
+    /* INCOMPLETE indexOf SOLUTION
+
+    const timestep = 14400000;
+    let totalValueTimeSeries = [];
+    let minTimeValue = Number.MAX_VALUE;
+    let maxTimeValue = 0;
+    let minKey;
+    let startingTimeValue = [];
+
     console.log(this.props.data);
-    const totalValueTimeSeries = [];
-    Object.keys(this.props.data).forEach(series => {
-      
-    });
+
+    for (var key in this.props.data) {
+        if (this.props.data.hasOwnProperty(key)) {
+          startingTimeValue.push([key, this.props.data[key][0][0]]);
+          if (this.props.data[key][0][0] < minTimeValue){
+            minTimeValue = this.props.data[key][0][0];
+            maxTimeValue = this.props.data[key][(this.props.data[key].length) - 1][0];
+            minKey = key;
+          }
+        }
+    }
+
+    while (minTimeValue <= maxTimeValue){
+      let value = 0.0
+      for (var key in this.props.data) {
+          if (this.props.data.hasOwnProperty(key)) {
+            this.props.data[key]
+          }
+      }
+
+
+      minTimeValue += timestep;
+    }
+    */
+
+    /* INCOMPLETE ZERO FILL SOLUTION
+    const maxLength = this.props.data[minKey].length
+    let zeroedTimeSeries = []
+
+    for (var key in this.props.data) {
+        if (this.props.data.hasOwnProperty(key)) {
+          let original = this.props.data[key].slice()
+          let zeroes = Array(maxLength - original.length).fill
+          zeroesTimeSeries.push()
+        }
+    }
+
+    Array(x).fill(0)
+    */
+
+    /* INCOMPLETE FIND START DATE SOLUTION
+    function sortfunction(a, b){ //causes an array to be sorted numerically and ascending
+      return (a[1] - b[1])
+    }
+    startingTimeValue.sort(sortfunction)
+
+    for (i = 0; i < startingTimeValue.length ; i++){
+      value += this.props.data[startedSeries[i]][][3]
+    }
+
+    let startedSeries = []
+    console.log(startingTimeValue)
+
+    while (minTimeValue <= maxTimeValue){
+      if (startingTimeValue.length > 0 && minTimeValue == startingTimeValue[0][1]){
+        startedSeries.push(startingTimeValue[0][0]);
+        startingTimeValue.shift();
+      }
+      let value = 0.0
+      for (i = 0; i < startedSeries.length; i++){
+        value += this.props.data[startedSeries[i]][][3]
+      }
+
+
+      minTimeValue += timestep;
+    }
+
+*/
+
+    const series = {
+      data: totalValueTimeSeries,
+    };
 
     return (
       <Navigator series={series} />
