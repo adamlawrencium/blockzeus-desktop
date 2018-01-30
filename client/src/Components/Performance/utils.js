@@ -8,13 +8,19 @@ export function navigatorAggregator(historicalData) {
   let maxTimeValue = 0;
   const valueMap = new Map();
 
+// This section runs through each key, transforming a number of different
+//  arrays of historical data into a single map storing all of the data
 
+// Transforming data of type
+//  {'currencyA':[[Time,~,~,AmtOwnedUSD], ...], ...} (this.props.data)
+//  to data of type
+//  MAP{'Time' : [currencyA_AmtOwnedUSD, currencyB_AmtOwnedUSD, ...]}
   Object.keys(historicalData).forEach((key) => {
-    // Transforming data of type
-    //  {'currency':[[Time,~,~,AmtOwnedUSD], ...], ...} (this.props.data)
-    //  to data of type
-    //  MAP{'Time' : [currencyA_AmtOwnedUSD, currencyB_AmtOwnedUSD, ...]}
     for (let i = 0; i < historicalData[key].length; i += 1) {
+      // If the Map has the timestamp already stored, push the USD value at that
+      //  timestamp to the array stored at that timestamps key value in the map
+      //  Otherwise, create a new array with the USD value stored at the
+      //  timestamps key value
       if (valueMap.has(historicalData[key][i][0])) {
         valueMap.get(historicalData[key][i][0]).push(historicalData[key][i][3]);
       } else {
@@ -29,6 +35,9 @@ export function navigatorAggregator(historicalData) {
     }
   });
 
+  // This section iterates from the earliest timestamp recorded to the latest,
+  //  transforming the map into a simple timeseries array recording the
+  //  aggreggated account in USD
 
   // Transforming ValueMap of data type
   //  MAP{'Time' : [currencyA_AmtOwnedUSD, currencyB_AmtOwnedUSD, ...]}
