@@ -1,5 +1,3 @@
-
-
 export function navigatorAggregator(historicalData) {
   // This function helps render the navigator for the chart, which is a aggregation
   //  of all currencys values in USD
