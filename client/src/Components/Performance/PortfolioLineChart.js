@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Highcharts from 'highcharts/highstock';
+import { navigatorAggregator } from './utils.js';
 // import HighchartsBoost from 'highcharts/modules/boost';
 import {
   HighchartsStockChart, Chart, withHighcharts,
@@ -48,17 +49,15 @@ class PortfolioLineChart extends Component {
   }
 
   renderNavigator() {
-    if (!this.props.loaded) return
+    if (!this.props.loaded) return;
 
-    // Performant
-    return (<Navigator></Navigator>)
+    const series = {
+      data: navigatorAggregator(this.props.data),
+    };
 
-    // TODO - this is too performance intensive
     return (
-      <Navigator>
-        { Object.keys(this.props.data).map(series => <Navigator.Series key={series} seriesId={series} />) }
-      </Navigator>
-    )
+      <Navigator series={series} />
+    );
   }
 
   renderFlags() {
@@ -143,7 +142,12 @@ class PortfolioLineChart extends Component {
             {/* {this.renderFlags()} */}
           </YAxis>
 
-          { this.renderNavigator() }
+          {/*}
+          <Navigator series={{
+            data: navigatorAggregator(this.props.data),
+          }} />
+          */}
+          {this.renderNavigator() }
 
           <Scrollbar />
 
