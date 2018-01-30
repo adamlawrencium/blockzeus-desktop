@@ -2,7 +2,7 @@ export function navigatorAggregator(historicalData) {
   // This function helps render the navigator for the chart, which is a aggregation
   //  of all currencys values in USD
 
-  const timestep = 14400000;
+  const timestep = 14400000; // TODO: Take difference between timestamps to determine timestep 
   const totalValueTimeSeries = [];
   let minTimeValue = Number.MAX_VALUE;
   let maxTimeValue = 0;
