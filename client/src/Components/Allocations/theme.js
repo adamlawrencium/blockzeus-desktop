@@ -1,7 +1,7 @@
 export const theme = {
   chart: {
     style: {
-      fontFamily: 'Barlow, sans-serif',
+      fontFamily: 'din-next-regular-latin-1, sans-serif',
     },
   },
   tooltip: {
