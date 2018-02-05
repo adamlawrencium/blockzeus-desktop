@@ -11,7 +11,7 @@ const http = require('http');
 const mongoose = require('mongoose');
 
 
-const index = require('./routes/index');
+const landingPage = require('./routes/landingPage/landingPage');
 const users = require('./routes/users');
 const poloniex = require('./routes/poloniex/poloniex');
 
@@ -46,15 +46,21 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'routes/landingPage')));
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.use('/users', users);
 app.use('/poloniex/', poloniex);
 
+
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-app.get('*', (req, res) => {
-  res.sendFile(path.join(`../client/build/index.html`));
+
+
+app.use('/', landingPage);
+// SEND REACT APP
+app.get('/demo', (req, res) => {
+  res.sendFile(path.join(`${__dirname}/client/build/index.html`));
 });
 
 // catch 404 and forward to error handler
