@@ -1,0 +1,18 @@
+{
+  "name": "blockzeus",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node ./server/bin/www",
+    "heroku-postbuild": "cd client && npm install && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adamalawrence/BlockZeus.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adamalawrence/BlockZeus/issues"
+  },
+  "homepage": "https://github.com/adamalawrence/BlockZeus#readme"
+}
