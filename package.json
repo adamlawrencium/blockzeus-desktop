@@ -2,7 +2,7 @@
   "name": "blockzeus",
   "version": "1.0.0",
   "scripts": {
-    "start": "node ./server/bin/www",
+    "start": "cd server && npm install && node ./bin/www",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
   "repository": {
