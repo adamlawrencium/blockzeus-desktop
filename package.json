@@ -1,18 +1,42 @@
 {
-  "name": "blockzeus",
-  "version": "1.0.0",
+  "name": "BlockZeus",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "start": "cd server && npm install && node ./bin/www",
+    "start": "node ./bin/www",
     "heroku-postbuild": "cd client && npm install && npm run build"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/adamalawrence/BlockZeus.git"
+  "dependencies": {
+    "assert": "^1.4.1",
+    "await-to-js": "^2.0.1",
+    "bluebird": "^3.5.1",
+    "body-parser": "~1.17.1",
+    "chalk": "^2.3.0",
+    "connect-mongo": "^2.0.0",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.3",
+    "dotenv": "^4.0.0",
+    "express": "~4.15.2",
+    "jsonfile": "^4.0.0",
+    "memory-cache": "^0.2.0",
+    "mongoose": "^4.13.7",
+    "morgan": "~1.8.1",
+    "poloniex-api-node": "^1.6.5",
+    "pretty-error": "^2.1.1",
+    "pug": "~2.0.0-beta11",
+    "redis": "^2.8.0",
+    "serve-favicon": "~2.4.2",
+    "sleep": "^5.1.1"
   },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/adamalawrence/BlockZeus/issues"
-  },
-  "homepage": "https://github.com/adamalawrence/BlockZeus#readme"
+  "devDependencies": {
+    "babel-eslint": "^8.2.1",
+    "babel-preset-airbnb": "^2.4.0",
+    "eslint": "^4.16.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.6.1",
+    "nodemon": "^1.14.11",
+    "prettier": "^1.9.2"
+  }
 }
