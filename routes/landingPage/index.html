@@ -1,13 +1,31 @@
 <html>
 
   <head>
-    <title>BlockZeus</title>
+    <title>BlockZeus // cryptomanager</title>
     <meta charSet="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="description" content="// Live cryptocurrency portfolio management.">
+    <meta name="description" content="Your live cryptocurrency portfolio manager.">
     <meta property="og:image" content="https://cdn.launchaco.com/images/de456287-2d9b-4fa9-ae36-ef2dd8e3bd1b.png">
-    <link rel="shortcut icon" href="https://www.launchaco.com/static/favicon.ico" />
+    <link rel="shortcut icon" href="images/1adbd9fa-512e-43a9-9c14-9913cb8765f0.png" />
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet">
+
+    <script>
+      (function(i, s, o, g, r, a, m)
+      {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function()
+        {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+      ga('create', 'UA-58206630-6', 'auto');
+      ga('send', 'pageview');
+    </script>
 
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/color.css">
@@ -22,7 +40,7 @@
             <a class="logo">
               <img src="images/e0c44b47-b9be-4f2f-b7a2-94d3717d2e1e.png" alt="BlockZeusCompany Logo">
             </a>
-            <a href="mailto:adam?subject=BlockZeus%20Feedback&amp;body=Hi%20BlockZeus,%0a%0a%0a" class="paragraph secondary-color email accent-bg header-email">Contact</a>
+            <a href="mailto:hello@blockzeus.com?subject=BlockZeus%20Feedback&amp;body=Hi%20BlockZeus,%0a%0a%0a" class="paragraph secondary-color email accent-bg header-email">Contact</a>
           </div>
         </div>
       </header>
@@ -32,11 +50,11 @@
             <h1 class="heading-lrg primary-color">Your live cryptocurrency portfolio manager</h1>
             <h2 class="subheading secondary-color mt20">No more excel. No more data imports. Connect your exchange account to BlockZeus and get a live view of your portfolio.</h2>
             <div class="mt40">
-              <a href="blah.com" target="_blank" class="button mt10 mr10 primary-color accent-bg">
-                <span> View Demo </span>
+              <a href="#blah" target="_blank" class="button mt10 mr10 primary-color accent-bg">
+                <span> Sign Up for Updates! </span>
               </a>
-              <a href="signup.com" target="_blank" class="button mt10">
-                <span> Sign Up </span>
+              <a href="/demo" target="_blank" class="button mt10">
+                <span> Enter Demo </span>
               </a>
             </div>
           </div>
@@ -100,7 +118,7 @@
         <div class="col-6 flex center-horizontal center-vertical">
           <div class="launchaco-builder-hoverable">
             <div class="">
-              <img src="images/0c49d575-0481-49dc-848c-0c1578d9da1d.png" alt="Screenshot of small App" class="custom-img">
+              <img src="images/eea8c069-4775-4540-a1cb-1f12e704b06c.png" alt="Screenshot of small App" class="custom-img">
             </div>
           </div>
         </div>
@@ -112,7 +130,7 @@
           <h3 class="heading primary-color">
             FAQ
           </h3>
-          <p class="subheading secondary-color mt20">Can't find an answer? Feel free to reach out!</p>
+          <p class="subheading secondary-color mt20">Can't find an answer? Feel free to contact us!</p>
         </div>
       </div>
       <div class="container mt40">
@@ -126,7 +144,7 @@
               </svg>
             </label>
             <p class="paragraph secondary-color faq-content mt20">
-              BlockZeuz works by connecting your exchange account via an API key and/or secret provided by the exchange. This allows the exchange to export your portfolio to BlockZeus, where it can then provide detailed charts and portfolio metrics.
+              BlockZeuz works by connecting your exchange account via an API key and/or secret provided by the exchange. This allows the exchange to export your portfolio to BlockZeus, where it can then provide detailed charts and performance metrics.
             </p>
           </div>
           <div class="faq pad20">
@@ -150,8 +168,8 @@
               </svg>
             </label>
             <p class="paragraph secondary-color faq-content mt20">
-              Each API key from all exchanges offer different permissions. BlockZeus highly recommends users giving API keys read-only access, so no currency can be traded or sent to other addresses. You will generate a new API key for BlockZeus - to revoke access,
-              simply delete your API key from your exchange account.
+              Each API key from all exchanges offer different permissions. BlockZeus highly recommends users giving API keys read-only access, so no currency can be traded or sent to other addresses. You will generate a new API key for BlockZeus to use — to revoke
+              access, simply delete your API key from your exchange account.
             </p>
           </div>
           <div class="faq pad20">
@@ -163,20 +181,20 @@
               </svg>
             </label>
             <p class="paragraph secondary-color faq-content mt20">
-              BlockZeus currently only supports Poloniex. We're working hard to add new integrations. Add yourself to our email list to find out when new exchange integrations are added!
+              BlockZeus currently only supports Poloniex. Binance and Bitfinex are the next exchanges on our list. Add yourself to our email list to find out when new exchange integrations are added!
             </p>
           </div>
           <div class="faq pad20">
             <input id="faq-4" type="checkbox" name="faq" class="faq-input">
             <label for="faq-4" class="faq-label flex spread center-horizontal">
-              <span class="bold primary-color mr20">Is it dangerous to give API access to my account?</span>
+              <span class="bold primary-color mr20">Is it dangerous to give API access to my exchange account?</span>
               <svg width="15px" height="9px" viewBox="0 0 15 9" version="1.1" xmlns="http://www.w3.org/2000/svg" class="noshrink svg-fill">
                 <path d="M7.4176407,5.65342711 L1.76421359,8.8817842e-16 L0.350000024,1.41421356 L6.00342714,7.06764068 L6,7.07106781 L7.41421356,8.48528137 L7.4176407,8.48185424 L7.42106784,8.48528137 L8.8352814,7.07106781 L8.83185426,7.06764068 L14.4852814,1.41421356 L13.0710678,8.8817842e-16 L7.4176407,5.65342711 Z"></path>
               </svg>
             </label>
             <p class="paragraph secondary-color faq-content mt20">
               The Poloniex API is structured so that you can provide restricted API access to your account. When you disable 'Withdrawal' and 'Trading' API access (which you will do as part of your account setup), BlockZeus can only import your information as read-only.
-              We can't trade on your behalf or withdraw funds from your account.
+              We can't trade on your behalf or withdraw funds from your account. Other exchanges like Binance and Bitfinex work in similar manners. Learn more here: https://github.com/binance-exchange/binance-official-api-docs
             </p>
           </div>
         </div>
@@ -189,7 +207,7 @@
           <p class="subheading secondary-color mt20">Exchanges don't offer portfolio clarity. BlockZeus solves that problem for you.</p>
           <ul class="checklist mt20">
             <li class="checklist-item flex center-horizontal spread pad10 pr0 pl0">
-              <p class="span primary-color mr20">Major exchange integrations including Poloniex and Binance, with more to come!</p>
+              <p class="span primary-color mr20">Major exchange integrations including Poloniex, with Binance and more to come!</p>
               <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="noshrink svg-fill">
                 <g transform="translate(4.000000, 5.000000)">
                   <path d="M5.24961475,8.39956394 L2.16512063,5.35475362 C1.74038521,4.93548271 1.05017933,4.9352057 0.624646383,5.35526395 C0.199019838,5.77541456 0.198881924,6.45614266 0.624129379,6.8759191 L4.35212111,10.555948 C4.38658274,10.6034965 4.42544251,10.6488955 4.46870038,10.6915969 C4.70907746,10.9288814 5.03375662,11.0320952 5.3475228,11.0013023 C5.59592563,10.9812599 5.83876209,10.8774981 6.02880771,10.6898975 C6.06831079,10.6509027 6.10414872,10.6096632 6.13632157,10.5665961 L13.9850992,2.81879759 C14.4107939,2.39857976 14.410861,1.71746456 13.985328,1.29740632 C13.5597015,0.8772557 12.8697673,0.877449143 12.444108,1.29763217 L5.24961475,8.39956394 Z"></path>
@@ -197,7 +215,7 @@
               </svg>
             </li>
             <li class="checklist-item flex center-horizontal spread pad10 pr0 pl0">
-              <p class="span primary-color mr20">Live data streams so you're always up-to-date with your portfolio's status.</p>
+              <p class="span primary-color mr20">Live data streams so you're portfolio is always up to date with new market data.</p>
               <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="noshrink svg-fill">
                 <g transform="translate(4.000000, 5.000000)">
                   <path d="M5.24961475,8.39956394 L2.16512063,5.35475362 C1.74038521,4.93548271 1.05017933,4.9352057 0.624646383,5.35526395 C0.199019838,5.77541456 0.198881924,6.45614266 0.624129379,6.8759191 L4.35212111,10.555948 C4.38658274,10.6034965 4.42544251,10.6488955 4.46870038,10.6915969 C4.70907746,10.9288814 5.03375662,11.0320952 5.3475228,11.0013023 C5.59592563,10.9812599 5.83876209,10.8774981 6.02880771,10.6898975 C6.06831079,10.6509027 6.10414872,10.6096632 6.13632157,10.5665961 L13.9850992,2.81879759 C14.4107939,2.39857976 14.410861,1.71746456 13.985328,1.29740632 C13.5597015,0.8772557 12.8697673,0.877449143 12.444108,1.29763217 L5.24961475,8.39956394 Z"></path>
@@ -205,7 +223,7 @@
               </svg>
             </li>
             <li class="checklist-item flex center-horizontal spread pad10 pr0 pl0">
-              <p class="span primary-color mr20">Mobile-responsive web application that works on any device.</p>
+              <p class="span primary-color mr20">Mobile-responsive web application that works on mobile, tablet, or desktop.</p>
               <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="noshrink svg-fill">
                 <g transform="translate(4.000000, 5.000000)">
                   <path d="M5.24961475,8.39956394 L2.16512063,5.35475362 C1.74038521,4.93548271 1.05017933,4.9352057 0.624646383,5.35526395 C0.199019838,5.77541456 0.198881924,6.45614266 0.624129379,6.8759191 L4.35212111,10.555948 C4.38658274,10.6034965 4.42544251,10.6488955 4.46870038,10.6915969 C4.70907746,10.9288814 5.03375662,11.0320952 5.3475228,11.0013023 C5.59592563,10.9812599 5.83876209,10.8774981 6.02880771,10.6898975 C6.06831079,10.6509027 6.10414872,10.6096632 6.13632157,10.5665961 L13.9850992,2.81879759 C14.4107939,2.39857976 14.410861,1.71746456 13.985328,1.29740632 C13.5597015,0.8772557 12.8697673,0.877449143 12.444108,1.29763217 L5.24961475,8.39956394 Z"></path>
@@ -213,7 +231,7 @@
               </svg>
             </li>
             <li class="checklist-item flex center-horizontal spread pad10 pr0 pl0">
-              <p class="span primary-color mr20">Current curated news updates so you're always in the know.</p>
+              <p class="span primary-color mr20">Curated current news updates so you are always in-the-know.</p>
               <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="noshrink svg-fill">
                 <g transform="translate(4.000000, 5.000000)">
                   <path d="M5.24961475,8.39956394 L2.16512063,5.35475362 C1.74038521,4.93548271 1.05017933,4.9352057 0.624646383,5.35526395 C0.199019838,5.77541456 0.198881924,6.45614266 0.624129379,6.8759191 L4.35212111,10.555948 C4.38658274,10.6034965 4.42544251,10.6488955 4.46870038,10.6915969 C4.70907746,10.9288814 5.03375662,11.0320952 5.3475228,11.0013023 C5.59592563,10.9812599 5.83876209,10.8774981 6.02880771,10.6898975 C6.06831079,10.6509027 6.10414872,10.6096632 6.13632157,10.5665961 L13.9850992,2.81879759 C14.4107939,2.39857976 14.410861,1.71746456 13.985328,1.29740632 C13.5597015,0.8772557 12.8697673,0.877449143 12.444108,1.29763217 L5.24961475,8.39956394 Z"></path>
@@ -238,7 +256,7 @@
         </div>
       </div>
     </section>
-    <section class="section black-white">
+    <section class="section fuschia-white">
       <div class="container text-center">
         <div class="col-12">
           <h4 class="heading primary-color">All you need with HODL tier. Do even more with HODL Plus.</h4>
@@ -251,7 +269,7 @@
             <div class="col-6 flex flex-column spread pad30">
               <div class="mb20">
                 <p class="bold primary-color">HODL</p>
-                <b class="heading primary-color">$0.00</b>
+                <b class="heading primary-color">Free!</b>
                 <span class="paragraph secondary-color"></span>
                 <ul class="mt20">
                   <li class="flex mb20">
@@ -260,7 +278,7 @@
                         <path d="M5.24961475,8.39956394 L2.16512063,5.35475362 C1.74038521,4.93548271 1.05017933,4.9352057 0.624646383,5.35526395 C0.199019838,5.77541456 0.198881924,6.45614266 0.624129379,6.8759191 L4.35212111,10.555948 C4.38658274,10.6034965 4.42544251,10.6488955 4.46870038,10.6915969 C4.70907746,10.9288814 5.03375662,11.0320952 5.3475228,11.0013023 C5.59592563,10.9812599 5.83876209,10.8774981 6.02880771,10.6898975 C6.06831079,10.6509027 6.10414872,10.6096632 6.13632157,10.5665961 L13.9850992,2.81879759 C14.4107939,2.39857976 14.410861,1.71746456 13.985328,1.29740632 C13.5597015,0.8772557 12.8697673,0.877449143 12.444108,1.29763217 L5.24961475,8.39956394 Z"></path>
                       </g>
                     </svg>
-                    <span class="span secondary-color">Bitfinex and Poloniex integration</span>
+                    <span class="span secondary-color">Poloniex integration</span>
                   </li>
                   <li class="flex mb20">
                     <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svg-fill noshrink mr20">
@@ -276,7 +294,7 @@
                         <path d="M5.24961475,8.39956394 L2.16512063,5.35475362 C1.74038521,4.93548271 1.05017933,4.9352057 0.624646383,5.35526395 C0.199019838,5.77541456 0.198881924,6.45614266 0.624129379,6.8759191 L4.35212111,10.555948 C4.38658274,10.6034965 4.42544251,10.6488955 4.46870038,10.6915969 C4.70907746,10.9288814 5.03375662,11.0320952 5.3475228,11.0013023 C5.59592563,10.9812599 5.83876209,10.8774981 6.02880771,10.6898975 C6.06831079,10.6509027 6.10414872,10.6096632 6.13632157,10.5665961 L13.9850992,2.81879759 C14.4107939,2.39857976 14.410861,1.71746456 13.985328,1.29740632 C13.5597015,0.8772557 12.8697673,0.877449143 12.444108,1.29763217 L5.24961475,8.39956394 Z"></path>
                       </g>
                     </svg>
-                    <span class="span secondary-color">Track up to 4 currenices</span>
+                    <span class="span secondary-color">Track up to 4 currencies</span>
                   </li>
                 </ul>
               </div>
@@ -296,7 +314,7 @@
                         <path d="M5.24961475,8.39956394 L2.16512063,5.35475362 C1.74038521,4.93548271 1.05017933,4.9352057 0.624646383,5.35526395 C0.199019838,5.77541456 0.198881924,6.45614266 0.624129379,6.8759191 L4.35212111,10.555948 C4.38658274,10.6034965 4.42544251,10.6488955 4.46870038,10.6915969 C4.70907746,10.9288814 5.03375662,11.0320952 5.3475228,11.0013023 C5.59592563,10.9812599 5.83876209,10.8774981 6.02880771,10.6898975 C6.06831079,10.6509027 6.10414872,10.6096632 6.13632157,10.5665961 L13.9850992,2.81879759 C14.4107939,2.39857976 14.410861,1.71746456 13.985328,1.29740632 C13.5597015,0.8772557 12.8697673,0.877449143 12.444108,1.29763217 L5.24961475,8.39956394 Z"></path>
                       </g>
                     </svg>
-                    <span class="span secondary-color">Bitfinex, Poloniex, and Kraken integrations</span>
+                    <span class="span secondary-color">Poloniex, Binance &amp; Bitfinex integrations</span>
                   </li>
                   <li class="flex mb20">
                     <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svg-fill noshrink mr20">
@@ -328,7 +346,7 @@
                         <path d="M5.24961475,8.39956394 L2.16512063,5.35475362 C1.74038521,4.93548271 1.05017933,4.9352057 0.624646383,5.35526395 C0.199019838,5.77541456 0.198881924,6.45614266 0.624129379,6.8759191 L4.35212111,10.555948 C4.38658274,10.6034965 4.42544251,10.6488955 4.46870038,10.6915969 C4.70907746,10.9288814 5.03375662,11.0320952 5.3475228,11.0013023 C5.59592563,10.9812599 5.83876209,10.8774981 6.02880771,10.6898975 C6.06831079,10.6509027 6.10414872,10.6096632 6.13632157,10.5665961 L13.9850992,2.81879759 C14.4107939,2.39857976 14.410861,1.71746456 13.985328,1.29740632 C13.5597015,0.8772557 12.8697673,0.877449143 12.444108,1.29763217 L5.24961475,8.39956394 Z"></path>
                       </g>
                     </svg>
-                    <span class="span secondary-color">Curated Twitter news feed</span>
+                    <span class="span secondary-color">View account withdrawals and deposits</span>
                   </li>
                   <li class="flex mb20">
                     <svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="svg-fill noshrink mr20">
@@ -358,8 +376,8 @@
     </section>
     <section class="section fuschia-gradient background">
       <div class="bg">
-        <div class="bg-image" style="background-image: url(&quot;https://images.unsplash.com/photo-1457365050282-c53d772ef8b2?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjExNDY1fQ&amp;s=a2c7987cf2641c0411b8b201bba8971d&quot;);"></div>
-        <a href="https://unsplash.com/@spacex?utm_medium=referral&amp;utm_campaign=photographer-credit&amp;utm_content=creditBadge" target="_blank" rel="noopener noreferrer" title="Download free do whatever you want high-resolution photos from spacex"
+        <div class="bg-image" style="background-image: url(&quot;https://images.unsplash.com/photo-1504966981333-1ac8809be1ca?ixlib=rb-0.3.5&amp;q=80&amp;fm=jpg&amp;crop=entropy&amp;cs=tinysrgb&amp;w=1080&amp;fit=max&amp;ixid=eyJhcHBfaWQiOjExNDY1fQ&amp;s=fa7cd259f8cce9ef65e21c5cc408dda1&quot;);"></div>
+        <a href="https://unsplash.com/@jareeign?utm_medium=referral&amp;utm_campaign=photographer-credit&amp;utm_content=creditBadge" target="_blank" rel="noopener noreferrer" title="Download free do whatever you want high-resolution photos from jareeign"
           class="bg-author" style="background-color: black; color: white; text-decoration: none; padding: 4px 6px; font-family: -apple-system, BlinkMacSystemFont, &quot;San Francisco&quot;, &quot;Helvetica Neue&quot;, Helvetica, Ubuntu, Roboto, Noto, &quot;Segoe UI&quot;, Arial, sans-serif; font-size: 12px; font-weight: bold; line-height: 1.2; display: inline-block; border-radius: 3px;">
           <span style="display: inline-block; padding: 2px 3px;">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" style="height: 12px; width: auto; position: relative; vertical-align: middle; top: -1px; fill: white;">
@@ -367,14 +385,14 @@
               <path d="M20.8 18.1c0 2.7-2.2 4.8-4.8 4.8s-4.8-2.1-4.8-4.8c0-2.7 2.2-4.8 4.8-4.8 2.7.1 4.8 2.2 4.8 4.8zm11.2-7.4v14.9c0 2.3-1.9 4.3-4.3 4.3h-23.4c-2.4 0-4.3-1.9-4.3-4.3v-15c0-2.3 1.9-4.3 4.3-4.3h3.7l.8-2.3c.4-1.1 1.7-2 2.9-2h8.6c1.2 0 2.5.9 2.9 2l.8 2.4h3.7c2.4 0 4.3 1.9 4.3 4.3zm-8.6 7.5c0-4.1-3.3-7.5-7.5-7.5-4.1 0-7.5 3.4-7.5 7.5s3.3 7.5 7.5 7.5c4.2-.1 7.5-3.4 7.5-7.5z"></path>
             </svg>
           </span>
-          <span style="display: inline-block; padding: 2px 3px;">SpaceX </span>
+          <span style="display: inline-block; padding: 2px 3px;">John Reign Abarintos </span>
         </a>
       </div>
       <div class="container text-center">
         <div class="col-12">
           <h4 class="heading-lrg primary-color">Take it for a spin!</h4>
           <div class="mt40">
-            <a href="blockzeus.herokuapp.com" target="_blank" class="button mt10 primary-color accent-bg">
+            <a href="/demo" target="_blank" class="button mt10 primary-color accent-bg">
               <span> Enter Demo </span>
             </a>
           </div>
@@ -384,15 +402,15 @@
     <section class="section fuschia-black">
       <div class="container text-center">
         <div class="col-12">
-          <h4 class="heading-lrg primary-color">Interested in updates?</h4>
-          <p class="paragraph mt20 secondary-color mt20">Sign up here. We all hate spam. You won't get any from us.</p>
+          <h4 class="heading primary-color">Want to know when it's ready?</h4>
+          <p class="paragraph mt20 secondary-color">Sign up here! We all hate spam. You won't get any from us.</p>
           <div class="mt40">
-            <form action="" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" novalidate="novalidate" class="container-sml mailchimp flex mb20">
+            <form action="https://herokuapp.us17.list-manage.com/subscribe/post?u=9c629f95f8d0b7374f4982df1&amp;amp;id=1d42d470a9" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" novalidate="novalidate" class="container-sml mailchimp flex mb20">
               <input type="email" value="" name="EMAIL" id="mce-EMAIL" placeholder="Your Email Address" required="required" class="mailchimp-input mobile-text-center">
               <div aria-hidden="true" style="position: absolute; left: -5000px;">
                 <input type="text" name="b_3198ee66c8baf4d60aa2fee6b_d60e1830e8" tabindex="-1" value="">
               </div>
-              <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="white-color button no-max-width primary-color accent-bg" value="placeholder">
+              <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="white-color button no-max-width primary-color accent-bg" value="Sign Up for Updates">
             </form>
           </div>
         </div>
@@ -401,11 +419,11 @@
     <footer class="section text-center fuschia-black">
       <div class="container col-12">
         <nav class="mb50">
-          <a href="" class="nav-link secondary-color">Terms</a>
-          <a href="" class="nav-link secondary-color">Privacy</a>
-          <a href="" class="nav-link secondary-color">Careers</a>
-          <a href="" class="nav-link secondary-color">Demo</a>
-          <a href="" class="nav-link secondary-color">Contact</a>
+          <a href="#" class="nav-link secondary-color">Terms</a>
+          <a href="#" class="nav-link secondary-color">Privacy</a>
+          <a href="#" class="nav-link secondary-color">Careers</a>
+          <a href="#" class="nav-link secondary-color">Demo</a>
+          <a href="#" class="nav-link secondary-color">Contact</a>
         </nav>
         <div class="mt50">
           <span class="span secondary-color">©</span>
