@@ -1,3 +1,8 @@
+@font-face {
+  font-family: "DDin";
+  src: url("https://www.datto.com/fonts/DattoDIN-Regular.woff2") format('woff2')
+}
+
 .font-friendly * {
   font-family: 'Montserrat', sans-serif;
 }*,

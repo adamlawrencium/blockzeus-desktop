@@ -1,7 +1,7 @@
 export const theme = {
   chart: {
     style: {
-      fontFamily: 'din-next-regular-latin-1, sans-serif',
+      fontFamily: 'url("https://www.datto.com/fonts/DattoDIN-Regular.woff2")',
     },
   },
   tooltip: {
