@@ -4,15 +4,19 @@ class Tile extends Component {
   render() {
     let color = '';
     let icon = '';
+    let percentColor = '';
     if (this.props.priceChange === 0) {
       color = 'grey';
       icon = 'arrows-alt-h';
+      percentColor = 'secondary';
     } else if (this.props.priceChange < 0) {
       color = 'red';
       icon = 'angle-double-down';
+      percentColor = 'danger';
     } else {
       color = 'green';
       icon = 'angle-double-up';
+      percentColor = 'success';
     }
 
     return (
@@ -21,7 +25,7 @@ class Tile extends Component {
           <h4 className="card-header d-flex align-items-center">
             <i className={`mr-2 cc ${this.props.currency}`} title="{this.props.currency}" />
             {this.props.currency}
-            <small className="text-success text-right w-100">
+            <small className={`text-${percentColor} text-right w-100`}>
               <i className={`fas fa-${icon} mr-2`} />
               {this.props.priceChange.toFixed(2)}%
             </small>
