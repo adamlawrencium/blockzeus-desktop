@@ -5,17 +5,19 @@
   max-width: 1280px;
   padding-left: 20px;
   padding-right: 20px;
-  font-family: 'din-next-regular-latin-1', 'Avenir Next', sans-serif;
+  font-family: url("https://www.datto.com/fonts/DattoDIN-Regular.woff2"), 'din-next-regular-latin-1', 'Avenir Next', sans-serif;
 }
 
 
 /* NAVIGATION BAR */
 .navbar-bz-purple {
-  background-color: #34407F; /* blue: 34407F, purple: 482D62 */
+  /* background-color: #34407F; blue: 34407F, purple: 482D62 */
+  background:  #4731B9;
+  /* background: linear-gradient(90deg,#F93268, #4731B9); */
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); 
 }
 .navbar {
-  font-family: 'din-next-regular-latin-1';
+  font-family: url("https://www.datto.com/fonts/DattoDIN-Regular.woff2"), 'din-next-regular-latin-1';
   letter-spacing: 0.08em;
   margin-bottom: 1em;
 }
@@ -26,12 +28,12 @@
   color: white;
 }
 .navbar-brand {
-  font-family: "din-next-regular-latin-1";
+  font-family: url("https://www.datto.com/fonts/DattoDIN-Regular.woff2"), "din-next-regular-latin-1";
   letter-spacing: 0.1em;
   margin-right: 1rem;
 }
 .blockzeus-comment {
-  font-family: "din-next-regular-latin-1";
+  font-family: url("https://www.datto.com/fonts/DattoDIN-Regular.woff2"), "din-next-regular-latin-1";
   letter-spacing: 0.07em;
   color: #BEFA5A !important;
   font-size: 1.15rem;
