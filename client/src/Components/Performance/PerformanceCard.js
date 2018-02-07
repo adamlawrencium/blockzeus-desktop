@@ -26,7 +26,17 @@ class PerformanceCard extends Component {
     return (
       <div className="card card-section h-100" >
         <div className="card-body">
-          <h2 className="card-title">Portfolio Value</h2>
+          {/* <h2 className="card-title">Portfolio Value</h2> */}
+          <div className="row">
+            <div className="col-sm-6"> 
+              <h2 className="card-title">Portfolio Value</h2>
+            </div>
+            <div className="col-sm-6">
+              <button className='btn btn-sm btn-outline-success'>
+                Click
+              </button>
+            </div>
+          </div>
           <PortfolioLineChart loaded={this.state.loaded} data={this.state.fullPerformance} />
         </div>
       </div>
@@ -37,7 +47,16 @@ class PerformanceCard extends Component {
     return (
       <div className="card card-section h-100" >
         <div className="card-body">
-          <h2 className="card-title">Portfolio Value</h2>
+          
+          <div className="row">
+            <div className="col-sm-6"> 
+              <h2 className="card-title">Portfolio Value</h2>
+            </div>
+            <div className="row">
+              <small>hello</small>
+            </div>
+          </div>
+
           <div className="col"><h2>Loading...</h2></div>
         </div>
       </div>
