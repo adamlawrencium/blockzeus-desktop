@@ -4,20 +4,19 @@ import { fetchPortfolioPerformance, fetchFullPortfolioPerformance } from '../../
 
 
 class PerformanceCard extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
       portfolioPerformance: [],
       fullPerformance: {},
-      loaded: false
-    }
+      loaded: false,
+    };
   }
 
   componentWillMount() {
-    fetchFullPortfolioPerformance().then(fullPerformance => {
+    fetchFullPortfolioPerformance().then((fullPerformance) => {
       this.setState({ fullPerformance });
-      this.setState({loaded: true});
+      this.setState({ loaded: true });
       // console.log(fullPerformance);
     }).catch(err => console.log(err));
   }
@@ -28,11 +27,11 @@ class PerformanceCard extends Component {
         <div className="card-body">
           {/* <h2 className="card-title">Portfolio Value</h2> */}
           <div className="row">
-            <div className="col-sm-6"> 
+            <div className="col-sm-6">
               <h2 className="card-title">Portfolio Value</h2>
             </div>
             <div className="col-sm-6">
-              <button className='btn btn-sm btn-outline-success'>
+              <button className="btn btn-sm btn-outline-success">
                 Click
               </button>
             </div>
@@ -40,16 +39,16 @@ class PerformanceCard extends Component {
           <PortfolioLineChart loaded={this.state.loaded} data={this.state.fullPerformance} />
         </div>
       </div>
-    )
+    );
   }
 
   renderLoading() {
     return (
       <div className="card card-section h-100" >
         <div className="card-body">
-          
+
           <div className="row">
-            <div className="col-sm-6"> 
+            <div className="col-sm-6">
               <h2 className="card-title">Portfolio Value</h2>
             </div>
             <div className="row">
@@ -60,17 +59,17 @@ class PerformanceCard extends Component {
           <div className="col"><h2>Loading...</h2></div>
         </div>
       </div>
-    )
+    );
   }
 
   render() {
     if (1) {
       return this.renderChart();
-    } else {
+    } 
       return this.renderLoading();
-    }
+    
   }
 }
 
-export default PerformanceCard
+export default PerformanceCard;
 
