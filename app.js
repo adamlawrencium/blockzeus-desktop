@@ -1,18 +1,13 @@
 const express = require('express');
 const path = require('path');
-// const favicon = require('serve-favicon');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
-const chalk = require('chalk');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const http = require('http');
-// const MongoStore = require('connect-mongo')(session);
-const mongoose = require('mongoose');
 
-
+// ROUTES
 const landingPage = require('./routes/landingPage/landingPage');
-const users = require('./routes/users');
 const poloniex = require('./routes/poloniex/poloniex');
 
 
@@ -24,24 +19,9 @@ dotenv.load({ path: '.env' });
 
 const app = express();
 
-/**
- * Connect to MongoDB.
- */
-// mongoose.Promise = global.Promise;
-// mongoose.connect(process.env.MONGO_HEROKU || process.env.MONGOLAB_URI, { useMongoClient: true });
-// mongoose.connection.on('error', (err) => {
-//   console.error(err);
-//   console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
-//   process.exit();
-// });
-
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'pug');
 
-// uncomment after placing your favicon in /public
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -49,19 +29,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'routes/landingPage')));
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-app.use('/users', users);
-app.use('/poloniex/', poloniex);
-
-
-// The "catchall" handler: for any request that doesn't
-// match one above, send back React's index.html file.
-
-
+// LANDING PAGE
 app.use('/', landingPage);
+
 // SEND REACT APP
-app.get('/demo', (req, res) => {
+app.get('/demo2', (req, res) => {
   res.sendFile(path.join(`${__dirname}/client/build/index.html`));
 });
+
+// POLONIEX ROUTE
+app.use('/poloniex/', poloniex);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
