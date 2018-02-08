@@ -11,7 +11,7 @@ const http = require('http');
 const mongoose = require('mongoose');
 
 
-const index = require('./routes/index');
+const landingPage = require('./routes/landingPage/landingPage');
 const users = require('./routes/users');
 const poloniex = require('./routes/poloniex/poloniex');
 
@@ -27,13 +27,13 @@ const app = express();
 /**
  * Connect to MongoDB.
  */
-mongoose.Promise = global.Promise;
-mongoose.connect(process.env.MONGO_HEROKU || process.env.MONGOLAB_URI, { useMongoClient: true });
-mongoose.connection.on('error', (err) => {
-  console.error(err);
-  console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
-  process.exit();
-});
+// mongoose.Promise = global.Promise;
+// mongoose.connect(process.env.MONGO_HEROKU || process.env.MONGOLAB_URI, { useMongoClient: true });
+// mongoose.connection.on('error', (err) => {
+//   console.error(err);
+//   console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
+//   process.exit();
+// });
 
 
 // view engine setup
@@ -46,15 +46,20 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'routes/landingPage')));
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-app.use('/', index);
 app.use('/users', users);
 app.use('/poloniex/', poloniex);
 
+
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-app.get('*', (req, res) => {
+
+
+app.use('/', landingPage);
+// SEND REACT APP
+app.get('/demo', (req, res) => {
   res.sendFile(path.join(`${__dirname}/client/build/index.html`));
 });
 

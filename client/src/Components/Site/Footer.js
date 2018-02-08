@@ -8,14 +8,13 @@ class Footer extends Component {
           <div className="row">
             <div className="col-md-6">
               <br />
-              <h5 className="title">BlockZeus</h5>
+              {/* <h5 className="title">BlockZeus</h5> */}
               <div className="blockzeus-comment">BlockZeus is currently in beta! Please leave feedback here.</div>
             </div>
             <div className="col-md-6">
               <br />
               <h5 className="title">More</h5>
               <a href="#!">Roadmap</a><br />
-              <a href="#!">Github</a><br />
               <a href="#!">Contact</a><br />
             </div>
           </div>
@@ -24,7 +23,7 @@ class Footer extends Component {
         {/* Copyright */}
         <div className="footer-copyright">
           <div className="container-fluid">
-            © 2017 Copyright: <a href="https://www.MDBootstrap.com"> BlockZeus Technologies </a>
+            © 2018 BlockZeus Technologies
             <br />
             <br />
           </div>
