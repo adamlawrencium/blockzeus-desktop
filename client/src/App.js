@@ -38,7 +38,7 @@ class App extends Component {
 
           <InfoAlert />
 
-          {/* CHARTS, TILES & TWITTER FEED */}
+          {/* ALLOCATIONS AND PERFORMANCE */}
           <div className="row d-flex h-100 flex-row">
             <div className="col-lg-5 d-flex flex-column">
               <AllocationsCard balances={this.state.balances} ticker={this.state.ticker} />
@@ -47,6 +47,8 @@ class App extends Component {
               <PerformanceCard />
             </div>
           </div>
+
+          {/* TILES AND TWITTER ROW */}
           <div className="row" id="poloniex">
             <div className="col-lg-9">
               <HoldingsTiles holdings={this.state.balances} ticker={this.state.ticker} />
