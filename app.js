@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 app.use('/', landingPage);
 
 // SEND REACT APP
-app.get('/demo2', (req, res) => {
+app.get('/demo', (req, res) => {
   res.sendFile(path.join(`${__dirname}/client/build/index.html`));
 });
 
