@@ -4,7 +4,7 @@ export default class Navbar extends Component {
   render() {
     return (
       <nav className="navbar navbar-expand-lg sticky-top navbar-dark navbar-bz-purple">
-        <a className="navbar-brand abs" href="">BlockZeus</a>
+        <a className="navbar-brand abs" href="https://blockzeus.com">BlockZeus</a>
         <a className="blockzeus-comment pl-lg-2">Cryptocurrency Manager</a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
           <span className="navbar-toggler-icon" />
