@@ -65,9 +65,8 @@ class PerformanceCard extends Component {
   render() {
     if (1) {
       return this.renderChart();
-    } 
-      return this.renderLoading();
-    
+    }
+    return this.renderLoading();
   }
 }
 
