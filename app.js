@@ -9,6 +9,7 @@ const http = require('http');
 // ROUTES
 const landingPage = require('./routes/landingPage/landingPage');
 const poloniex = require('./routes/poloniex/poloniex');
+const auth = require('./routes/auth/auth');
 
 
 /**
@@ -39,6 +40,7 @@ app.get('/demo', (req, res) => {
 
 // POLONIEX ROUTE
 app.use('/poloniex/', poloniex);
+app.use('/auth/', auth);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
