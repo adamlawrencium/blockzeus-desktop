@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const http = require('http');
+const mongoose = require('mongoose')
 
 // ROUTES
 const landingPage = require('./routes/landingPage/landingPage');
@@ -19,6 +20,17 @@ dotenv.load({ path: '.env' });
 
 
 const app = express();
+
+/**
+ * Connect to MongoDB.
+ */
+mongoose.Promise = global.Promise;
+mongoose.connect(process.env.MONGOLAB_URI, { useMongoClient: true });
+mongoose.connection.on('error', (err) => {
+  console.error(err);
+  console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
+  process.exit();
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
