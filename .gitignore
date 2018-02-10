@@ -1,4 +1,5 @@
 node_modules
+<<<<<<< HEAD
 *.json
 
 .eslintrc.js
@@ -6,3 +7,5 @@ node_modules
 .eslintrc
 
 *.org
+=======
+>>>>>>> master
