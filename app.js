@@ -6,13 +6,8 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const http = require('http');
 
-<<<<<<< HEAD
-
-const index = require('./routes/index');
-=======
 // ROUTES
 const landingPage = require('./routes/landingPage/landingPage');
->>>>>>> master
 const poloniex = require('./routes/poloniex/poloniex');
 
 
@@ -34,14 +29,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'routes/landingPage')));
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-<<<<<<< HEAD
-app.use('/', index);
-app.use
-app.use('/poloniex/', poloniex);
-=======
 // LANDING PAGE
 app.use('/', landingPage);
->>>>>>> master
 
 // SEND REACT APP
 app.get('/demo', (req, res) => {
