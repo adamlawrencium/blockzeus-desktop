@@ -12,7 +12,6 @@ const mongoose = require('mongoose');
 
 
 const index = require('./routes/index');
-const users = require('./routes/users');
 const poloniex = require('./routes/poloniex/poloniex');
 
 
@@ -49,7 +48,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.use('/', index);
-app.use('/users', users);
+app.use
 app.use('/poloniex/', poloniex);
 
 // The "catchall" handler: for any request that doesn't
