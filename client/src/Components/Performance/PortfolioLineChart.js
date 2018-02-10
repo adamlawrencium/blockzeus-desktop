@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Highcharts from 'highcharts/highstock';
+import { navigatorAggregator } from './utils.js';
 // import HighchartsBoost from 'highcharts/modules/boost';
 import {
   HighchartsStockChart, Chart, withHighcharts,
@@ -48,17 +49,15 @@ class PortfolioLineChart extends Component {
   }
 
   renderNavigator() {
-    if (!this.props.loaded) return
+    if (!this.props.loaded) return;
 
-    // Performant
-    return (<Navigator></Navigator>)
+    const series = {
+      data: navigatorAggregator(this.props.data),
+    };
 
-    // TODO - this is too performance intensive
     return (
-      <Navigator>
-        { Object.keys(this.props.data).map(series => <Navigator.Series key={series} seriesId={series} />) }
-      </Navigator>
-    )
+      <Navigator series={series} />
+    );
   }
 
   renderFlags() {
@@ -90,14 +89,14 @@ class PortfolioLineChart extends Component {
       stroke: 'none',
       'stroke-width': 0,
       style: {
-        color: '#482D62',
+        color: '#4731B9',
         fontWeight: 'bold',
       },
       states: {
         hover: {
         },
         select: {
-          fill: '#482D62',
+          fill: '#4731B9',
           style: {
             color: 'white',
           },
@@ -110,7 +109,7 @@ class PortfolioLineChart extends Component {
       label: {
         enabled: true,
         format: '${value:.2f}',
-        backgroundColor: '#482D62',
+        backgroundColor: '#4731B9',
       },
     };
 
@@ -143,7 +142,12 @@ class PortfolioLineChart extends Component {
             {/* {this.renderFlags()} */}
           </YAxis>
 
-          { this.renderNavigator() }
+          {/*}
+          <Navigator series={{
+            data: navigatorAggregator(this.props.data),
+          }} />
+          */}
+          {this.renderNavigator() }
 
           <Scrollbar />
 

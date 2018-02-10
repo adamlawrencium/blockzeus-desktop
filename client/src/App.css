@@ -1,21 +1,22 @@
 .App {
-  background-color: rgb(250, 250, 250);
+  background-color: #FAFAFA;
+  font-family: url("https://www.datto.com/fonts/DattoDIN-Regular.woff2"), 'Avenir Next';
 }
 .container-fluid {
   max-width: 1280px;
   padding-left: 20px;
   padding-right: 20px;
-  font-family: 'din-next-regular-latin-1', 'Avenir Next', sans-serif;
 }
-
 
 /* NAVIGATION BAR */
 .navbar-bz-purple {
-  background-color: #34407F;
+  /* background-color: #34407F; blue: 34407F, purple: 482D62 */
+  /* background:  #4731B9; */
+  background-image: linear-gradient(-270deg, #4D2B8E 3%, #6772E5 100%);
+  /* background: linear-gradient(90deg,#F93268, #4731B9); */
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); 
 }
 .navbar {
-  font-family: 'din-next-regular-latin-1';
   letter-spacing: 0.08em;
   margin-bottom: 1em;
 }
@@ -26,16 +27,18 @@
   color: white;
 }
 .navbar-brand {
-  font-family: "din-next-regular-latin-1";
   letter-spacing: 0.1em;
   margin-right: 1rem;
 }
 .blockzeus-comment {
-  font-family: "din-next-regular-latin-1";
-  letter-spacing: 0.07em;
   color: #BEFA5A !important;
-  font-size: 1.15rem;
-  margin-right: 0rem;
+  font-size: 1.05rem;
+}
+
+
+/* ALERTS */
+.alert {
+  letter-spacing: 0.05px;
 }
 
 
@@ -91,7 +94,7 @@
   border-top: 1.1em solid rgba(172,105,255, 0.2);
   border-right: 1.1em solid rgba(172,105,255, 0.2);
   border-bottom: 1.1em solid rgba(172,105,255, 0.2);
-  border-left: 1.1em solid #a96fca;
+  border-left: 1.1em solid #4D2B8E;
   -webkit-transform: translateZ(0);
   -ms-transform: translateZ(0);
   transform: translateZ(0);
@@ -130,7 +133,7 @@
   width: 24%;
   height: 27%;
   margin: 3px;
-  background-color: #a96fca;
+  background-color: #4D2B8E;
   float: left;
   -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
           animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out; 
@@ -183,6 +186,6 @@
 
 
 .page-footer {
-  background-color: #34407F !important;
+  background:  #4731B9;
   color: whitesmoke;
 }

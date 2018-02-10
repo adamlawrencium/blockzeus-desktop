@@ -181,7 +181,7 @@ class HoldingsTiles extends Component {
           {this.props.ticker.USDT_BTC && Object.keys(this.props.holdings).length ? (
             this.renderTiles(this.state.tileSortBy)
           ) : (
-              this.renderLoading()
+            this.renderLoading()
             )}
         </div>
       </div>
