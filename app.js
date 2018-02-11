@@ -6,7 +6,8 @@ const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const http = require('http');
 const mongoose = require('mongoose');
-let expressValidator = require('express-validator');
+const jwt = require('jsonwebtoken');
+const expressValidator = require('express-validator');
 
 
 // Controllers
@@ -54,17 +55,19 @@ app.use(express.static(path.join(__dirname, 'client/build')));
  */
 app.use((req, res, next) => {
   req.isAuthenticated = function () {
-    console.log(req.headers.authorization);
-    const token = (req.headers.authorization && req.headers.authorization.split(' ')[1]) || req.cookies.token;
+    // console.log(req.headers.authorization);
+    const token = (req.headers.authorization && req.headers.authorization.split(' ')[1]);
     try {
-      return jwt.verify(token, process.env.TOKEN_SECRET);
+      console.log(token);
+      console.log(process.env.JWT_SECRET);
+      return jwt.verify(token, process.env.JWT_SECRET);
     } catch (err) {
       return false;
     }
   };
   if (req.isAuthenticated()) {
     const payload = req.isAuthenticated();
-    console.log(payload);
+    // console.log(payload);
     User.findById(payload.sub, (err, user) => {
       req.user = user;
       next();

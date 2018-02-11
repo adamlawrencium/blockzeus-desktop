@@ -29,6 +29,7 @@
         "no-template-curly-in-string": "off",
         "no-underscore-dangle": "off",
         "import/prefer-default-export": "off",
+        "func-names": "off",
         
         "react/jsx-filename-extension": "off",
         "react/prefer-stateless-function": "off",

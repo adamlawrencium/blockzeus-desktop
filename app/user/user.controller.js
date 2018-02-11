@@ -1,14 +1,13 @@
-let async = require('async');
-let crypto = require('crypto');
-let nodemailer = require('nodemailer');
-let jwt = require('jsonwebtoken');
-let moment = require('moment');
-let request = require('request');
-let qs = require('querystring');
-let User = require('./user.model');
+const async = require('async');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
+const moment = require('moment');
+const request = require('request');
+const User = require('./user.model');
 
 function generateToken(user) {
-  let payload = {
+  const payload = {
     iss: 'my.domain.com',
     sub: user.id,
     iat: moment().unix(),
@@ -33,45 +32,45 @@ exports.ensureAuthenticated = function (req, res, next) {
    * POST /login
    * Sign in with email and password
    */
-exports.loginPost = function (req, res, next) {
-  console.log(req);
+exports.loginPost = function (req, res) {
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('email', 'Email cannot be blank').notEmpty();
   req.assert('password', 'Password cannot be blank').notEmpty();
   req.sanitize('email').normalizeEmail({ remove_dots: false });
 
-  let errors = req.validationErrors();
+  const errors = req.validationErrors();
 
   if (errors) {
     return res.status(400).send(errors);
   }
 
   User.findOne({ email: req.body.email }, (err, user) => {
-      if (!user) {
-        return res.status(401).send({ msg: 'The email address ' + req.body.email + ' is not associated with any account. ' +
-        'Double-check your email address and try again.'
-        });
-      }
-      user.comparePassword(req.body.password, function(err, isMatch) {
-        if (!isMatch) {
-          return res.status(401).send({ msg: 'Invalid email or password' });
-        }
-        res.send({ token: generateToken(user), user: user.toJSON() });
+    if (!user) {
+      return res.status(401).send({
+        msg: `The email address ${req.body.email} is not associated with any account. ` +
+          'Double-check your email address and try again.',
       });
+    }
+    user.comparePassword(req.body.password, (err, isMatch) => {
+      if (!isMatch) {
+        return res.status(401).send({ msg: 'Invalid email or password' });
+      }
+      res.send({ token: generateToken(user), user: user.toJSON() });
     });
+  });
 };
 
 /**
  * POST /signup
  */
-exports.signupPost = function (req, res, next) {
+exports.signupPost = function (req, res) {
   req.assert('name', 'Name cannot be blank').notEmpty();
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('email', 'Email cannot be blank').notEmpty();
   req.assert('password', 'Password must be at least 4 characters long').len(4);
   req.sanitize('email').normalizeEmail({ remove_dots: false });
 
-  let errors = req.validationErrors();
+  const errors = req.validationErrors();
 
   if (errors) {
     return res.status(400).send(errors);
@@ -79,15 +78,19 @@ exports.signupPost = function (req, res, next) {
 
   User.findOne({ email: req.body.email }, (err, user) => {
     if (user) {
-    return res.status(400).send({ msg: 'The email address you have entered is already associated with another account.' });
+      return res.status(400).send({ msg: 'The email address you have entered is already associated with another account.' });
     }
     user = new User({
       name: req.body.name,
       email: req.body.email,
-      password: req.body.password
+      password: req.body.password,
     });
-    user.save(function(err) {
-    res.send({ token: generateToken(user), user: user });
+    user.save((err) => {
+      if (!err) {
+        res.send({ token: generateToken(user), user });
+      } else {
+        throw Error(err);
+      }
     });
   });
 };
@@ -97,7 +100,7 @@ exports.signupPost = function (req, res, next) {
  * PUT /account
  * Update profile information OR change password.
  */
-exports.accountPut = function (req, res, next) {
+exports.accountPut = function (req, res) {
   if ('password' in req.body) {
     req.assert('password', 'Password must be at least 4 characters long').len(4);
     req.assert('confirm', 'Passwords must match').equals(req.body.password);
@@ -107,7 +110,7 @@ exports.accountPut = function (req, res, next) {
     req.sanitize('email').normalizeEmail({ remove_dots: false });
   }
 
-  let errors = req.validationErrors();
+  const errors = req.validationErrors();
 
   if (errors) {
     return res.status(400).send(errors);
@@ -123,13 +126,13 @@ exports.accountPut = function (req, res, next) {
       user.location = req.body.location;
       user.website = req.body.website;
     }
-    user.save(function(err) {
+    user.save((err) => {
       if ('password' in req.body) {
         res.send({ msg: 'Your password has been changed.' });
       } else if (err && err.code === 11000) {
         res.status(409).send({ msg: 'The email address you have entered is already associated with another account.' });
       } else {
-        res.send({ user: user, msg: 'Your profile information has been updated.' });
+        res.send({ user, msg: 'Your profile information has been updated.' });
       }
     });
   });
@@ -138,16 +141,20 @@ exports.accountPut = function (req, res, next) {
 /**
  * DELETE /account
  */
-exports.accountDelete = function (req, res, next) {
+exports.accountDelete = function (req, res) {
   User.remove({ _id: req.user.id }, (err) => {
-    res.send({ msg: 'Your account has been permanently deleted.' });
+    if (!err) {
+      res.send({ msg: 'Your account has been permanently deleted.' });
+    } else {
+      throw Error(err);
+    }
   });
 };
 
 /**
  * GET /unlink/:provider
  */
-exports.unlink = function (req, res, next) {
+exports.unlink = function (req, res) {
   User.findById(req.user.id, (err, user) => {
     switch (req.params.provider) {
       case 'facebook':
@@ -163,13 +170,17 @@ exports.unlink = function (req, res, next) {
         user.vk = undefined;
         break;
       case 'github':
-          user.github = undefined;
-        break;      
+        user.github = undefined;
+        break;
       default:
         return res.status(400).send({ msg: 'Invalid OAuth Provider' });
     }
-    user.save(function(err) {
-      res.send({ msg: 'Your account has been unlinked.' });
+    user.save((err) => {
+      if (!err) {
+        res.send({ msg: 'Your account has been unlinked.' });
+      } else {
+        throw Error(err);
+      }
     });
   });
 };
@@ -177,12 +188,12 @@ exports.unlink = function (req, res, next) {
 /**
  * POST /forgot
  */
-exports.forgotPost = function (req, res, next) {
+exports.forgotPost = function (req, res) {
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('email', 'Email cannot be blank').notEmpty();
   req.sanitize('email').normalizeEmail({ remove_dots: false });
 
-  let errors = req.validationErrors();
+  const errors = req.validationErrors();
 
   if (errors) {
     return res.status(400).send(errors);
@@ -191,41 +202,41 @@ exports.forgotPost = function (req, res, next) {
   async.waterfall([
     function (done) {
       crypto.randomBytes(16, (err, buf) => {
-        var token = buf.toString('hex');
+        const token = buf.toString('hex');
         done(err, token);
       });
     },
     function (token, done) {
       User.findOne({ email: req.body.email }, (err, user) => {
         if (!user) {
-          return res.status(400).send({ msg: 'The email address ' + req.body.email + ' is not associated with any account.' });
+          return res.status(400).send({ msg: `The email address ${req.body.email} is not associated with any account.` });
         }
         user.passwordResetToken = token;
         user.passwordResetExpires = Date.now() + 3600000; // expire in 1 hour
-        user.save(function(err) {
+        user.save((err) => {
           done(err, token, user);
         });
       });
     },
     function (token, user, done) {
-      let transporter = nodemailer.createTransport({
+      const transporter = nodemailer.createTransport({
         service: 'Mailgun',
         auth: {
           user: process.env.MAILGUN_USERNAME,
           pass: process.env.MAILGUN_PASSWORD,
         },
       });
-      let mailOptions = {
+      const mailOptions = {
         to: user.email,
         from: 'support@yourdomain.com',
         subject: '✔ Reset your password on Mega Boilerplate',
         text: `${'You are receiving this email because you (or someone else) have requested the reset of the password for your account.\n\n' +
-        'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-        'http://'}${  req.headers.host  }/reset/${  token  }\n\n` +
-        `If you did not request this, please ignore this email and your password will remain unchanged.\n`,
+          'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
+          'http://'}${req.headers.host}/reset/${token}\n\n` +
+          'If you did not request this, please ignore this email and your password will remain unchanged.\n',
       };
       transporter.sendMail(mailOptions, (err) => {
-        res.send({ msg: 'An email has been sent to ' + user.email + ' with further instructions.' });
+        res.send({ msg: `An email has been sent to ${user.email} with further instructions.` });
         done(err);
       });
     },
@@ -235,11 +246,11 @@ exports.forgotPost = function (req, res, next) {
 /**
  * POST /reset
  */
-exports.resetPost = function (req, res, next) {
+exports.resetPost = function (req, res) {
   req.assert('password', 'Password must be at least 4 characters long').len(4);
   req.assert('confirm', 'Passwords must match').equals(req.body.password);
 
-  let errors = req.validationErrors();
+  const errors = req.validationErrors();
 
   if (errors) {
     return res.status(400).send(errors);
@@ -256,28 +267,32 @@ exports.resetPost = function (req, res, next) {
           user.password = req.body.password;
           user.passwordResetToken = undefined;
           user.passwordResetExpires = undefined;
-          user.save(function(err) {
+          user.save((err) => {
             done(err, user);
           });
         });
     },
-    function (user, done) {
-      let transporter = nodemailer.createTransport({
+    function (user) {
+      const transporter = nodemailer.createTransport({
         service: 'Mailgun',
         auth: {
           user: process.env.MAILGUN_USERNAME,
           pass: process.env.MAILGUN_PASSWORD,
         },
       });
-      let mailOptions = {
+      const mailOptions = {
         from: 'support@yourdomain.com',
         to: user.email,
         subject: 'Your Mega Boilerplate password has been changed',
         text: `${'Hello,\n\n' +
-        'This is a confirmation that the password for your account '}${  user.email  } has just been changed.\n`,
+          'This is a confirmation that the password for your account '}${user.email} has just been changed.\n`,
       };
       transporter.sendMail(mailOptions, (err) => {
-        res.send({ msg: 'Your password has been changed successfully.' });
+        if (!err) {
+          res.send({ msg: 'Your password has been changed successfully.' });
+        } else {
+          throw Error(err);
+        }
       });
     },
   ]);
@@ -287,10 +302,10 @@ exports.resetPost = function (req, res, next) {
  * Sign in with Google
  */
 exports.authGoogle = function (req, res) {
-  let accessTokenUrl = 'https://accounts.google.com/o/oauth2/token';
-  let peopleApiUrl = 'https://www.googleapis.com/plus/v1/people/me/openIdConnect';
+  const accessTokenUrl = 'https://accounts.google.com/o/oauth2/token';
+  const peopleApiUrl = 'https://www.googleapis.com/plus/v1/people/me/openIdConnect';
 
-  let params = {
+  const params = {
     code: req.body.code,
     client_id: req.body.clientId,
     client_secret: process.env.GOOGLE_SECRET,
@@ -300,17 +315,17 @@ exports.authGoogle = function (req, res) {
 
   // Step 1. Exchange authorization code for access token.
   request.post(accessTokenUrl, { json: true, form: params }, (err, response, token) => {
-    var accessToken = token.access_token;
-    var headers = { Authorization: 'Bearer ' + accessToken };
+    const accessToken = token.access_token;
+    const headers = { Authorization: `Bearer ${accessToken}` };
 
     // Step 2. Retrieve user's profile information.
-    request.get({ url: peopleApiUrl, headers: headers, json: true }, function(err, response, profile) {
+    request.get({ url: peopleApiUrl, headers, json: true }, (err, response, profile) => {
       if (profile.error) {
         return res.status(500).send({ message: profile.error.message });
       }
       // Step 3a. Link accounts if user is authenticated.
       if (req.isAuthenticated()) {
-        User.findOne({ google: profile.sub }, function(err, user) {
+        User.findOne({ google: profile.sub }, (err, user) => {
           if (user) {
             return res.status(409).send({ msg: 'There is already an existing account linked with Google that belongs to you.' });
           }
@@ -320,15 +335,15 @@ exports.authGoogle = function (req, res) {
           user.picture = user.picture || profile.picture.replace('sz=50', 'sz=200');
           user.location = user.location || profile.location;
           user.google = profile.sub;
-          user.save(function() {
-            res.send({ token: generateToken(user), user: user });
+          user.save(() => {
+            res.send({ token: generateToken(user), user });
           });
         });
       } else {
         // Step 3b. Create a new user account or return an existing one.
-        User.findOne({ google: profile.sub }, function(err, user) {
+        User.findOne({ google: profile.sub }, (err, user) => {
           if (user) {
-            return res.send({ token: generateToken(user), user: user });
+            return res.send({ token: generateToken(user), user });
           }
           user = new User({
             name: profile.name,
@@ -336,10 +351,14 @@ exports.authGoogle = function (req, res) {
             gender: profile.gender,
             picture: profile.picture.replace('sz=50', 'sz=200'),
             location: profile.location,
-            google: profile.sub
+            google: profile.sub,
           });
-          user.save(function(err) {
-            res.send({ token: generateToken(user), user: user });
+          user.save((err) => {
+            if (!err) {
+              res.send({ token: generateToken(user), user });
+            } else {
+              throw Error(err);
+            }
           });
         });
       }
@@ -350,3 +369,9 @@ exports.authGoogle = function (req, res) {
 exports.authGoogleCallback = function (req, res) {
   res.render('loading');
 };
+
+/* eslint consistent-return: 0 */
+/* eslint no-param-reassign: 0 */
+/* eslint no-shadow: 0 */
+/* eslint prefer-destructuring: 0 */
+/* eslint max-len: 0 */
