@@ -1,56 +1,56 @@
 const express = require('express');
+
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const User = require('../user/model')
+const User = require('../user/model');
 
 
 function generateToken(user) {
-  //1. Dont use password and other sensitive fields
-  //2. Use fields that are useful in other parts of the
-  //app/collections/models
+  // 1. Dont use password and other sensitive fields
+  // 2. Use fields that are useful in other parts of the
+  // app/collections/models
   const u = {
-   name: user,
+    name: user,
   };
   return jwt.sign(u, process.env.JWT_SECRET, {
-     expiresIn: 60 * 60 * 24 // expires in 24 hours
+    expiresIn: 60 * 60 * 24, // expires in 24 hours
   });
 }
 
 router.post('/register', async (req, res) => {
   // Parses username, password parameters from req.body
-    const { username, password } = req.body;
+  const { username, password } = req.body;
 
-    // Create a new User instance if one does not exist
-    const create = (user) => {
-        // User exists - throw error and return
-        if (user) {
-            throw new Error('username exists')
-            return
-        }
-
-        // Creates a new User
-        return User.create(username, password)
+  // Create a new User instance if one does not exist
+  const create = (user) => {
+    // User exists - throw error and return
+    if (user) {
+      throw new Error('username exists');
     }
 
-    // Respond to the client
-    const respond = (isAdmin) => {
-        res.json({
-            message: 'Registered Successfully.'
-        })
-    }
+    // Creates a new User
+    return User.create(username, password);
+  };
 
-    // Handle error (username exists)
-    const onError = (error) => {
-        res.status(409).json({
-            message: error.message
-        })
-    }
+  // Respond to the client
+  const respond = (isAdmin) => {
+    res.json({
+      message: 'Registered Successfully.',
+    });
+  };
 
-    // check username duplication
-    User.findOneByUsername(username)
+  // Handle error (username exists)
+  const onError = (error) => {
+    res.status(409).json({
+      message: error.message,
+    });
+  };
+
+  // check username duplication
+  User.findOneByUsername(username)
     .then(create)
     .then(respond)
-    .catch(onError)
+    .catch(onError);
 });
 /*
 router.get('/login', async (req, res) => {
@@ -171,17 +171,16 @@ router.get('/fakeSignIn', async (req, res) => {
 });
 
 router.get('/accessPrivateInfo', async (req, res) => {
-  let token = req.headers['authorization'];
-  jwt.verify(token, process.env.JWT_SECRET, function(err, user) {
+  const token = req.headers.authorization;
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) {
       return res.status(401).json({
         success: false,
-        message: 'Please register Log in using a valid email to submit posts'
+        message: 'Please register Log in using a valid email to submit posts',
       });
-    } else {
-      console.log('authenticated')
-      return res.json('poopoo')
     }
+    console.log('authenticated');
+    return res.json('poopoo');
   });
 });
 
