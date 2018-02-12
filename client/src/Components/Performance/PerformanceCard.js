@@ -31,9 +31,9 @@ class PerformanceCard extends Component {
               <h2 className="card-title">Portfolio Value</h2>
             </div>
             <div className="col-sm-6">
-              <button className="btn btn-sm btn-outline-success">
-                Click
-              </button>
+              {/* <button className="btn btn-xs btn-outline-success float-left">
+                Log
+              </button> */}
             </div>
           </div>
           <PortfolioLineChart loaded={this.state.loaded} data={this.state.fullPerformance} />
