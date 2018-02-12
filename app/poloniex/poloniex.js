@@ -6,14 +6,6 @@ const User = require('../user/user.model');
 const poloniex = new PoloniexDAL();
 const router = express.Router();
 
-const PERIOD = 14400;
-var lastCall = Date.now(); // used for poloniex rate limiting
-
-// Initialize most commonly used data.
-let USDT_BTC;
-poloniex.public('chartData', 'USDT_BTC').then(data => USDT_BTC = data);
-
-
 /**
  * Poloniex User's API/Secret credentials middleware
  */
@@ -21,7 +13,7 @@ const retrievePoloniexCredentials = function (req, res, next) {
   if (req.isAuthenticated()) {
     const token = (req.headers.authorization && req.headers.authorization.split(' ')[1]);
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userID = decoded.sub; // JWT 'subject', which is essentially a user's unique id in mongodb
+    const userID = decoded.sub; // JWT 'sub' = 'subject', which is essentially a user's unique id in mongodb
     User.findById(userID, (err, user) => {
       if (user) {
         res.locals.poloniexKey = user.poloniexKey;
@@ -36,7 +28,6 @@ const retrievePoloniexCredentials = function (req, res, next) {
     res.status(401).send({ msg: 'Unauthorized. wrekt.' });
   }
 };
-
 
 /*
 "BTC_DASH": {
@@ -337,7 +328,7 @@ async function convertChartDataToUSDTBase(pair, chartData_) {
   if (pair.split('_')[0] === 'USDT') {
     return chartData;
   } else if (pair.split('_')[0] === 'BTC') {
-    usdtbase = USDT_BTC;
+    usdtbase = await poloniex.public('chartData', 'USDT_BTC');
   } else if (pair.split('_')[0] === 'ETH') {
     usdtbase = await poloniex.public('chartData', 'USDT_ETH');
   } else if (pair.split('_')[0] === 'XMR') {
