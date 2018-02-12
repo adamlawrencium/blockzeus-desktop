@@ -15,26 +15,50 @@ const userSchema = new mongoose.Schema({
   password: String,
   passwordResetToken: String,
   passwordResetExpires: Date,
-  gender: String,
-  location: String,
-  website: String,
   picture: String,
-  facebook: String,
-  twitter: String,
   google: String,
-  github: String,
   vk: String,
+  blah: String,
+  poloniexKey: String,
+  poloniexSecret: String,
+  connectedExchanges: { type: mongoose.Schema.Types.Mixed },
 }, schemaOptions);
 
 userSchema.pre('save', function (next) {
   const user = this;
-  if (!user.isModified('password')) { return next(); }
-  bcrypt.genSalt(10, (err, salt) => {
-    bcrypt.hash(user.password, salt, null, (err, hash) => {
-      user.password = hash;
-      next();
+  if (user.isModified('password')) {
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(user.password, salt, null, (err, hash) => {
+        user.password = hash;
+        next();
+      });
     });
-  });
+  // } else if (user.isModified('poloniexKey')) {
+  //   bcrypt.genSalt(10, (err, salt) => {
+  //     bcrypt.hash(user.poloniexKey, salt, null, (err, hash) => {
+  //       user.poloniexKey = hash;
+  //       next();
+  //     });
+  //   });
+  // } else if (user.isModified('poloniexSecret')) {
+  //   bcrypt.genSalt(10, (err, salt) => {
+  //     bcrypt.hash(user.poloniexSecret, salt, null, (err, hash) => {
+  //       user.poloniexSecret = hash;
+  //       next();
+  //     });
+  //   });
+  } else {
+    return next();
+  }
+  // if (!user.isModified('password')) { return next(); }
+  // if (!user.isModified('poloniexKey')) { return next(); }
+  // if (!user.isModified('poloniexSecret')) { return next(); }
+  // bcrypt.genSalt(10, (err, salt) => {
+  //   bcrypt.hash(user.password, salt, null, (err, hash) => {
+  //     user.password = hash;
+  //     next();
+  //   });
+  // });
 });
 
 userSchema.methods.comparePassword = function (password, cb) {
