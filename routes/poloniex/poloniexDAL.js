@@ -2,9 +2,13 @@ const sleep = require('sleep');
 const Poloniex = require('poloniex-api-node');
 const TimeSeriesCache = require('../../utils/timeSeriesCache/cache'); // TODO
 
-
+/**
+ * This data access layer wraps retry and rate limiting functionality
+ * around the 'poloniex-api-node' library.
+ *
+ * @class poloniexDAL
+ */
 class poloniexDAL {
-
   constructor() {
     this.lastCall = Date.now();
     this.PERIOD = 14400;
@@ -13,7 +17,6 @@ class poloniexDAL {
 
   // Route all public Poloniex API calls through here
   async public(apiCall, params) {
-    //console.log(Object.keys(this.cache));
     let result;
     const poloPublic_ = new Poloniex({ socketTimeout: 5000 });
     console.log(`Making public Poloniex API request [${apiCall}, ${params}]`);
@@ -30,12 +33,12 @@ class poloniexDAL {
             const currentTime = Date.now() / 1000;
             const lastIndex = (this.cache)[params].length - 1;
             const lastUpdate = (this.cache)[params][lastIndex].date + this.PERIOD;
-            // Checking if theres been a update, if there hasn't just send
-            //  cached data
+            // Checking if theres been a update, if there hasn't just send cached data
             if (lastUpdate > currentTime) {
               result = this.cache[params];
               console.log('Sent cached data for ', params, '.');
-            } else { // Otherwise, pull new data and push it to the cache
+            } else {
+              // Otherwise, pull new data and push it to the cache
               result = await poloPublic_.returnChartData(
                 params,
                 this.PERIOD,
@@ -45,8 +48,9 @@ class poloniexDAL {
               (this.cache)[params] = result;
               console.log('Updated data in cache for ', params, '.');
             }
-          } else { // If data not in cache, pull the data through a API call
-          //  and push it to the cache
+          } else {
+            // If data not in cache, pull the data through a API call
+            //  and push it to the cache
             result = await poloPublic_.returnChartData(
               params,
               this.PERIOD,
