@@ -98,7 +98,12 @@ exports.signupPost = function (req, res) {
 
 /**
  * PUT /account
- * Update profile information OR change password.
+ * Updates the following:
+ * - email
+ * - password
+ * - name
+ * - poloniexKey
+ * - poloniexSecret
  */
 exports.accountPut = function (req, res) {
   if ('password' in req.body) {
@@ -122,9 +127,8 @@ exports.accountPut = function (req, res) {
     } else {
       user.email = req.body.email;
       user.name = req.body.name;
-      user.gender = req.body.gender;
-      user.location = req.body.location;
-      user.website = req.body.website;
+      user.poloniexKey = req.body.poloniexKey;
+      user.poloniexSecret = req.body.poloniexSecret;
     }
     user.save((err) => {
       if ('password' in req.body) {

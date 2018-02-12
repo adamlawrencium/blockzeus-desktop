@@ -55,11 +55,8 @@ app.use(express.static(path.join(__dirname, 'client/build')));
  */
 app.use((req, res, next) => {
   req.isAuthenticated = function () {
-    // console.log(req.headers.authorization);
     const token = (req.headers.authorization && req.headers.authorization.split(' ')[1]);
     try {
-      console.log(token);
-      console.log(process.env.JWT_SECRET);
       return jwt.verify(token, process.env.JWT_SECRET);
     } catch (err) {
       return false;
@@ -67,7 +64,6 @@ app.use((req, res, next) => {
   };
   if (req.isAuthenticated()) {
     const payload = req.isAuthenticated();
-    // console.log(payload);
     User.findById(payload.sub, (err, user) => {
       req.user = user;
       next();
@@ -85,9 +81,10 @@ app.get('/demo', (req, res) => {
 
 // ROUTES
 app.use('/', landingPage);
-app.use('/poloniex/', poloniex);
+app.use('/poloniex', poloniex);
 app.post('/signup', userController.signupPost);
 app.post('/login', userController.loginPost);
+app.put('/account', userController.ensureAuthenticated, userController.accountPut);
 
 app.get('/privbro', userController.ensureAuthenticated, (req, res) => {
   res.json('hi');

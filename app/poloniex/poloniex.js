@@ -1,5 +1,7 @@
 const express = require('express');
 const PoloniexDAL = require('./poloniexDAL');
+const jwt = require('jsonwebtoken');
+const User = require('../user/user.model');
 
 const poloniex = new PoloniexDAL();
 const router = express.Router();
@@ -10,6 +12,31 @@ var lastCall = Date.now(); // used for poloniex rate limiting
 // Initialize most commonly used data.
 let USDT_BTC;
 poloniex.public('chartData', 'USDT_BTC').then(data => USDT_BTC = data);
+
+
+/**
+ * Poloniex User's API/Secret credentials middleware
+ */
+const retrievePoloniexCredentials = function (req, res, next) {
+  if (req.isAuthenticated()) {
+    const token = (req.headers.authorization && req.headers.authorization.split(' ')[1]);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userID = decoded.sub; // JWT 'subject', which is essentially a user's unique id in mongodb
+    User.findById(userID, (err, user) => {
+      if (user) {
+        res.locals.poloniexKey = user.poloniexKey;
+        res.locals.poloniexSecret = user.poloniexSecret;
+        next();
+      } else {
+        res.status(403).send({ msg: 'Can not find user in db' });
+      }
+    });
+  } else {
+    console.log('isnt authenticated');
+    res.status(401).send({ msg: 'Unauthorized. wrekt.' });
+  }
+};
+
 
 /*
 "BTC_DASH": {
@@ -37,8 +64,8 @@ router.get('/ticker', async (req, res) => {
   ...,
 }
 */
-router.get('/balances', async (req, res) => {
-  const p = poloniex.createPrivatePoloInstance();
+router.get('/balances', retrievePoloniexCredentials, async (req, res) => {
+  const p = poloniex.createPrivatePoloInstance(res.locals.poloniexKey, res.locals.poloniexSecret);
   const balances = await poloniex.private(p, 'balances');
   res.json(balances);
 });
@@ -130,8 +157,8 @@ router.get('/performance/', async (req, res) => {
 
 // A TEST ROUTE
 router.get('/test', async (req, res) => {
-  console.log(USDT_BTC);
-  res.json('hi');
+  console.log('sup on server');
+  res.json('hi on client');
 });
 
 /* Get dollar performance of every holding and sum them up
