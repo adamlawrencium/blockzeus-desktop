@@ -5,7 +5,7 @@ const TimeSeriesCache = require('../../utils/timeSeriesCache/cache'); // TODO
 
 class poloniexDAL {
   constructor() {
-    this.cache = false;
+    this.cache = false; // TODO
     this.lastCall = Date.now();
     this.PERIOD = 14400;
   }
