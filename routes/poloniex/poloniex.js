@@ -7,10 +7,6 @@ const router = express.Router();
 const PERIOD = 14400;
 var lastCall = Date.now(); // used for poloniex rate limiting
 
-// Initialize most commonly used data.
-let USDT_BTC;
-poloniex.public('chartData', 'USDT_BTC').then(data => USDT_BTC = data);
-
 /*
 "BTC_DASH": {
   "id": 24,
