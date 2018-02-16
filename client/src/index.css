@@ -1,6 +1,6 @@
 @font-face {
-  font-family: 'din-next-regular-latin-1';
-  src: local('din-next-regular-latin-1'), url(./din-next-regular-latin-1.ttf) format('truetype');
+  font-family: 'DDin';
+  src: url(./assets/DattoDIN-Regular.woff2) format('woff2');
 }
 
 body {

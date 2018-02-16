@@ -37,7 +37,33 @@ class App extends Component {
           <DemoAlert />
 
           <InfoAlert />
-
+          {/* INFO TILES */}
+          <div className="row d-flex h-100 flex-row">
+            <div className="col d-flex flex-column">
+              <div className="card card-body card-section h-100 " >
+                <div className="text-muted">Asset count</div>
+                <h4>13</h4>
+              </div>
+            </div>
+            <div className="col d-flex flex-column">
+              <div className="card card-body card-section h-100 " >
+                <div className="text-muted">Value (USD)</div>
+                <h4>$1,345</h4>
+              </div>
+            </div>
+            <div className="col d-flex flex-column">
+              <div className="card card-body card-section h-100 " >
+                <div className="text-muted">24h change</div>
+                <h4>15.2%</h4>
+              </div>
+            </div>
+            <div className="col d-flex flex-column">
+              <div className="card card-body card-section h-100 " >
+                <div className="text-muted">1wk change</div>
+                <h4>18.7%</h4>
+              </div>
+            </div>
+          </div>
           {/* ALLOCATIONS AND PERFORMANCE */}
           <div className="row d-flex h-100 flex-row">
             <div className="col-lg-5 d-flex flex-column">
