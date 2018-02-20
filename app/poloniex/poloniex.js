@@ -82,7 +82,7 @@ router.get('/completeBalances', async (req, res) => {
   console.log(completeBalances);
   // Cache-Control response header
   // browser will cache this response for 60 seconds
-  res.setHeader('Cache-Control', 'max-age=60')
+  res.setHeader('Cache-Control', 'max-age=60');
   res.json(completeBalances);
 });
 
