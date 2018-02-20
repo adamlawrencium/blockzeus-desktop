@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-import TwitterFeed from './Components/TwitterFeed/TwitterFeed';
-import Navbar from './Components/Site/Navbar';
-import DemoAlert from './Components/Site/DemoAlert';
-import InfoAlert from './Components/Site/InfoAlert';
-import Footer from './Components/Site/Footer';
-import AllocationsCard from './Components/Allocations/AllocationsCard';
-import PerformanceCard from './Components/Performance/PerformanceCard';
-import HoldingsTiles from './Components/Holdings/HoldingsTiles';
-import { fetchPoloniexTicker, fetchPoloniexCompleteBalances } from './exchanges/poloniex';
+import TwitterFeed from './TwitterFeed/TwitterFeed';
+import Navbar from './Site/Navbar';
+import DemoAlert from './Site/DemoAlert';
+import InfoAlert from './Site/InfoAlert';
+import Footer from './Site/Footer';
+import AllocationsCard from './Allocations/AllocationsCard';
+import PerformanceCard from './Performance/PerformanceCard';
+import HoldingsTiles from './Holdings/HoldingsTiles';
+import { fetchPoloniexTicker, fetchPoloniexCompleteBalances } from '../API/poloniex';
 
 import './App.css';
 
-class App extends Component {
+class Dashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -64,4 +64,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Dashboard;
