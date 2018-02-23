@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 export default class Navbar extends Component {
   render() {
@@ -10,17 +11,31 @@ export default class Navbar extends Component {
           <span className="navbar-toggler-icon" />
         </button>
         <div className="navbar-collapse collapse" id="collapsingNavbar">
-          <ul className="navbar-nav ml-auto">
-            <li className="nav-item">
-              <a className="nav-link" href="" data-toggle="modal">About</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="" data-toggle="modal">Upgrade</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="" data-toggle="modal">Connect to Poloniex</a>
-            </li>
-          </ul>
+
+          {/* If user is not logged in */}
+          {!localStorage.getItem('user') &&
+            <ul className="navbar-nav ml-auto">
+              <li className="nav-item">
+                <a className="nav-link" href="" data-toggle="modal">Sign Up</a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="" data-toggle="modal">Log In</a>
+              </li>
+            </ul>
+          }
+
+          {/* If user is logged in */}
+          {localStorage.getItem('user') &&
+            <ul className="navbar-nav ml-auto">
+              <li className="nav-item">
+                {/* <a className="nav-link" href="" data-toggle="modal">Account</a> */}
+                <Link to="/account" className="nav-link">Account</Link>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="" data-toggle="modal">Log out</a>
+              </li>
+            </ul>
+          }
         </div>
       </nav>
     );

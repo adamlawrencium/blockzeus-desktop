@@ -1,6 +1,6 @@
 .App {
   background-color: #FAFAFA;
-  font-family: url("https://www.datto.com/fonts/DattoDIN-Regular.woff2"), 'Avenir Next';
+  font-family: 'Avenir Next', 'Barlow';
 }
 .container-fluid {
   max-width: 1280px;
@@ -12,7 +12,7 @@
 .navbar-bz-purple {
   /* background-color: #34407F; blue: 34407F, purple: 482D62 */
   /* background:  #4731B9; */
-  background-image: linear-gradient(-270deg, #4D2B8E 3%, #6772E5 100%);
+  background-image: linear-gradient(-270deg, #4D2B8E 3%, #4D2B8E 100%);
   /* background: linear-gradient(90deg,#F93268, #4731B9); */
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); 
 }
