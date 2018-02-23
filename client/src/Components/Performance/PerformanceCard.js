@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PortfolioLineChart from './PortfolioLineChart';
-import { fetchPortfolioPerformance, fetchFullPortfolioPerformance } from '../../exchanges/poloniex';
+import { fetchPortfolioPerformance, fetchFullPortfolioPerformance } from '../../API/poloniex';
 
 
 class PerformanceCard extends Component {
