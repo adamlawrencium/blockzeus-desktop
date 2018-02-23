@@ -39,7 +39,6 @@ function logout() {
 }
 
 function register(user) {
-console.log('registering');
   return (dispatch) => {
     dispatch(request(user));
 

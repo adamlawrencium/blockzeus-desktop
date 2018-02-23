@@ -9,6 +9,6 @@ export function registration(state = {}, action) {
     case userConstants.REGISTER_FAILURE:
       return {};
     default:
-      return state
+      return state;
   }
 }
