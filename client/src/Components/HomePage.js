@@ -54,4 +54,4 @@ function mapStateToProps(state) {
 }
 
 const connectedHomePage = connect(mapStateToProps)(HomePage);
-export { connectedHomePage as HomePage };
+export default connectedHomePage;
