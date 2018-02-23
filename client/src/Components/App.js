@@ -29,10 +29,10 @@ class App extends React.Component {
     return (
       <Router history={history}>
         <div>
-          <PrivateRoute exact path="/" component={Dashboard} />
-          <PrivateRoute exact path="/account" component={Account} />
+          <Route exact path="/" component={Dashboard} />
           <Route path="/login" component={LoginPage} />
           <Route path="/register" component={RegisterPage} />
+          <PrivateRoute exact path="/account" component={Account} />
         </div>
       </Router>
     //   <div className="jumbotron">

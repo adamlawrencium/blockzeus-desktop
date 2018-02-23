@@ -1,7 +1,24 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-export default class Navbar extends Component {
+import { userActions } from '../../_actions';
+
+class Navbar extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleLogout = this.handleLogout.bind(this);
+  }
+
+  handleLogout() {
+    // e.preventDefault();
+
+    console.log('logging out');
+    const { dispatch } = this.props;
+    dispatch(userActions.logout());
+  }
+
   render() {
     return (
       <nav className="navbar navbar-expand-lg sticky-top navbar-dark navbar-bz-purple">
@@ -19,7 +36,7 @@ export default class Navbar extends Component {
                 <a className="nav-link" href="" data-toggle="modal">Sign Up</a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="" data-toggle="modal">Log In</a>
+                <Redirect to="/login" className="nav-link" href="" data-toggle="modal" Log In />
               </li>
             </ul>
           }
@@ -28,11 +45,10 @@ export default class Navbar extends Component {
           {localStorage.getItem('user') &&
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                {/* <a className="nav-link" href="" data-toggle="modal">Account</a> */}
                 <Link to="/account" className="nav-link">Account</Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="" data-toggle="modal">Log out</a>
+                <Link to="/" className="nav-link" href="" data-toggle="modal" onClick={this.handleLogout}>Log out</Link>
               </li>
             </ul>
           }
@@ -41,3 +57,15 @@ export default class Navbar extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  const { loggedIn } = state.authentication;
+  console.log(state.authentication);
+  return {
+    loggedIn,
+  };
+}
+
+const connectedNavbar = connect(mapStateToProps)(Navbar);
+export default connectedNavbar;
+
