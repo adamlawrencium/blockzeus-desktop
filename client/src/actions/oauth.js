@@ -13,7 +13,7 @@ export function googleLogin() {
     authorizationUrl: 'https://accounts.google.com/o/oauth2/auth',
     scope: 'openid profile email',
     width: 452,
-    height: 633
+    height: 633,
   };
 
   return (dispatch) => {
@@ -34,32 +34,29 @@ export function link(provider) {
     default:
       return {
         type: 'LINK_FAILURE',
-        messages: [{ msg: 'Invalid OAuth Provider' }]
-      }
+        messages: [{ msg: 'Invalid OAuth Provider' }],
+      };
   }
 }
 
 // Unlink account
 export function unlink(provider) {
-  return (dispatch) => {
-    return fetch('/unlink/' + provider).then((response) => {
-      if (response.ok) {
-        return response.json().then((json) => {
-          dispatch({
-            type: 'UNLINK_SUCCESS',
-            messages: [json]
-          });
+  return dispatch => fetch(`/unlink/${provider}`).then((response) => {
+    if (response.ok) {
+      return response.json().then((json) => {
+        dispatch({
+          type: 'UNLINK_SUCCESS',
+          messages: [json],
         });
-      } else {
-        return response.json().then((json) => {
-          dispatch({
-            type: 'UNLINK_FAILURE',
-            messages: [json]
-          });
-        });
-      }
+      });
+    }
+    return response.json().then((json) => {
+      dispatch({
+        type: 'UNLINK_FAILURE',
+        messages: [json],
+      });
     });
-  }
+  });
 }
 
 function oauth2(config, dispatch) {
@@ -69,16 +66,16 @@ function oauth2(config, dispatch) {
       redirect_uri: config.redirectUri,
       scope: config.scope,
       display: 'popup',
-      response_type: 'code'
+      response_type: 'code',
     };
-    const url = config.authorizationUrl + '?' + qs.stringify(params);
-    resolve({ url: url, config: config, dispatch: dispatch });
+    const url = `${config.authorizationUrl}?${qs.stringify(params)}`;
+    resolve({ url, config, dispatch });
   });
 }
 
 function oauth1(config, dispatch) {
   return new Promise((resolve, reject) => {
-    resolve({ url: 'about:blank', config: config, dispatch: dispatch });
+    resolve({ url: 'about:blank', config, dispatch });
   });
 }
 
@@ -87,10 +84,10 @@ function openPopup({ url, config, dispatch }) {
     const width = config.width || 500;
     const height = config.height || 500;
     const options = {
-      width: width,
-      height: height,
+      width,
+      height,
       top: window.screenY + ((window.outerHeight - height) / 2.5),
-      left: window.screenX + ((window.outerWidth - width) / 2)
+      left: window.screenX + ((window.outerWidth - width) / 2),
     };
     const popup = window.open(url, '_blank', qs.stringify(options, ','));
 
@@ -98,35 +95,37 @@ function openPopup({ url, config, dispatch }) {
       popup.document.body.innerHTML = 'Loading...';
     }
 
-    resolve({ window: popup, config: config, dispatch: dispatch });
+    resolve({ window: popup, config, dispatch });
   });
 }
 
 function getRequestToken({ window, config, dispatch }) {
-  return new Promise((resolve, reject) => {
-    return fetch(config.url, {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        redirectUri: config.redirectUri
-      })
-    }).then((response) => {
-      if (response.ok) {
-        return response.json().then((json) => {
-          resolve({ window: window, config: config, requestToken: json, dispatch: dispatch });
+  return new Promise((resolve, reject) => fetch(config.url, {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      redirectUri: config.redirectUri,
+    }),
+  }).then((response) => {
+    if (response.ok) {
+      return response.json().then((json) => {
+        resolve({
+          window, config, requestToken: json, dispatch,
         });
-      }
-    });
-  });
+      });
+    }
+  }));
 }
 
-function pollPopup({ window, config, requestToken, dispatch }) {
+function pollPopup({
+  window, config, requestToken, dispatch,
+}) {
   return new Promise((resolve, reject) => {
     const redirectUri = url.parse(config.redirectUri);
     const redirectUriPath = redirectUri.host + redirectUri.pathname;
 
     if (requestToken) {
-      window.location = config.authorizationUrl + '?' + qs.stringify(requestToken);
+      window.location = `${config.authorizationUrl}?${qs.stringify(requestToken)}`;
     }
 
     const polling = setInterval(() => {
@@ -144,15 +143,17 @@ function pollPopup({ window, config, requestToken, dispatch }) {
             if (params.error) {
               dispatch({
                 type: 'OAUTH_FAILURE',
-                messages: [{ msg: params.error }]
+                messages: [{ msg: params.error }],
               });
             } else {
-              resolve({ oauthData: params, config: config, window: window, interval: polling, dispatch: dispatch });
+              resolve({
+                oauthData: params, config, window, interval: polling, dispatch,
+              });
             }
           } else {
             dispatch({
               type: 'OAUTH_FAILURE',
-              messages: [{ msg: 'OAuth redirect has occurred but no query or hash parameters were found.' }]
+              messages: [{ msg: 'OAuth redirect has occurred but no query or hash parameters were found.' }],
             });
           }
         }
@@ -164,7 +165,9 @@ function pollPopup({ window, config, requestToken, dispatch }) {
   });
 }
 
-function exchangeCodeForToken({ oauthData, config, window, interval, dispatch }) {
+function exchangeCodeForToken({
+  oauthData, config, window, interval, dispatch,
+}) {
   return new Promise((resolve, reject) => {
     const data = Object.assign({}, oauthData, config);
 
@@ -172,37 +175,39 @@ function exchangeCodeForToken({ oauthData, config, window, interval, dispatch })
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'same-origin', // By default, fetch won't send any cookies to the server
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     }).then((response) => {
       if (response.ok) {
         return response.json().then((json) => {
-          resolve({ token: json.token, user: json.user, window: window, interval: interval, dispatch: dispatch });
-        });
-      } else {
-        return response.json().then((json) => {
-          dispatch({
-            type: 'OAUTH_FAILURE',
-            messages: Array.isArray(json) ? json : [json]
+          resolve({
+            token: json.token, user: json.user, window, interval, dispatch,
           });
-          closePopup({ window: window, interval: interval });
         });
       }
+      return response.json().then((json) => {
+        dispatch({
+          type: 'OAUTH_FAILURE',
+          messages: Array.isArray(json) ? json : [json],
+        });
+        closePopup({ window, interval });
+      });
     });
   });
 }
 
-function signIn({ token, user, window, interval, dispatch }) {
+function signIn({
+  token, user, window, interval, dispatch,
+}) {
   return new Promise((resolve, reject) => {
     dispatch({
       type: 'OAUTH_SUCCESS',
-      token: token,
-      user: user
+      token,
+      user,
     });
     cookie.save('token', token, { expires: moment().add(1, 'hour').toDate() });
     browserHistory.push('/');
-    resolve({ window: window, interval: interval });
+    resolve({ window, interval });
   });
-
 }
 
 
