@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { history } from '../../_helpers';
+
 
 import { userActions } from '../../_actions';
 
@@ -9,6 +11,7 @@ class Navbar extends Component {
     super(props);
 
     this.handleLogout = this.handleLogout.bind(this);
+    this.handleDirectToLogin = this.handleDirectToLogin.bind(this);
   }
 
   handleLogout() {
@@ -19,10 +22,17 @@ class Navbar extends Component {
     dispatch(userActions.logout());
   }
 
+  handleDirectToLogin() {
+    history.push('/login');
+  }
+  handleDirectToSignup() {
+    history.push('/register');
+  }
+
   render() {
     return (
       <nav className="navbar navbar-expand-lg sticky-top navbar-dark navbar-bz-purple">
-        <a className="navbar-brand abs" href="">BlockZeus</a>
+        <Link to={localStorage.user ? '/dashboard' : '/login'} className="navbar-brand abs" href="">BlockZeus</Link>
         <a className="blockzeus-comment pl-lg-2">Cryptocurrency Manager</a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
           <span className="navbar-toggler-icon" />
@@ -33,10 +43,10 @@ class Navbar extends Component {
           {!localStorage.getItem('user') &&
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <a className="nav-link" href="" data-toggle="modal">Sign Up</a>
+                <a className="nav-link" href="" data-toggle="modal" onClick={this.handleDirectToSignup}>Sign Up</a>
               </li>
               <li className="nav-item">
-                <Redirect to="/login" className="nav-link" href="" data-toggle="modal" Log In />
+                <a className="nav-link" href="/login" data-toggle="modal" onClick={this.handleDirectToLogin}>Log In</a>
               </li>
             </ul>
           }

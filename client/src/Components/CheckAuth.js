@@ -17,7 +17,7 @@ export function BaseComponent() {
     checkAuthentication(params) {
       const { history } = params;
       if (!store.getState().auth.token) {
-        history.replace({ pathname: '/login' });
+        // history.replace({ pathname: '/login' });
       }
     }
     render() {

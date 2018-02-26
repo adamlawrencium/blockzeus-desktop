@@ -11,15 +11,15 @@ export const userActions = {
   delete: _delete,
 };
 
-function login(username, password) {
+function login(email, password) {
   return (dispatch) => {
-    dispatch(request({ username }));
+    dispatch(request({ email }));
 
-    userService.login(username, password)
+    userService.login(email, password)
       .then(
         (user) => {
           dispatch(success(user));
-          history.push('/');
+          history.push('/dashboard');
         },
         (error) => {
           dispatch(failure(error));
@@ -35,6 +35,8 @@ function login(username, password) {
 
 function logout() {
   userService.logout();
+  console.log('we gettin crazy');
+  history.push('/login');
   return { type: userConstants.LOGOUT };
 }
 
@@ -46,7 +48,9 @@ function register(user) {
       .then(
         (user) => {
           dispatch(success());
-          history.push('/login');
+          
+          console.log('WATCHOUT');
+          history.push('/dashboard');
           dispatch(alertActions.success('Registration successful'));
         },
         (error) => {
