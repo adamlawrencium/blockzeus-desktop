@@ -13,14 +13,14 @@ export function configureFakeBackend() {
           const params = JSON.parse(opts.body);
 
           // find if any user matches login credentials
-          const filteredUsers = users.filter(user => user.username === params.username && user.password === params.password);
+          const filteredUsers = users.filter(user => user.email === params.email && user.password === params.password);
 
           if (filteredUsers.length) {
             // if login details are valid return user details and fake jwt token
             const user = filteredUsers[0];
             const responseJson = {
               id: user.id,
-              username: user.username,
+              email: user.email,
               firstName: user.firstName,
               lastName: user.lastName,
               token: 'fake-jwt-token',
@@ -28,7 +28,7 @@ export function configureFakeBackend() {
             resolve({ ok: true, json: () => responseJson });
           } else {
             // else return error
-            reject('Username or password is incorrect');
+            reject('Email or password is incorrect');
           }
 
           return;
@@ -73,9 +73,9 @@ export function configureFakeBackend() {
           const newUser = JSON.parse(opts.body);
 
           // validation
-          const duplicateUser = users.filter(user => user.username === newUser.username).length;
+          const duplicateUser = users.filter(user => user.email === newUser.email).length;
           if (duplicateUser) {
-            reject(`Username "${newUser.username }" is already taken`);
+            reject(`Email "${newUser.email }" is already taken`);
             return;
           }
 
