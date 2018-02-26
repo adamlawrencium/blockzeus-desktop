@@ -32,14 +32,14 @@ class Navbar extends Component {
   render() {
     return (
       <nav className="navbar navbar-expand-lg sticky-top navbar-dark navbar-bz-purple">
-        <Link to={localStorage.user ? '/dashboard' : '/login'} className="navbar-brand abs" href="">BlockZeus</Link>
+        <Link to={localStorage.getItem('user') ? '/dashboard' : '/login'} className="navbar-brand abs" href="">BlockZeus</Link>
         <a className="blockzeus-comment pl-lg-2">Cryptocurrency Manager</a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
           <span className="navbar-toggler-icon" />
         </button>
         <div className="navbar-collapse collapse" id="collapsingNavbar">
 
-          {/* If user is not logged in */}
+          {/* If user is not logged in, TODO: handling auth logic redirects in Navbar doesn't seem right..., fix */}
           {!localStorage.getItem('user') &&
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
