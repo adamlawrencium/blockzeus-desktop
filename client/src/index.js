@@ -8,7 +8,7 @@ import { store, configureFakeBackend } from './_helpers';
 import App from './Components/App';
 
 // setup fake backend
-configureFakeBackend();
+// configureFakeBackend();
 
 ReactDOM.render(
   <Provider store={store}>

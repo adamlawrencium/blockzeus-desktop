@@ -81,14 +81,17 @@ app.get('/demo', (req, res) => {
 
 // ROUTES
 app.use('/', landingPage);
+
 app.use('/poloniex', poloniex);
-app.post('/signup', userController.signupPost);
-app.post('/login', userController.loginPost);
-app.put('/account', userController.ensureAuthenticated, userController.accountPut);
+
+app.post('/user/signup', userController.signupPost);
+app.post('/user/login', userController.loginPost);
+app.put('/user/account', userController.ensureAuthenticated, userController.accountPut);
 
 app.get('/privbro', userController.ensureAuthenticated, (req, res) => {
   res.json('hi');
 });
+
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

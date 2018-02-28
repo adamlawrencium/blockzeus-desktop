@@ -1,4 +1,6 @@
 import { authHeader } from '../_helpers';
+const qs = require('querystring');
+
 
 export const userService = {
   login,
@@ -13,11 +15,12 @@ export const userService = {
 function login(email, password) {
   const requestOptions = {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password }),
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: qs.stringify({ email, password }),
   };
-
-  return fetch('/users/authenticate', requestOptions)
+  return fetch('/user/login', requestOptions)
     .then((response) => {
       if (!response.ok) {
         return Promise.reject(response.statusText);
@@ -41,6 +44,16 @@ function logout() {
   localStorage.removeItem('user');
 }
 
+function register(user) {
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: qs.stringify(user),
+  };
+
+  return fetch('/users/register', requestOptions).then(handleResponse);
+}
+
 function getAll() {
   const requestOptions = {
     method: 'GET',
@@ -57,16 +70,6 @@ function getById(id) {
   };
 
   return fetch(`/users/${id}`, requestOptions).then(handleResponse);
-}
-
-function register(user) {
-  const requestOptions = {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(user),
-  };
-
-  return fetch('/users/register', requestOptions).then(handleResponse);
 }
 
 function update(user) {
