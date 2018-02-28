@@ -33,6 +33,7 @@ exports.ensureAuthenticated = function (req, res, next) {
    * Sign in with email and password
    */
 exports.loginPost = function (req, res) {
+  console.log(req.body);
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('email', 'Email cannot be blank').notEmpty();
   req.assert('password', 'Password cannot be blank').notEmpty();
@@ -41,8 +42,11 @@ exports.loginPost = function (req, res) {
   const errors = req.validationErrors();
 
   if (errors) {
+    console.log(errors);
     return res.status(400).send(errors);
   }
+
+  console.log('tryna login');
 
   User.findOne({ email: req.body.email }, (err, user) => {
     if (!user) {

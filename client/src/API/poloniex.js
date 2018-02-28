@@ -1,3 +1,13 @@
+const createAuthHeader = () => {
+  const authToken = JSON.parse(localStorage.getItem('user')).token;
+  return {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      authorization: `Bearer ${authToken}`,
+    },
+  };
+};
+
 export function fetchPoloniexTicker() {
   console.log('calling /poloniex/ticker');
   return new Promise((resolve, reject) => {
@@ -16,7 +26,7 @@ export function fetchPoloniexTicker() {
 export function fetchPoloniexCompleteBalances() {
   console.log('calling /poloniex/completeBalances');
   return new Promise((resolve, reject) => {
-    fetch('/poloniex/completeBalances').then((res) => {
+    fetch('/poloniex/completeBalances', createAuthHeader()).then((res) => {
       if (!res.ok) {
         reject(res);
       } else {
@@ -32,7 +42,7 @@ export function fetchPoloniexCompleteBalances() {
 export function fetchTradeHistory(pair) {
   console.log('calling /poloniex/tradeHistory');
   return new Promise((resolve, reject) => {
-    fetch(`/poloniex/tradeHistory/${pair}`).then((res) => {
+    fetch(`/poloniex/tradeHistory/${pair}`, createAuthHeader()).then((res) => {
       if (!res.ok) {
         reject(res);
       } else {
@@ -46,7 +56,7 @@ export function fetchTradeHistory(pair) {
 
 export function fetchPortfolioPerformance(pair) {
   return new Promise((resolve, reject) => {
-    fetch('/poloniex/performance').then((res) => {
+    fetch('/poloniex/performance', createAuthHeader()).then((res) => {
       if (!res.ok) {
         reject(res);
       } else {
@@ -60,7 +70,7 @@ export function fetchPortfolioPerformance(pair) {
 
 export async function fetchFullPortfolioPerformance() {
   return new Promise(async (resolve, reject) => {
-    fetch('poloniex/fullPerformance').then(async (res) => {
+    fetch('poloniex/fullPerformance', createAuthHeader()).then(async (res) => {
       if (res.ok) {
         resolve((await res.json()));
       } else {

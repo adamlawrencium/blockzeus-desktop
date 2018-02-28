@@ -1,6 +1,6 @@
 const sleep = require('sleep');
 const Poloniex = require('poloniex-api-node');
-const TimeSeriesCache = require('../../utils/timeSeriesCache/cache'); // TODO
+// const TimeSeriesCache = require('../../utils/timeSeriesCache/cache'); // TODO
 
 
 class poloniexDAL {

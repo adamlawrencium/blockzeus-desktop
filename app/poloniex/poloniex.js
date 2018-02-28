@@ -9,13 +9,14 @@ const router = express.Router();
 /**
  * Poloniex User's API/Secret credentials middleware
  */
-const retrievePoloniexCredentials = function (req, res, next) {
+const requirePoloniexCredentials = function (req, res, next) {
   if (req.isAuthenticated()) {
     const token = (req.headers.authorization && req.headers.authorization.split(' ')[1]);
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userID = decoded.sub; // JWT 'sub' = 'subject', which is essentially a user's unique id in mongodb
     User.findById(userID, (err, user) => {
       if (user) {
+        console.log('found user');
         res.locals.poloniexKey = user.poloniexKey;
         res.locals.poloniexSecret = user.poloniexSecret;
         next();
@@ -55,7 +56,7 @@ router.get('/ticker', async (req, res) => {
   ...,
 }
 */
-router.get('/balances', retrievePoloniexCredentials, async (req, res) => {
+router.get('/balances', requirePoloniexCredentials, async (req, res) => {
   const p = poloniex.createPrivatePoloInstance(res.locals.poloniexKey, res.locals.poloniexSecret);
   const balances = await poloniex.private(p, 'balances');
   res.json(balances);
@@ -70,8 +71,8 @@ router.get('/balances', retrievePoloniexCredentials, async (req, res) => {
   }, ...
 }
 */
-router.get('/completeBalances', async (req, res) => {
-  const p = poloniex.createPrivatePoloInstance();
+router.get('/completeBalances', requirePoloniexCredentials, async (req, res) => {
+  const p = poloniex.createPrivatePoloInstance(res.locals.poloniexKey, res.locals.poloniexSecret);
   const completeBalances = await poloniex.private(p, 'completeBalances');
   // Filter zero available balances
   Object.keys(completeBalances).forEach((balance) => {
@@ -79,9 +80,7 @@ router.get('/completeBalances', async (req, res) => {
       delete completeBalances[balance];
     }
   });
-  console.log(completeBalances);
-  // Cache-Control response header
-  // browser will cache this response for 60 seconds
+  // Cache-Control response header, browser will cache this response for 60 seconds
   res.setHeader('Cache-Control', 'max-age=60');
   res.json(completeBalances);
 });
@@ -158,10 +157,9 @@ for all holdings:
 2. timeline of buys & sells in ALL markets
 3. value all the inflow/outflows against (BTC ->) USD
 */
-router.get('/fullPerformance', async (req, res) => {
+router.get('/fullPerformance', requirePoloniexCredentials, async (req, res) => {
   // Get all historically owned currencies by looking at past buys/sells/deposits/withdrawals
-
-  const p = poloniex.createPrivatePoloInstance();
+  const p = poloniex.createPrivatePoloInstance(res.locals.poloniexKey, res.locals.poloniexSecret);
 
   const [dw, bs, ticker] = await Promise.all([
     poloniex.private(p, 'depositsWithdrawals'),

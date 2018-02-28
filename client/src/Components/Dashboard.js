@@ -34,9 +34,9 @@ class Dashboard extends Component {
       <div className="App" >
         <Navbar />
         <div className="container-fluid">
-          <DemoAlert />
+          {/* <DemoAlert /> */}
 
-          <InfoAlert />
+          {/* <InfoAlert /> */}
 
           {/* ALLOCATIONS AND PERFORMANCE */}
           <div className="row d-flex h-100 flex-row">

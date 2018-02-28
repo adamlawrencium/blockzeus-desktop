@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { userActions } from '../../_actions';
-import './login.css';
 import Navbar from '../Site/Navbar';
 
 class LoginPage extends React.Component {
