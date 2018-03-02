@@ -16,6 +16,7 @@
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.17",
     "react-twitter-widgets": "^1.7.1",
+    "react-validate-form": "^1.0.6",
     "reactstrap": "^5.0.0-alpha.4",
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
