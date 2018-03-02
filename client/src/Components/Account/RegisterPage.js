@@ -2,12 +2,20 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { userActions } from '../../_actions';
+import { history } from '../../_helpers';
+import { userActions, alertActions } from '../../_actions';
+
 import Navbar from '../Site/Navbar';
 
 class RegisterPage extends React.Component {
   constructor(props) {
     super(props);
+
+    // clear alert on location change
+    const { dispatch } = this.props;
+    history.listen((location, action) => {
+      dispatch(alertActions.clear());
+    });
 
     this.state = {
       user: {
@@ -15,7 +23,7 @@ class RegisterPage extends React.Component {
         // lastName: '',
         email: '',
         password: '',
-        passConfirm: '',
+        confirm: '',
       },
       submitted: false,
       passwordValid: false,
@@ -24,12 +32,11 @@ class RegisterPage extends React.Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handlePassChange = this.handlePassChange.bind(this);
-    this.handleConfirmPassChange = this.handleConfirmPassChange.bind(this);
+    // this.handlePassChange = this.handlePassChange.bind(this);
+    // this.handleConfirmPassChange = this.handleConfirmPassChange.bind(this);
   }
 
   handleChange(event) {
-    console.log('handle change');
     const { name, value } = event.target;
     const { user } = this.state;
     this.setState({
@@ -40,58 +47,65 @@ class RegisterPage extends React.Component {
     });
   }
 
-  handlePassChange(event) {
-    const { name, value } = event.target;
-    const { user } = this.state;
-    this.setState({
-      user: {
-        ...user,
-        [name]: value,
-      },
-    }, () => { this.passwordValid(); });
-  }
+  // handlePassChange(event) {
+  //   const { name, value } = event.target;
+  //   const { user } = this.state;
+  //   this.setState({
+  //     user: {
+  //       ...user,
+  //       [name]: value,
+  //     },
+  //   }, () => { this.passwordValid(); });
+  // }
 
-  handleConfirmPassChange(event) {
-    const { name, value } = event.target;
-    const { user } = this.state;
-    this.setState({
-      user: {
-        ...user,
-        [name]: value,
-      },
-    }, () => { this.passwordsMatch(); });
-  }
+  // handleConfirmPassChange(event) {
+  //   const { name, value } = event.target;
+  //   const { user } = this.state;
+  //   this.setState({
+  //     user: {
+  //       ...user,
+  //       [name]: value,
+  //     },
+  //   }, () => { this.passwordsMatch(); });
+  // }
 
-  passwordValid() {
-    const { user } = this.state;
-    if (user.password.length >= 8 && user.password.length <= 20) {
-      this.setState({ passwordValid: true });
-      return;
-    }
-    this.setState({ passwordValid: false });
-  }
-  passwordsMatch() {
-    const { user } = this.state;
-    if (user.password === user.passConfirm || user.passConfirm.length === 0) {
-      this.setState({ passwordsMatch: true });
-      return;
-    }
-    this.setState({ passwordsMatch: false });
-  }
+  // passwordValid() {
+  //   const { user } = this.state;
+  //   if (user.password.length >= 8 && user.password.length <= 20) {
+  //     this.setState({ passwordValid: true });
+  //     return;
+  //   }
+  //   this.setState({ passwordValid: false });
+  // }
+  // passwordsMatch() {
+  //   const { user } = this.state;
+  //   if (user.password === user.confirm || user.confirm.length === 0) {
+  //     this.setState({ passwordsMatch: true });
+  //     return;
+  //   }
+  //   this.setState({ passwordsMatch: false });
+  // }
 
   handleSubmit(event) {
     event.preventDefault();
-
     this.setState({ submitted: true });
-    const { user } = this.state;
+    
     const { dispatch } = this.props;
-    if (user.firstName && user.lastName && user.email && user.password && user.passConfirm) {
+    dispatch(alertActions.clear());
+
+    const { user } = this.state;
+    if (user.email && user.password && user.confirm) {
+      console.log('all forms filled out');
       dispatch(userActions.register(user));
+    } else {
+      console.log('not all forms filled');
     }
   }
 
   render() {
-    const { registering } = this.props;
+    const { registering, alert } = this.props;
+    // console.log(this.props);
+    // console.log(this.state);
     const { user, submitted } = this.state;
     return (
       <div>
@@ -102,7 +116,7 @@ class RegisterPage extends React.Component {
               <div className="card card-body card-section panel" style={{ maxWidth: '520px' }} >
                 <h2 className="card-title">Signup</h2>
                 <hr />
-                <form className="needs-validation">
+                <form className="needs-validation" onSubmit={this.handleSubmit}>
                   <div className="form-group">
                     <label htmlFor="email">Email address</label>
                     <input type="email" className="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="satoshi@example.com" required onChange={this.handleChange} />
@@ -124,18 +138,23 @@ class RegisterPage extends React.Component {
                   </div> */}
                   <div className="form-group">
                     <label htmlFor="password">Password</label>
-                    <input type="password" className={`form-control ${this.state.passwordValid ? 'is-valid' : ''}`} id="password" name="password" placeholder="8-20 characters" onChange={this.handlePassChange} />
+                    <input type="password" className={`form-control ${this.state.passwordValid ? 'is-valid' : ''}`} id="password" name="password" placeholder="8-20 characters" onChange={this.handleChange} />
                     <div className="valid-feedback">
                       Password looks good!
                     </div>
                   </div>
                   <div className="form-group">
-                    <label htmlFor="passConfirm">Confirm Password</label>
-                    <input type="password" className={`form-control ${this.state.passwordsMatch ? '' : 'is-invalid'}`} id="passConfirm" name="passConfirm" placeholder="8-20 characters" onChange={this.handleConfirmPassChange} />
+                    <label htmlFor="confirm">Confirm Password</label>
+                    <input type="password" className={`form-control ${this.state.passwordsMatch ? '' : 'is-invalid'}`} id="confirm" name="confirm" placeholder="8-20 characters" onChange={this.handleChange} />
                     <div className="invalid-feedback">
                       Passwords must match!
                     </div>
                   </div>
+                  {alert.message && (
+                    <div className={`alert ${alert.type}`} role="alert">
+                      {alert.message}
+                    </div>
+                  )}
                   <button type="submit" className="btn btn-primary">Signup</button>
                 </form>
               </div>
@@ -149,8 +168,10 @@ class RegisterPage extends React.Component {
 
 function mapStateToProps(state) {
   const { registering } = state.registration;
+  const { alert } = state;
   return {
     registering,
+    alert,
   };
 }
 

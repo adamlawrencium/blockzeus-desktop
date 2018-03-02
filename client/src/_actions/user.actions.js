@@ -45,19 +45,16 @@ function register(user) {
     dispatch(request(user));
 
     userService.register(user)
-      .then(
-        (user) => {
-          dispatch(success());
-          
-          console.log('WATCHOUT');
-          history.push('/dashboard');
-          dispatch(alertActions.success('Registration successful'));
-        },
-        (error) => {
-          dispatch(failure(error));
-          dispatch(alertActions.error(error));
-        },
-      );
+      .then((user) => {
+        dispatch(success());
+        history.push('/dashboard');
+        dispatch(alertActions.success('Registration successful'));
+      })
+      .catch((error) => {
+        console.log('userService', error);
+        dispatch(failure(error));
+        dispatch(alertActions.error(error));
+      });
   };
 
   function request(user) { return { type: userConstants.REGISTER_REQUEST, user }; }

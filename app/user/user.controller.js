@@ -50,14 +50,14 @@ exports.loginPost = function (req, res) {
 
   User.findOne({ email: req.body.email }, (err, user) => {
     if (!user) {
-      return res.status(401).send({
+      return res.status(401).send([{ // wrapped in array to match express-validator asserts
         msg: `The email address ${req.body.email} is not associated with any account. ` +
           'Double-check your email address and try again.',
-      });
+      }]);
     }
     user.comparePassword(req.body.password, (err, isMatch) => {
       if (!isMatch) {
-        return res.status(401).send({ msg: 'Invalid email or password' });
+        return res.status(401).send([{ msg: 'Invalid email or password' }]);
       }
       res.send({ token: generateToken(user), user: user.toJSON() });
     });
@@ -68,21 +68,26 @@ exports.loginPost = function (req, res) {
  * POST /signup
  */
 exports.signupPost = function (req, res) {
-  req.assert('name', 'Name cannot be blank').notEmpty();
+  // req.assert('name', 'Name cannot be blank').notEmpty();
   req.assert('email', 'Email is not valid').isEmail();
   req.assert('email', 'Email cannot be blank').notEmpty();
   req.assert('password', 'Password must be at least 4 characters long').len(4);
+  req.assert('confirm', 'Passwords must match').equals(req.body.password);
   req.sanitize('email').normalizeEmail({ remove_dots: false });
 
   const errors = req.validationErrors();
-
+  console.log('shits wrong', errors);
+  console.log('reqbody', req.body);
   if (errors) {
     return res.status(400).send(errors);
   }
 
   User.findOne({ email: req.body.email }, (err, user) => {
     if (user) {
-      return res.status(400).send({ msg: 'The email address you have entered is already associated with another account.' });
+      console.log('user already in db');
+      return res.status(400).send([{
+        msg: 'The email address you have entered is already associated with another account.',
+      }]);
     }
     user = new User({
       name: req.body.name,
@@ -118,7 +123,7 @@ exports.accountPut = function (req, res) {
     req.assert('email', 'Email cannot be blank').notEmpty();
     req.sanitize('email').normalizeEmail({ remove_dots: false });
   }
-
+  console.log(req.body);
   const errors = req.validationErrors();
 
   if (errors) {

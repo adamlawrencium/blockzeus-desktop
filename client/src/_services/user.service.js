@@ -1,4 +1,5 @@
 import { authHeader } from '../_helpers';
+
 const qs = require('querystring');
 
 
@@ -47,11 +48,19 @@ function logout() {
 function register(user) {
   const requestOptions = {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
     body: qs.stringify(user),
   };
-
-  return fetch('/users/register', requestOptions).then(handleResponse);
+  console.log(requestOptions);
+  return fetch('/user/signup', requestOptions)
+    .then(handleResponse)
+    .then((response) => {
+      if (response.user && response.token) {
+        localStorage.setItem('user', JSON.stringify(response.token));
+      }
+    });
 }
 
 function getAll() {
@@ -92,10 +101,14 @@ function _delete(id) {
   return fetch(`/users/${id}`, requestOptions).then(handleResponse);
 }
 
-function handleResponse(response) {
-  if (!response.ok) {
-    return Promise.reject(response.statusText);
-  }
-
-  return response.json();
+async function handleResponse(response) {
+  const res = await response.json();
+  return new Promise((resolve, reject) => {
+    if (!response.ok) {
+      console.log(res);
+      reject(res[0].msg); // express-validator error parsing
+    } else {
+      resolve(res);
+    }
+  });
 }
