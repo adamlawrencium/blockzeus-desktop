@@ -11,13 +11,6 @@ import PerformanceCard from './Performance/PerformanceCard';
 import HoldingsTiles from './Holdings/HoldingsTiles';
 import { fetchPoloniexTicker, fetchPoloniexCompleteBalances } from '../API/poloniex';
 
-
-// import { history } from '../../_helpers';
-// import { testPoloniexIntegration } from '../../API/poloniex';
-
-
-// import '../App.css';
-
 class Dashboard extends Component {
   constructor(props) {
     super(props);

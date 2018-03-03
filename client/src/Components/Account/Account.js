@@ -83,7 +83,7 @@ class Account extends Component {
                 <div className="alert alert-primary alert-dismissible fade show" role="alert">
                   <h5 className="alert-heading">Poloniex Integration Instructions</h5>
                   <u>Note</u>: Throughout these steps, you will likely have to confirm actions for security purposes via emails from Poloniex.
-                    <ol>
+                  <ol>
                     <li>Sign into your Poloniex account.</li>
                     <li>Head to the Settings menu option and click on the &#34;API KEYS.&#34;</li>
                     <li>Click on &#34;Create New Key&#34;. Make sure you <u>uncheck</u> &#34;Enable Trading&#34; and &#34;Enable Withdrawals.&#34;</li>
