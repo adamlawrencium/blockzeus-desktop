@@ -80,6 +80,20 @@ export async function fetchFullPortfolioPerformance() {
   });
 }
 
+export async function testPoloniexIntegration() {
+  return new Promise(async (resolve, reject) => {
+    fetch('poloniex/testIntegration', createAuthHeader()).then(async (res) => {
+      if (res.ok) {
+        if (await res.json()) {
+          resolve(true);
+        }
+      } else {
+        reject(res);
+      }
+    });
+  });
+}
+
 function poloObjectToArray(obj) {
   const a = [];
   console.log(obj);
