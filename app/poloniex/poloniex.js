@@ -146,9 +146,14 @@ router.get('/performance/', async (req, res) => {
 
 
 // A TEST ROUTE
-router.get('/test', async (req, res) => {
-  console.log('sup on server');
-  res.json('hi on client');
+router.get('/testIntegration', requirePoloniexCredentials, async (req, res) => {
+  const p = poloniex.createPrivatePoloInstance(res.locals.poloniexKey, res.locals.poloniexSecret);
+  const [dw, bs] = await Promise.all([
+    poloniex.private(p, 'depositsWithdrawals'),
+    poloniex.private(p, 'tradeHistory'),
+  ]);
+
+  res.json('Integration works!');
 });
 
 /* Get dollar performance of every holding and sum them up
@@ -184,7 +189,7 @@ router.get('/fullPerformance', requirePoloniexCredentials, async (req, res) => {
   }
   // Cache-Control response header
   // browser will cache this response for 60 seconds
-  res.setHeader('Cache-Control', 'max-age=60')
+  res.setHeader('Cache-Control', 'max-age=60');
   res.json(fullPerformance);
 });
 

@@ -56,9 +56,10 @@ function register(user) {
   console.log(requestOptions);
   return fetch('/user/signup', requestOptions)
     .then(handleResponse)
-    .then((response) => {
-      if (response.user && response.token) {
-        localStorage.setItem('user', JSON.stringify(response.token));
+    .then((userResponse) => {
+      if (userResponse.user && userResponse.token) {
+        console.log(user);
+        localStorage.setItem('user', JSON.stringify(userResponse));
       }
     });
 }
