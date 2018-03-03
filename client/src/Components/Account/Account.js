@@ -55,13 +55,19 @@ class Account extends Component {
                     <label htmlFor="exampleInputEmail1">Email address</label>
                     <input autoComplete="email" type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder={this.state.email} />
                   </div>
-                  <div className="form-group">
-                    <label htmlFor="exampleInputPassword1">Change Password</label>
-                    <input type="password" className="form-control" id="exampleInputPassword1" placeholder="8-20 characters" />
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="exampleInputPassword1">Confirm Password</label>
-                    <input type="password" className="form-control" id="exampleInputPassword1" placeholder="8-20 characters" />
+                  <div className="row">
+                    <div className="col-6">
+                      <div className="form-group">
+                        <label htmlFor="exampleInputPassword1">Change Password</label>
+                        <input type="password" className="form-control" id="exampleInputPassword1" placeholder="8-20 characters" />
+                      </div>
+                    </div>
+                    <div className="col-6">
+                      <div className="form-group">
+                        <label htmlFor="exampleInputPassword1">Confirm Password</label>
+                        <input type="password" className="form-control" id="exampleInputPassword1" placeholder="8-20 characters" />
+                      </div>
+                    </div>
                   </div>
                   <button type="submit" className="btn btn-primary">Save Account Settings</button>
                 </form>
@@ -78,11 +84,11 @@ class Account extends Component {
                   <h5 className="alert-heading">Poloniex Integration Instructions</h5>
                   <u>Note</u>: Throughout these steps, you will likely have to confirm actions for security purposes via emails from Poloniex.
                     <ol>
-                      <li>Sign into your Poloniex account.</li>
-                      <li>Head to the Settings menu option and click on the &#34;API KEYS.&#34;</li>
-                      <li>Click on &#34;Create New Key&#34;. Make sure you <u>uncheck</u> &#34;Enable Trading&#34; and &#34;Enable Withdrawals.&#34;</li>
-                      <li>Enter your API Key and API Secret below.</li>
-                    </ol>
+                    <li>Sign into your Poloniex account.</li>
+                    <li>Head to the Settings menu option and click on the &#34;API KEYS.&#34;</li>
+                    <li>Click on &#34;Create New Key&#34;. Make sure you <u>uncheck</u> &#34;Enable Trading&#34; and &#34;Enable Withdrawals.&#34;</li>
+                    <li>Enter your API Key and API Secret below.</li>
+                  </ol>
                   <button type="button" className="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>

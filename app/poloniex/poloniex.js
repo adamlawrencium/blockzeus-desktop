@@ -12,13 +12,30 @@ const router = express.Router();
 const requirePoloniexCredentials = function (req, res, next) {
   if (req.isAuthenticated()) {
     const token = (req.headers.authorization && req.headers.authorization.split(' ')[1]);
+    console.log(req.headers);
+
+    // If user hasn't made an account is on the dashboard
+    if (token === 'DEMO') {
+      res.locals.poloniexKey = 'GTTSHNIZ-V4EYK5K9-4QT6XXS8-EPGJ9G5F';
+      res.locals.poloniexSecret = '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f9847e55edb39685c69350c9536c9f0f26d5b70804415859bfb90408ae364c19d';
+      return next();
+    }
+
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const userID = decoded.sub; // JWT 'sub' = 'subject', which is essentially a user's unique id in mongodb
     User.findById(userID, (err, user) => {
       if (user) {
         console.log('found user');
-        res.locals.poloniexKey = user.poloniexKey;
-        res.locals.poloniexSecret = user.poloniexSecret;
+        console.log(user);
+
+        // If the user hasn't inputed their creds yet, request data using demo keys
+        if (!user.poloniexSecret || !user.poloniexKey) {
+          res.locals.poloniexKey = 'GTTSHNIZ-V4EYK5K9-4QT6XXS8-EPGJ9G5F';
+          res.locals.poloniexSecret = '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f9847e55edb39685c69350c9536c9f0f26d5b70804415859bfb90408ae364c19d';
+        } else {
+          res.locals.poloniexKey = user.poloniexKey;
+          res.locals.poloniexSecret = user.poloniexSecret;
+        }
         next();
       } else {
         res.status(403).send({ msg: 'Can not find user in db' });

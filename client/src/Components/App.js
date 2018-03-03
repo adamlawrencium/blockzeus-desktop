@@ -29,8 +29,8 @@ class App extends React.Component {
     return (
       <Router history={history}>
         <div>
-          <PrivateRoute exact path="/" component={Dashboard} />
-          <PrivateRoute exact path="/dashboard" component={Dashboard} />
+          {/* <Route exact path="/" component={Dashboard} /> */}
+          <Route exact path="/dashboard" component={Dashboard} />
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/register" component={RegisterPage} />
           <PrivateRoute exact path="/account" component={Account} />
