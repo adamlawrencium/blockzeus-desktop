@@ -41,8 +41,11 @@ function login(email, password) {
 }
 
 function logout() {
-  // remove user from local storage to log user out
+  // remove user from local storage to log user out and add back demo user
   localStorage.removeItem('user');
+  const demoUser = { user: { token: 'DEMO' } };
+  localStorage.setItem('user', JSON.stringify(demoUser));
+  return demoUser;
 }
 
 function register(user) {

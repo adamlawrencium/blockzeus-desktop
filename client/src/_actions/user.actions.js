@@ -34,10 +34,9 @@ function login(email, password) {
 }
 
 function logout() {
-  userService.logout();
-  console.log('we gettin crazy');
+  const demoUser = userService.logout();
   history.push('/login');
-  return { type: userConstants.LOGOUT };
+  return { type: userConstants.LOGOUT, userInfo: demoUser };
 }
 
 function register(user) {

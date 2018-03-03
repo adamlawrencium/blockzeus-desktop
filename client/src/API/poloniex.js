@@ -1,5 +1,7 @@
 const createAuthHeader = () => {
-  const authToken = JSON.parse(localStorage.getItem('user')).token;
+  let authToken = JSON.parse(localStorage.getItem('user')).token;
+  if (!authToken) { authToken = 'DEMO'; }
+  console.log(authToken);
   return {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -96,7 +98,6 @@ export async function testPoloniexIntegration() {
 
 function poloObjectToArray(obj) {
   const a = [];
-  console.log(obj);
   for (const key in obj) {
     if (key === 'USDT') {
       a.push([key, parseFloat(obj[key].available)]);
@@ -104,6 +105,5 @@ function poloObjectToArray(obj) {
       a.push([key, parseFloat(obj[key].btcValue)]);
     }
   }
-  console.log(a);
   return a;
 }

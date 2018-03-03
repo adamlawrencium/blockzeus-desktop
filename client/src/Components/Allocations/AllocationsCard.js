@@ -6,7 +6,6 @@ class AllocationsCard extends Component {
     let total = 0.0;
     for (let i = 0; i < balances.length; i++) {
       total += balances[i][1];
-      console.log(balances[i][1]);
     }
     return total.toFixed(2);
   }
