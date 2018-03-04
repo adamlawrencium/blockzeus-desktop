@@ -87,7 +87,7 @@ class PortfolioLineChart extends Component {
     const buttonTheme = { // styles for the buttons
       fill: 'none',
       stroke: 'none',
-      'stroke-width': 0,
+      'stroke-width': 1,
       style: {
         color: '#4731B9',
         fontWeight: 'bold',
@@ -120,14 +120,13 @@ class PortfolioLineChart extends Component {
 
           <Loading isLoading={!this.props.loaded}>Fetching portfolio data...</Loading>
 
-          <RangeSelector buttonTheme={buttonTheme}>
+          <RangeSelector buttonTheme={buttonTheme} selected={this.props.loaded ? 3 : null}>
             <RangeSelector.Button count={1} type="day">1D</RangeSelector.Button>
             <RangeSelector.Button count={7} type="day">1W</RangeSelector.Button>
             <RangeSelector.Button count={1} type="month">1M</RangeSelector.Button>
             <RangeSelector.Button count={3} type="month">3M</RangeSelector.Button>
             <RangeSelector.Button count={1} type="year">1Y</RangeSelector.Button>
             <RangeSelector.Button type="all">All</RangeSelector.Button>
-            {/* <RangeSelector.Input boxBorderColor="#483453" /> */}
           </RangeSelector>
 
           <Tooltip />
