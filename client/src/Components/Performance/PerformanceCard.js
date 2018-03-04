@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PortfolioLineChart from './PortfolioLineChart';
-import { fetchPortfolioPerformance, fetchFullPortfolioPerformance } from '../../exchanges/poloniex';
+import { fetchPortfolioPerformance, fetchFullPortfolioPerformance } from '../../API/poloniex';
 
 
 class PerformanceCard extends Component {
@@ -65,9 +65,8 @@ class PerformanceCard extends Component {
   render() {
     if (1) {
       return this.renderChart();
-    } 
-      return this.renderLoading();
-    
+    }
+    return this.renderLoading();
   }
 }
 

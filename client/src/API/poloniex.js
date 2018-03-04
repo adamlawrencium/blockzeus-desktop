@@ -1,3 +1,15 @@
+const createAuthHeader = () => {
+  let authToken = JSON.parse(localStorage.getItem('user')).token;
+  if (!authToken) { authToken = 'DEMO'; }
+  console.log(authToken);
+  return {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      authorization: `Bearer ${authToken}`,
+    },
+  };
+};
+
 export function fetchPoloniexTicker() {
   console.log('calling /poloniex/ticker');
   return new Promise((resolve, reject) => {
@@ -16,7 +28,7 @@ export function fetchPoloniexTicker() {
 export function fetchPoloniexCompleteBalances() {
   console.log('calling /poloniex/completeBalances');
   return new Promise((resolve, reject) => {
-    fetch('/poloniex/completeBalances').then((res) => {
+    fetch('/poloniex/completeBalances', createAuthHeader()).then((res) => {
       if (!res.ok) {
         reject(res);
       } else {
@@ -32,7 +44,7 @@ export function fetchPoloniexCompleteBalances() {
 export function fetchTradeHistory(pair) {
   console.log('calling /poloniex/tradeHistory');
   return new Promise((resolve, reject) => {
-    fetch(`/poloniex/tradeHistory/${pair}`).then((res) => {
+    fetch(`/poloniex/tradeHistory/${pair}`, createAuthHeader()).then((res) => {
       if (!res.ok) {
         reject(res);
       } else {
@@ -46,7 +58,7 @@ export function fetchTradeHistory(pair) {
 
 export function fetchPortfolioPerformance(pair) {
   return new Promise((resolve, reject) => {
-    fetch('/poloniex/performance').then((res) => {
+    fetch('/poloniex/performance', createAuthHeader()).then((res) => {
       if (!res.ok) {
         reject(res);
       } else {
@@ -60,7 +72,7 @@ export function fetchPortfolioPerformance(pair) {
 
 export async function fetchFullPortfolioPerformance() {
   return new Promise(async (resolve, reject) => {
-    fetch('poloniex/fullPerformance').then(async (res) => {
+    fetch('poloniex/fullPerformance', createAuthHeader()).then(async (res) => {
       if (res.ok) {
         resolve((await res.json()));
       } else {
@@ -70,9 +82,22 @@ export async function fetchFullPortfolioPerformance() {
   });
 }
 
+export async function testPoloniexIntegration() {
+  return new Promise(async (resolve, reject) => {
+    fetch('poloniex/testIntegration', createAuthHeader()).then(async (res) => {
+      if (res.ok) {
+        if (await res.json()) {
+          resolve(true);
+        }
+      } else {
+        reject(res);
+      }
+    });
+  });
+}
+
 function poloObjectToArray(obj) {
   const a = [];
-  console.log(obj);
   for (const key in obj) {
     if (key === 'USDT') {
       a.push([key, parseFloat(obj[key].available)]);
@@ -80,6 +105,5 @@ function poloObjectToArray(obj) {
       a.push([key, parseFloat(obj[key].btcValue)]);
     }
   }
-  console.log(a);
   return a;
 }

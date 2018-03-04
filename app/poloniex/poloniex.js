@@ -1,11 +1,51 @@
 const express = require('express');
 const PoloniexDAL = require('./poloniexDAL');
+const jwt = require('jsonwebtoken');
+const User = require('../user/user.model');
 
 const poloniex = new PoloniexDAL();
 const router = express.Router();
 
-const PERIOD = 14400;
-var lastCall = Date.now(); // used for poloniex rate limiting
+/**
+ * Poloniex User's API/Secret credentials middleware
+ */
+const requirePoloniexCredentials = function (req, res, next) {
+  if (req.isAuthenticated()) {
+    const token = (req.headers.authorization && req.headers.authorization.split(' ')[1]);
+    console.log(req.headers);
+
+    // If user hasn't made an account is on the dashboard
+    if (token === 'DEMO') {
+      res.locals.poloniexKey = 'GTTSHNIZ-V4EYK5K9-4QT6XXS8-EPGJ9G5F';
+      res.locals.poloniexSecret = '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f9847e55edb39685c69350c9536c9f0f26d5b70804415859bfb90408ae364c19d';
+      return next();
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userID = decoded.sub; // JWT 'sub' = 'subject', which is essentially a user's unique id in mongodb
+    User.findById(userID, (err, user) => {
+      if (user) {
+        console.log('found user');
+        console.log(user);
+
+        // If the user hasn't inputed their creds yet, request data using demo keys
+        if (!user.poloniexSecret || !user.poloniexKey) {
+          res.locals.poloniexKey = 'GTTSHNIZ-V4EYK5K9-4QT6XXS8-EPGJ9G5F';
+          res.locals.poloniexSecret = '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f9847e55edb39685c69350c9536c9f0f26d5b70804415859bfb90408ae364c19d';
+        } else {
+          res.locals.poloniexKey = user.poloniexKey;
+          res.locals.poloniexSecret = user.poloniexSecret;
+        }
+        next();
+      } else {
+        res.status(403).send({ msg: 'Can not find user in db' });
+      }
+    });
+  } else {
+    console.log('isnt authenticated');
+    res.status(401).send({ msg: 'Unauthorized. wrekt.' });
+  }
+};
 
 /*
 "BTC_DASH": {
@@ -33,8 +73,8 @@ router.get('/ticker', async (req, res) => {
   ...,
 }
 */
-router.get('/balances', async (req, res) => {
-  const p = poloniex.createPrivatePoloInstance();
+router.get('/balances', requirePoloniexCredentials, async (req, res) => {
+  const p = poloniex.createPrivatePoloInstance(res.locals.poloniexKey, res.locals.poloniexSecret);
   const balances = await poloniex.private(p, 'balances');
   res.json(balances);
 });
@@ -48,8 +88,8 @@ router.get('/balances', async (req, res) => {
   }, ...
 }
 */
-router.get('/completeBalances', async (req, res) => {
-  const p = poloniex.createPrivatePoloInstance();
+router.get('/completeBalances', requirePoloniexCredentials, async (req, res) => {
+  const p = poloniex.createPrivatePoloInstance(res.locals.poloniexKey, res.locals.poloniexSecret);
   const completeBalances = await poloniex.private(p, 'completeBalances');
   // Filter zero available balances
   Object.keys(completeBalances).forEach((balance) => {
@@ -57,10 +97,8 @@ router.get('/completeBalances', async (req, res) => {
       delete completeBalances[balance];
     }
   });
-  console.log(completeBalances);
-  // Cache-Control response header
-  // browser will cache this response for 60 seconds
-  res.setHeader('Cache-Control', 'max-age=60')
+  // Cache-Control response header, browser will cache this response for 60 seconds
+  res.setHeader('Cache-Control', 'max-age=60');
   res.json(completeBalances);
 });
 
@@ -125,9 +163,14 @@ router.get('/performance/', async (req, res) => {
 
 
 // A TEST ROUTE
-router.get('/test', async (req, res) => {
-  console.log(USDT_BTC);
-  res.json('hi');
+router.get('/testIntegration', requirePoloniexCredentials, async (req, res) => {
+  const p = poloniex.createPrivatePoloInstance(res.locals.poloniexKey, res.locals.poloniexSecret);
+  const [dw, bs] = await Promise.all([
+    poloniex.private(p, 'depositsWithdrawals'),
+    poloniex.private(p, 'tradeHistory'),
+  ]);
+
+  res.json('Integration works!');
 });
 
 /* Get dollar performance of every holding and sum them up
@@ -136,10 +179,9 @@ for all holdings:
 2. timeline of buys & sells in ALL markets
 3. value all the inflow/outflows against (BTC ->) USD
 */
-router.get('/fullPerformance', async (req, res) => {
+router.get('/fullPerformance', requirePoloniexCredentials, async (req, res) => {
   // Get all historically owned currencies by looking at past buys/sells/deposits/withdrawals
-
-  const p = poloniex.createPrivatePoloInstance();
+  const p = poloniex.createPrivatePoloInstance(res.locals.poloniexKey, res.locals.poloniexSecret);
 
   const [dw, bs, ticker] = await Promise.all([
     poloniex.private(p, 'depositsWithdrawals'),
@@ -164,7 +206,7 @@ router.get('/fullPerformance', async (req, res) => {
   }
   // Cache-Control response header
   // browser will cache this response for 60 seconds
-  res.setHeader('Cache-Control', 'max-age=60')
+  res.setHeader('Cache-Control', 'max-age=60');
   res.json(fullPerformance);
 });
 
@@ -306,7 +348,7 @@ async function convertChartDataToUSDTBase(pair, chartData_) {
   if (pair.split('_')[0] === 'USDT') {
     return chartData;
   } else if (pair.split('_')[0] === 'BTC') {
-    usdtbase = USDT_BTC;
+    usdtbase = await poloniex.public('chartData', 'USDT_BTC');
   } else if (pair.split('_')[0] === 'ETH') {
     usdtbase = await poloniex.public('chartData', 'USDT_ETH');
   } else if (pair.split('_')[0] === 'XMR') {

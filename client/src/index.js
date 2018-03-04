@@ -1,18 +1,19 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
-import './index.css';
+import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
-import App from './App';
-import { unregister } from './registerServiceWorker';
-// import registerServiceWorker from './registerServiceWorker';
+import { Provider } from 'react-redux';
+
+import './index.css';
+import { store, configureFakeBackend } from './_helpers';
+import App from './Components/App';
+
+// setup fake backend
+// configureFakeBackend();
 
 
 ReactDOM.render(
-  <BrowserRouter>
+  <Provider store={store}>
     <App />
-  </BrowserRouter>,
+  </Provider>,
   document.getElementById('root'),
 );
-unregister();
-// registerServiceWorker();
