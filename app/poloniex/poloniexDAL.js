@@ -1,6 +1,6 @@
 const sleep = require('sleep');
 const Poloniex = require('poloniex-api-node');
-const TimeSeriesCache = require('../../utils/timeSeriesCache/cache'); // TODO
+// const TimeSeriesCache = require('../../utils/timeSeriesCache/cache'); // TODO
 
 /**
  * This data access layer wraps retry and rate limiting functionality
@@ -10,6 +10,7 @@ const TimeSeriesCache = require('../../utils/timeSeriesCache/cache'); // TODO
  */
 class poloniexDAL {
   constructor() {
+    this.cache = false; // TODO
     this.lastCall = Date.now();
     this.PERIOD = 14400;
     this.initializeCache();
@@ -112,9 +113,7 @@ class poloniexDAL {
   }
 
   // Creates an instance of Poloniex for private commands
-  createPrivatePoloInstance(auth) {
-    const key = 'GTTSHNIZ-V4EYK5K9-4QT6XXS8-EPGJ9G5F';
-    const secret = '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f9847e55edb39685c69350c9536c9f0f26d5b70804415859bfb90408ae364c19d';
+  createPrivatePoloInstance(key, secret) {
     return (new Poloniex(key, secret, { socketTimeout: 5000 }));
   }
 

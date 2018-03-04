@@ -5,10 +5,18 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const dotenv = require('dotenv');
 const http = require('http');
+const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const expressValidator = require('express-validator');
 
-// ROUTES
-const landingPage = require('./routes/landingPage/landingPage');
-const poloniex = require('./routes/poloniex/poloniex');
+
+// Controllers
+const landingPage = require('./app/landingPage/landingPage');
+const poloniex = require('./app/poloniex/poloniex');
+const userController = require('./app/user/user.controller');
+
+// Models
+const User = require('./app/user/user.model');
 
 
 /**
@@ -19,6 +27,17 @@ dotenv.load({ path: '.env' });
 
 const app = express();
 
+/**
+ * Connect to MongoDB.
+ */
+mongoose.Promise = global.Promise;
+mongoose.connect(process.env.MONGOLAB_URI, { useMongoClient: true });
+mongoose.connection.on('error', (err) => {
+  console.error(err);
+  console.log('%s MongoDB connection error. Please make sure MongoDB is running.');
+  process.exit();
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 
@@ -26,19 +45,59 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(expressValidator());
 app.use(express.static(path.join(__dirname, 'routes/landingPage')));
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-// LANDING PAGE
-app.use('/', landingPage);
+
+/**
+ * Auth Middleware
+ */
+app.use((req, res, next) => {
+  req.isAuthenticated = function () {
+    const token = (req.headers.authorization && req.headers.authorization.split(' ')[1]);
+    console.log(req.headers.authorization);
+    if (token === 'DEMO') {
+      return 'DEMO';
+    }
+    try {
+      return jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      return false;
+    }
+  };
+  if (req.isAuthenticated() === 'DEMO') {
+    next();
+  } else if (req.isAuthenticated()) {
+    const payload = req.isAuthenticated();
+    User.findById(payload.sub, (err, user) => {
+      req.user = user;
+      next();
+    });
+  } else {
+    next();
+  }
+});
+
 
 // SEND REACT APP
 app.get('/demo', (req, res) => {
   res.sendFile(path.join(`${__dirname}/client/build/index.html`));
 });
 
-// POLONIEX ROUTE
-app.use('/poloniex/', poloniex);
+// ROUTES
+app.use('/', landingPage);
+
+app.use('/poloniex', poloniex);
+
+app.post('/user/signup', userController.signupPost);
+app.post('/user/login', userController.loginPost);
+app.put('/user/account', userController.ensureAuthenticated, userController.accountPut);
+
+app.get('/privbro', userController.ensureAuthenticated, (req, res) => {
+  res.json('hi');
+});
+
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
