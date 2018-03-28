@@ -20,6 +20,7 @@ class Navbar extends Component {
     console.log('logging out');
     const { dispatch } = this.props;
     dispatch(userActions.logout());
+    // history.push('/demo');
   }
 
   handleDirectToLogin() {
