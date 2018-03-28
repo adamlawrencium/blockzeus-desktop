@@ -64,6 +64,8 @@ function register(user) {
         console.log(user);
         localStorage.setItem('user', JSON.stringify(userResponse));
       }
+      console.log(userResponse);
+      return userResponse;
     });
 }
 

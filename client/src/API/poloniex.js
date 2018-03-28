@@ -10,6 +10,15 @@ const createAuthHeader = () => {
   };
 };
 
+const createDemoAuthHeader = () => {
+  return {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      authorization: `Bearer DEMO`,
+    },
+  };
+};
+
 export function fetchPoloniexTicker() {
   console.log('calling /poloniex/ticker');
   return new Promise((resolve, reject) => {
@@ -29,6 +38,22 @@ export function fetchPoloniexCompleteBalances() {
   console.log('calling /poloniex/completeBalances');
   return new Promise((resolve, reject) => {
     fetch('/poloniex/completeBalances', createAuthHeader()).then((res) => {
+      if (!res.ok) {
+        reject(res);
+      } else {
+        res.json().then((data) => {
+          const d = poloObjectToArray(data);
+          resolve(d);
+        });
+      }
+    });
+  });
+}
+
+export function fetchDemoPoloniexCompleteBalances() {
+  console.log('calling /poloniex/completeBalances');
+  return new Promise((resolve, reject) => {
+    fetch('/poloniex/completeBalances', createDemoAuthHeader()).then((res) => {
       if (!res.ok) {
         reject(res);
       } else {
@@ -73,6 +98,18 @@ export function fetchPortfolioPerformance(pair) {
 export async function fetchFullPortfolioPerformance() {
   return new Promise(async (resolve, reject) => {
     fetch('poloniex/fullPerformance', createAuthHeader()).then(async (res) => {
+      if (res.ok) {
+        resolve((await res.json()));
+      } else {
+        reject(res);
+      }
+    });
+  });
+}
+
+export async function fetchFullDemoPortfolioPerformance() {
+  return new Promise(async (resolve, reject) => {
+    fetch('poloniex/fullPerformance', createDemoAuthHeader()).then(async (res) => {
       if (res.ok) {
         resolve((await res.json()));
       } else {

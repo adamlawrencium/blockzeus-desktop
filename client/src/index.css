@@ -48,6 +48,14 @@
   border-top: 0px solid #e9ecef !important;
 }
 
+#demo-modal {
+  margin-top: 10%;
+  max-width: 700px;
+}
+.card-footer {
+  border-top: 0px;
+}
+
 .blurredBackground {
   /* Set rules to fill background */
   min-height: 100%;

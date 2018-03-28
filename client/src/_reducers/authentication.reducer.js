@@ -7,10 +7,12 @@ const user = JSON.parse(localStorage.getItem('user'));
 // If they exist, then they'll carry on as they left off
 let initialState;
 if (!user) {
-  const demoUser = { token: 'DEMO' };
-  localStorage.setItem('user', JSON.stringify(demoUser));
-  initialState = { loggedIn: false, user: demoUser };
+  // console.log('no user found');
+  // const demoUser = { token: 'DEMO' };
+  // localStorage.setItem('user', JSON.stringify(demoUser));
+  initialState = { loggedIn: false };
 } else {
+  console.log('user found');
   initialState = { loggedIn: true, user };
 }
 // const initialState = user ? { loggedIn: true, user } : { loggedIn: false, user: demoUser };

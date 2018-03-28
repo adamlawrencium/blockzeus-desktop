@@ -10,6 +10,7 @@ import Account from '../Components/Account/Account';
 import LoginPage from './Account/LoginPage';
 import RegisterPage from './Account/RegisterPage';
 import Dashboard from '../Components/Dashboard';
+import Demo from '../Components/Demo';
 
 // import '../App.css';
 
@@ -30,10 +31,10 @@ class App extends React.Component {
       <Router history={history}>
         <div>
           {/* <Route exact path="/" component={Dashboard} /> */}
-          <Route exact path="/dashboard" component={Dashboard} />
-          <Route exact path="/demo" component={Dashboard} />
+          <Route exact path="/demo" component={Demo} />
           <Route exact path="/login" component={LoginPage} />
           <Route exact path="/register" component={RegisterPage} />
+          <PrivateRoute exact path="/dashboard" component={Dashboard} />
           <PrivateRoute exact path="/account" component={Account} />
         </div>
       </Router>
