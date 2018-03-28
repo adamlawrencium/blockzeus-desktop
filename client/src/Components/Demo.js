@@ -66,41 +66,6 @@ class Demo extends Component {
     // if (!this.props.authentication.loggedIn) {
     //   return (<h1>LOGIN BRO</h1>);
     // }
-    if (0) {
-      return (
-        <div className="App blurredBackground">
-          <div className="blurredBackground" style={{ backgroundImage: `url(${blurredImage})`, height: '100%' }}>
-            <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-              Launch demo modal
-            </button>
-            <div className="modal fade" id="exampleModalCenter" tabIndex={-1} role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-              <div className="modal-dialog modal-dialog-centered h-100 d-flex flex-column justify-content-center my-0" role="document">
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <h5 className="modal-title" id="exampleModalLongTitle">Welcome to BlockZeus!</h5>
-                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">×</span>
-                    </button>
-                  </div>
-                  <div className="modal-body">
-                    Thank you for signing up! BlockZeus works by linking your exchange API keys. Head over to your /Account to get started.
-                  </div>
-                  <div className="modal-footer" id="modal-footer">
-                    <div className="col-6">
-                      <button type="button" className="btn btn-block btn-primary">Link Exchange</button>
-                    </div>
-                    <div className="col-6">
-                      <button type="button" className="btn btn-block btn-outline-primary">View Demo</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      );
-    }
     return (
       <div className="App" >
         <Navbar />
@@ -112,33 +77,6 @@ class Demo extends Component {
 
           {/* INFO ALERT */}
           {this.renderInfoAlert()}
-
-          <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-            Launch demo modal
-          </button>
-          <div className="modal fade" id="exampleModalCenter" tabIndex={-1} role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div className="modal-dialog modal-dialog-centered h-100 d-flex flex-column justify-content-center my-0" role="document">
-              <div className="modal-content">
-                <div className="modal-header">
-                  <h5 className="modal-title" id="exampleModalLongTitle">Welcome to BlockZeus!</h5>
-                  <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                  </button>
-                </div>
-                <div className="modal-body">
-                  Thank you for signing up! BlockZeus works by linking your exchange API keys. Head over to your /Account to get started.
-                </div>
-                <div className="modal-footer" id="modal-footer">
-                  <div className="col-6">
-                    <button type="button" className="btn btn-block btn-primary">Link Exchange</button>
-                  </div>
-                  <div className="col-6">
-                    <button type="button" className="btn btn-block btn-outline-primary">View Demo</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
 
           {/* ALLOCATIONS AND PERFORMANCE */}
           <div className="row d-flex h-100 flex-row">

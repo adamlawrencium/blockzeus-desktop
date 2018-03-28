@@ -110,7 +110,7 @@ class Dashboard extends Component {
                 </div>
               </div>
             </div>
-            <div className="modal show fade" tabIndex={-1} role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            {/* <div className="modal show fade" tabIndex={-1} role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
               <div className="modal-dialog modal-dialog-centered h-100 d-flex flex-column justify-content-center my-0" role="document">
                 <div className="modal-content">
                   <div className="modal-header">
@@ -132,7 +132,7 @@ class Dashboard extends Component {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
 
         </div>
