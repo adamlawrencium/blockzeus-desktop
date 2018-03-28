@@ -73,44 +73,44 @@ class Dashboard extends Component {
     if (this.detectUserWithoutExchangeKeys()) {
       return (
         <div>
-          
-        <Navbar/>
-        <div className="container">
-          <div className="App blurredBackground">
-            <div className="blurredBackground" style={{ backgroundImage: `url(${blurredImage})`, height: '100%' }}>
-              {/* <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+
+          <Navbar />
+          <div className="container-fluid">
+            <div className="row">
+              <div className="App blurredBackground">
+                <div className="blurredBackground" style={{ backgroundImage: `url(${blurredImage})`, height: '100%' }}>
+                  {/* <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
               Launch demo modal
             </button> */}
-              <div className="row">
-                <div className="col">
-                  <div id="demo-modal" className="card text-center mx-auto">
-                    <div className="card-header">
-                      Welcome to BlockZeus - let's get started!
-                    </div>
-                    <div className="card-body">
-                      <p className="card-text">BlockZeus works by integrating with your cryptocurrency exchange. Click on which exchange you'd like to connect first! Alternatively, you can still view the demo.</p>
-                    </div>
-                    <div className="card-footer">
-                      <div className="row">
-                        <div className="col-5">
-                          {/* <a href="#" className="btn btn-info">Connect to Poloniex</a> */}
-                          <button type="button" className="btn btn-block btn-info">Link Poloniex</button>
-                        </div>
-                        <div className="col-5">
-                          {/* <a href="#" className="btn btn-info">Connect to Poloniex</a> */}
-                          <button type="button" className="btn btn-block btn-success">Link Bitfinex (coming soon!)</button>
-                        </div>
-                        <div className="col-2">
-                          <button href="/demo" type="button" className="btn btn-block btn-outline-primary">Demo</button>
-                          {/* <a href="#" className="btn btn-info">Connect to Bitfinex (coming soon)</a> */}
+                  <div className="col-12">
+                    <div id="demo-modal" className="card text-center mx-auto">
+                      <div className="card-header">
+                        Welcome to BlockZeus - let's get started!
+                      </div>
+                      <div className="card-body">
+                        <p className="card-text">BlockZeus works by integrating with your cryptocurrency exchange. Click on which exchange you'd like to connect first! Alternatively, you can still view the demo.</p>
+                      </div>
+                      <div className="card-footer">
+                        <div className="row">
+                          <div className="col-5">
+                            {/* <a href="#" className="btn btn-info">Connect to Poloniex</a> */}
+                            <a href="/account" type="button" className="btn btn-block btn-info">Link Poloniex</a>
+                          </div>
+                          <div className="col-5">
+                            {/* <a href="#" className="btn btn-info">Connect to Poloniex</a> */}
+                            <a href="/account" type="button" className="btn btn-block btn-success">Link Bitfinex (coming soon!)</a>
+                          </div>
+                          <div className="col-2">
+                            <a href="/demo" type="button" className="btn btn-block btn-outline-primary">Demo</a>
+                            {/* <a href="#" className="btn btn-info">Connect to Bitfinex (coming soon)</a> */}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            {/* <div className="modal show fade" tabIndex={-1} role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              {/* <div className="modal show fade" tabIndex={-1} role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
               <div className="modal-dialog modal-dialog-centered h-100 d-flex flex-column justify-content-center my-0" role="document">
                 <div className="modal-content">
                   <div className="modal-header">
@@ -133,9 +133,9 @@ class Dashboard extends Component {
                 </div>
               </div>
             </div> */}
-          </div>
+            </div>
 
-        </div>
+          </div>
         </div>
       );
     }
