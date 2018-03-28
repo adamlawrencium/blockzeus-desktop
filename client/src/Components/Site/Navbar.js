@@ -3,7 +3,6 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { history } from '../../_helpers';
 
-
 import { userActions } from '../../_actions';
 
 class Navbar extends Component {
@@ -30,43 +29,31 @@ class Navbar extends Component {
     history.push('/register');
   }
 
-  // If user's token is 'DEMO' (it is by default) or doesn't exist then render Signup/Login
   renderNavItems() {
+    const path = window.location.pathname;
     if (!this.props.loggedIn) {
       return (
         <ul className="navbar-nav ml-auto">
           <li className="nav-item">
-            <a className="nav-link" href="" data-toggle="modal" onClick={this.handleDirectToSignup}>Sign Up</a>
+            <a className={`nav-link ${path === '/signup' ? 'active' : ''}`} href="" data-toggle="modal" onClick={this.handleDirectToSignup}>Sign Up</a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="/login" data-toggle="modal" onClick={this.handleDirectToLogin}>Log In</a>
+            <a className={`nav-link ${path === '/login' ? 'active' : ''}`} href="/login" data-toggle="modal" onClick={this.handleDirectToLogin}>Log In</a>
           </li>
         </ul>
       );
     }
-    // const a = JSON.parse(localStorage.getItem('user'));
-    // console.log(a);
-    // const { user } = JSON.parse(localStorage.getItem('user'));
-    // if (user.token === 'DEMO') {
-    //   return (
-    //     <ul className="navbar-nav ml-auto">
-    //       <li className="nav-item">
-    //         <a className="nav-link" href="" data-toggle="modal" onClick={this.handleDirectToSignup}>Sign Up</a>
-    //       </li>
-    //       <li className="nav-item">
-    //         <a className="nav-link" href="/login" data-toggle="modal" onClick={this.handleDirectToLogin}>Log In</a>
-    //       </li>
-    //     </ul>
-    //   );
-    // }
 
     // If user is loggedin
     return (
       <ul className="navbar-nav ml-auto">
         <li className="nav-item">
-          <Link to="/account" className="nav-link">Account</Link>
+          <Link to="/dashboard" className={`nav-link ${path === '/dashboard' ? 'active' : ''}`}>Dashboard</Link>
         </li>
         <li className="nav-item">
+          <Link to="/account" className={`nav-link ${path === '/account' ? 'active' : ''}`}>Account</Link>
+        </li>
+        <li className="nav-item border border-round">
           <Link to="/" className="nav-link" href="" data-toggle="modal" onClick={this.handleLogout}>Log out</Link>
         </li>
       </ul>
