@@ -89,7 +89,7 @@ class RegisterPage extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     this.setState({ submitted: true });
-    
+
     const { dispatch } = this.props;
     dispatch(alertActions.clear());
 
@@ -98,6 +98,7 @@ class RegisterPage extends React.Component {
       console.log('all forms filled out');
       dispatch(userActions.register(user));
     } else {
+      dispatch(alertActions.error('Please fill out all fields'));
       console.log('not all forms filled');
     }
   }

@@ -5,11 +5,14 @@ import TwitterFeed from './TwitterFeed/TwitterFeed';
 import Navbar from './Site/Navbar';
 import DemoAlert from './Site/DemoAlert';
 import InfoAlert from './Site/InfoAlert';
+import NoKeysAlert from './Site/NoKeysAlert';
 import Footer from './Site/Footer';
 import AllocationsCard from './Allocations/AllocationsCard';
 import PerformanceCard from './Performance/PerformanceCard';
 import HoldingsTiles from './Holdings/HoldingsTiles';
 import { fetchPoloniexTicker, fetchPoloniexCompleteBalances } from '../API/poloniex';
+
+import blurredImage from './blurred.png';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -31,24 +34,98 @@ class Dashboard extends Component {
 
   // If user is not logged in or is a new user, render the info alert
   renderInfoAlert() {
-    const { token } = this.props.userInfo.user;
-    if (token === 'DEMO') {
-      return <InfoAlert />;
+    if (this.props.authentication.user) {
+      if (this.props.authentication.user.token === 'DEMO') {
+        return <InfoAlert />;
+      }
     }
-    if (!(this.props.userInfo.user.poloniexKey && this.props.userInfo.user.poloniexSecret)) {
-      return <InfoAlert />;
+    return (null);
+  }
+
+  // If a user is logged in but doesn't have keys added, render this alert
+  renderNewUserWithoutKeysAlert() {
+    if (this.props.authentication.loggedIn) {
+      const { accountInfo } = this.props.authentication.user;
+      if (!(accountInfo.poloniexKey && accountInfo.poloniexSecret)) {
+        return <NoKeysAlert />;
+      }
     }
+    return (null);
   }
 
   render() {
-    console.log(this.props);
+    if (0) {
+      return (
+        <div className="App blurredBackground">
+          <div className="blurredBackground" style={{ backgroundImage: `url(${blurredImage })`, height: '100%' }}>
+            <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+              Launch demo modal
+            </button>
+            <div className="modal fade" id="exampleModalCenter" tabIndex={-1} role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div className="modal-dialog modal-dialog-centered h-100 d-flex flex-column justify-content-center my-0" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title" id="exampleModalLongTitle">Welcome to BlockZeus!</h5>
+                  <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div className="modal-body">
+                  Thank you for signing up! BlockZeus works by linking your exchange API keys. Head over to your /Account to get started.
+                </div>
+                <div className="modal-footer" id="modal-footer">
+                  <div className="col-6">
+                    <button type="button" className="btn btn-block btn-primary">Link Exchange</button>
+                  </div>
+                  <div className="col-6">
+                    <button type="button" className="btn btn-block btn-outline-primary">View Demo</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+
+        </div>
+      );
+    }
     return (
       <div className="App" >
         <Navbar />
         <div className="container-fluid">
 
+          {/* NEW USER NO KEYS ALERT */}
+          {this.renderNewUserWithoutKeysAlert()}
+
           {/* INFO ALERT */}
           {this.renderInfoAlert()}
+
+          <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+            Launch demo modal
+          </button>
+          <div className="modal fade" id="exampleModalCenter" tabIndex={-1} role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div className="modal-dialog modal-dialog-centered h-100 d-flex flex-column justify-content-center my-0" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title" id="exampleModalLongTitle">Welcome to BlockZeus!</h5>
+                  <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+                <div className="modal-body">
+                  Thank you for signing up! BlockZeus works by linking your exchange API keys. Head over to your /Account to get started.
+                </div>
+                <div className="modal-footer" id="modal-footer">
+                  <div className="col-6">
+                    <button type="button" className="btn btn-block btn-primary">Link Exchange</button>
+                  </div>
+                  <div className="col-6">
+                    <button type="button" className="btn btn-block btn-outline-primary">View Demo</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* ALLOCATIONS AND PERFORMANCE */}
           <div className="row d-flex h-100 flex-row">
@@ -78,10 +155,10 @@ class Dashboard extends Component {
 
 function mapStateToProps(state) {
   console.log(state);
-  const userInfo = state.authentication.user;
+  const { authentication } = state;
   const { alert } = state;
   return {
-    userInfo,
+    authentication,
     alert,
   };
 }

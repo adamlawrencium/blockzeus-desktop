@@ -7,14 +7,13 @@ const user = JSON.parse(localStorage.getItem('user'));
 // If they exist, then they'll carry on as they left off
 let initialState;
 if (!user) {
-  const demoUser = { user: { token: 'DEMO' } };
+  const demoUser = { token: 'DEMO' };
   localStorage.setItem('user', JSON.stringify(demoUser));
   initialState = { loggedIn: false, user: demoUser };
 } else {
   initialState = { loggedIn: true, user };
 }
 // const initialState = user ? { loggedIn: true, user } : { loggedIn: false, user: demoUser };
-
 export function authentication(state = initialState, action) {
   switch (action.type) {
     case userConstants.LOGIN_REQUEST:

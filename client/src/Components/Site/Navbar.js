@@ -31,7 +31,7 @@ class Navbar extends Component {
 
   // If user's token is 'DEMO' (it is by default) or doesn't exist then render Signup/Login
   renderNavItems() {
-    if (!JSON.parse(localStorage.getItem('user'))) {
+    if (!this.props.loggedIn) {
       return (
         <ul className="navbar-nav ml-auto">
           <li className="nav-item">
@@ -43,20 +43,21 @@ class Navbar extends Component {
         </ul>
       );
     }
-
-    const { user } = JSON.parse(localStorage.getItem('user'));
-    if (user.token === 'DEMO') {
-      return (
-        <ul className="navbar-nav ml-auto">
-          <li className="nav-item">
-            <a className="nav-link" href="" data-toggle="modal" onClick={this.handleDirectToSignup}>Sign Up</a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="/login" data-toggle="modal" onClick={this.handleDirectToLogin}>Log In</a>
-          </li>
-        </ul>
-      );
-    }
+    // const a = JSON.parse(localStorage.getItem('user'));
+    // console.log(a);
+    // const { user } = JSON.parse(localStorage.getItem('user'));
+    // if (user.token === 'DEMO') {
+    //   return (
+    //     <ul className="navbar-nav ml-auto">
+    //       <li className="nav-item">
+    //         <a className="nav-link" href="" data-toggle="modal" onClick={this.handleDirectToSignup}>Sign Up</a>
+    //       </li>
+    //       <li className="nav-item">
+    //         <a className="nav-link" href="/login" data-toggle="modal" onClick={this.handleDirectToLogin}>Log In</a>
+    //       </li>
+    //     </ul>
+    //   );
+    // }
 
     // If user is loggedin
     return (
@@ -96,6 +97,7 @@ class Navbar extends Component {
 
 function mapStateToProps(state) {
   const { loggedIn } = state.authentication;
+  console.log(state);
   // console.log(state.authentication);
   return {
     loggedIn,

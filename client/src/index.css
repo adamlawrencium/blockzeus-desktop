@@ -43,6 +43,28 @@
   border-left: 6px #4D2B8E !important;
 }
 
+.modal-footer {
+  background-color: hsl(0, 0%, 97%);
+  border-top: 0px solid #e9ecef !important;
+}
+
+.blurredBackground {
+  /* Set rules to fill background */
+  min-height: 100%;
+  min-width: 1024px;
+
+  /* Set up proportionate scaling */
+  width: 100%;
+  height: auto;
+
+  /* Set up positioning */
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+/* background-image: url("./Compsdonents/blurred.png"); */
+}
+
 
 /* TILES */
 .card {
