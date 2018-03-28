@@ -10,7 +10,7 @@ class Account extends Component {
   constructor(props) {
     super(props);
     // User info:
-    let { email, poloniexKey, poloniexSecret } = this.props.userInfo.user;
+    let { email, poloniexKey, poloniexSecret } = this.props.authentication.user.accountInfo;
     if (!poloniexKey) poloniexKey = 'Example: N0VU8XMP-TSDTA4X5-IJFBMXR9-2TBDVRTM';
     if (!poloniexSecret) poloniexSecret = 'Example: db7afa959e27aa111e1f85dd8bb4f776b3c173daea6c056ee6e9d7aa832230547ac188f344f2272979bcef56531a1ed413849504ca92a1ce2758290355d73280';
     this.state = {
@@ -82,7 +82,7 @@ class Account extends Component {
                 <legend>Poloniex</legend>
                 <div className="alert alert-primary alert-dismissible fade show" role="alert">
                   <h5 className="alert-heading">Poloniex Integration Instructions</h5>
-                  <u>Note</u>: Throughout these steps, you will likely have to confirm actions for security purposes via emails from Poloniex.
+                  <u>Note</u>: Throughout these steps, Poloniex will likely send you confirmation emails for security purposes.
                   <ol>
                     <li>Sign into your Poloniex account.</li>
                     <li>Head to the Settings menu option and click on the &#34;API KEYS.&#34;</li>
@@ -158,10 +158,10 @@ class Account extends Component {
 
 function mapStateToProps(state) {
   console.log(state);
-  const userInfo = state.authentication.user;
+  const { authentication } = state;
   const { alert } = state;
   return {
-    userInfo,
+    authentication,
     alert,
   };
 }
