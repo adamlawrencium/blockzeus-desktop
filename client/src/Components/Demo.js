@@ -8,13 +8,13 @@ import InfoAlert from './Site/InfoAlert';
 import NoKeysAlert from './Site/NoKeysAlert';
 import Footer from './Site/Footer';
 import AllocationsCard from './Allocations/AllocationsCard';
-import PerformanceCard from './Performance/PerformanceCard';
+import DemoPerformanceCard from './Performance/DemoPerformanceCard';
 import HoldingsTiles from './Holdings/HoldingsTiles';
-import { fetchPoloniexTicker, fetchPoloniexCompleteBalances } from '../API/poloniex';
+import { fetchPoloniexTicker, fetchDemoPoloniexCompleteBalances } from '../API/poloniex';
 
 import blurredImage from './blurred.png';
 
-class Dashboard extends Component {
+class Demo extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,7 +27,7 @@ class Dashboard extends Component {
       .then((ticker) => { this.setState({ ticker }); })
       .catch((err) => { console.log(err); });
 
-    fetchPoloniexCompleteBalances()
+    fetchDemoPoloniexCompleteBalances()
       .then((balances) => { this.setState({ balances }); })
       .catch(err => console.log(err));
   }
@@ -38,21 +38,17 @@ class Dashboard extends Component {
       console.log(authentication);
       if (!authentication.user.accountInfo.poloniexKey) {
         console.log('NO KEYS FOUND BRO');
-        return true;
       }
-      return false;
     }
   }
 
-  // // If user is not logged in or is a new user, render the info alert
-  // renderInfoAlert() {
-  //   if (this.props.authentication.user) {
-  //     if (this.props.authentication.user.token === 'DEMO') {
-  //       return <InfoAlert />;
-  //     }
-  //   }
-  //   return (null);
-  // }
+  // If user is not logged in or is a new user, render the info alert
+  renderInfoAlert() {
+    if (!this.props.authentication.loggedIn) {
+      return <InfoAlert />;
+    }
+    return (null);
+  }
 
   // If a user is logged in but doesn't have keys added, render this alert
   // renderNewUserWithoutKeysAlert() {
@@ -67,54 +63,21 @@ class Dashboard extends Component {
 
   render() {
     // If user is logged in but doesn't have any keys associated with their account, give them a modal
-    if (!this.props.authentication.loggedIn) {
-      return (<h1>LOGIN BRO</h1>);
-    }
-    if (this.detectUserWithoutExchangeKeys()) {
+    // if (!this.props.authentication.loggedIn) {
+    //   return (<h1>LOGIN BRO</h1>);
+    // }
+    if (0) {
       return (
-        <div>
-          
-        <Navbar/>
-        <div className="container">
-          <div className="App blurredBackground">
-            <div className="blurredBackground" style={{ backgroundImage: `url(${blurredImage})`, height: '100%' }}>
-              {/* <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+        <div className="App blurredBackground">
+          <div className="blurredBackground" style={{ backgroundImage: `url(${blurredImage})`, height: '100%' }}>
+            <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
               Launch demo modal
-            </button> */}
-              <div className="row">
-                <div className="col">
-                  <div id="demo-modal" className="card text-center mx-auto">
-                    <div className="card-header">
-                      Welcome to BlockZeus - let's get started!
-                    </div>
-                    <div className="card-body">
-                      <p className="card-text">BlockZeus works by integrating with your cryptocurrency exchange. Click on which exchange you'd like to connect first! Alternatively, you can still view the demo.</p>
-                    </div>
-                    <div className="card-footer">
-                      <div className="row">
-                        <div className="col-5">
-                          {/* <a href="#" className="btn btn-info">Connect to Poloniex</a> */}
-                          <button type="button" className="btn btn-block btn-info">Link Poloniex</button>
-                        </div>
-                        <div className="col-5">
-                          {/* <a href="#" className="btn btn-info">Connect to Poloniex</a> */}
-                          <button type="button" className="btn btn-block btn-success">Link Bitfinex (coming soon!)</button>
-                        </div>
-                        <div className="col-2">
-                          <button href="/demo" type="button" className="btn btn-block btn-outline-primary">Demo</button>
-                          {/* <a href="#" className="btn btn-info">Connect to Bitfinex (coming soon)</a> */}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="modal show fade" tabIndex={-1} role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            </button>
+            <div className="modal fade" id="exampleModalCenter" tabIndex={-1} role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
               <div className="modal-dialog modal-dialog-centered h-100 d-flex flex-column justify-content-center my-0" role="document">
                 <div className="modal-content">
                   <div className="modal-header">
-                    <h5 className="modal-title">Welcome to BlockZeus!</h5>
+                    <h5 className="modal-title" id="exampleModalLongTitle">Welcome to BlockZeus!</h5>
                     <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">×</span>
                     </button>
@@ -127,7 +90,7 @@ class Dashboard extends Component {
                       <button type="button" className="btn btn-block btn-primary">Link Exchange</button>
                     </div>
                     <div className="col-6">
-                      <button type="button" className="btn btn-block btn-outline-primary">Demo</button>
+                      <button type="button" className="btn btn-block btn-outline-primary">View Demo</button>
                     </div>
                   </div>
                 </div>
@@ -135,7 +98,6 @@ class Dashboard extends Component {
             </div>
           </div>
 
-        </div>
         </div>
       );
     }
@@ -149,9 +111,9 @@ class Dashboard extends Component {
           {this.detectUserWithoutExchangeKeys()}
 
           {/* INFO ALERT */}
-          {/* {this.renderInfoAlert()} */}
+          {this.renderInfoAlert()}
 
-          {/* <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+          <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
             Launch demo modal
           </button>
           <div className="modal fade" id="exampleModalCenter" tabIndex={-1} role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -176,7 +138,7 @@ class Dashboard extends Component {
                 </div>
               </div>
             </div>
-          </div> */}
+          </div>
 
           {/* ALLOCATIONS AND PERFORMANCE */}
           <div className="row d-flex h-100 flex-row">
@@ -184,7 +146,7 @@ class Dashboard extends Component {
               <AllocationsCard balances={this.state.balances} ticker={this.state.ticker} />
             </div>
             <div className="col-lg-7 d-flex flex-column">
-              <PerformanceCard />
+              <DemoPerformanceCard />
             </div>
           </div>
 
@@ -214,5 +176,5 @@ function mapStateToProps(state) {
   };
 }
 
-const connectedDashboardPage = connect(mapStateToProps)(Dashboard);
-export default connectedDashboardPage;
+const connectedDemo = connect(mapStateToProps)(Demo);
+export default connectedDemo;

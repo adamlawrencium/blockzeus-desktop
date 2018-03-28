@@ -13,6 +13,7 @@ class DemoAlert extends Component {
           <li><b> Current News </b> by @coindesk (configurable from your account)</li>
         </p>
         <p>If you have any questions or comments reach out to adam@blockzeus.com, or leave feedback <a href="https://goo.gl/forms/XcIs6gZS4qBphFeA3" target="_blank" className="alert-link">here</a> :)</p>
+        <button className="btn btn-outline-primary">Sign Up</button>
 
         <button type="button" className="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
