@@ -1,16 +1,17 @@
 import React from 'react';
-import { Router, Route, Redirect } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { history } from '../_helpers';
 import { alertActions } from '../_actions';
-import { PrivateRoute } from '../_components';
+import { PrivateRoute, PublicOnly } from '../_components';
 
 import Account from '../Components/Account/Account';
 import LoginPage from './Account/LoginPage';
 import RegisterPage from './Account/RegisterPage';
 import Dashboard from '../Components/Dashboard';
 import Demo from '../Components/Demo';
+import NotFound from './Site/NotFound';
 
 // import '../App.css';
 
@@ -29,14 +30,15 @@ class App extends React.Component {
     const { alert } = this.props; // TODO: add success/alert messages
     return (
       <Router history={history}>
-        <div>
+        <Switch>
           {/* <Route exact path="/" component={Dashboard} /> */}
           <Route exact path="/demo" component={Demo} />
-          <Route exact path="/login" component={LoginPage} />
-          <Route exact path="/register" component={RegisterPage} />
+          <PublicOnly exact path="/login" component={LoginPage} />
+          <PublicOnly exact path="/register" component={RegisterPage} />
           <PrivateRoute exact path="/dashboard" component={Dashboard} />
           <PrivateRoute exact path="/account" component={Account} />
-        </div>
+          <Route component={NotFound} />
+        </Switch>
       </Router>
     );
   }
