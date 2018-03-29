@@ -102,8 +102,15 @@ class poloniexDAL {
           throw Error('BZ: Invalid API Call');
         }
       } catch (err) {
-        console.log('Error happened, retrying...', err);
-        sleep.msleep(300); // abide by rate limits and avoid nonce issue
+        if (err.message.includes('Invalid API')) { // Error: Poloniex error 403: Forbidden. Invalid API key/secret pair.
+          console.log(err.message);
+          throw new Error(err.message);
+        } else if (err.message.includes('Nonce')) {
+          console.log(err.message);
+          sleep.msleep(300); // abide by rate limits and avoid nonce issue
+        } else {
+          console.log('### Other error: ', err);
+        }
       }
       if (done) {
         break;

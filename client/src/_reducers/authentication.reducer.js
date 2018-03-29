@@ -9,7 +9,7 @@ let initialState;
 if (!user) {
   initialState = { loggedIn: false };
 } else {
-  console.log('user found');
+  // console.log('user found');
   initialState = { loggedIn: true, user };
 }
 

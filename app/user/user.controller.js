@@ -151,6 +151,31 @@ exports.accountPut = function (req, res) {
   });
 };
 
+exports.poloniexPut = function (req, res) {
+  if (!req.body.poloniexKey && !req.body.poloniexSecret) {
+    res.send({ msg: 'Invalid req' });
+    return;
+  }
+  User.findById(req.user.id, (err, user) => {
+    if (!user) {
+      return res.status(401).send([{ // wrapped in array to match express-validator asserts
+        msg: 'Can\'t find user, shits messed up',
+      }]);
+    }
+    console.log('$$$$$$$$$$$$', user);
+    user.poloniexKey = req.body.poloniexKey;
+    user.poloniexSecret = req.body.poloniexSecret;
+    console.log('############', user);
+    user.save((err) => {
+      if (err) {
+        res.send({ msg: err });
+      } else {
+        res.send(user);
+      }
+    });
+  });
+};
+
 /**
  * DELETE /account
  */

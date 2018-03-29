@@ -162,15 +162,25 @@ router.get('/performance/', async (req, res) => {
 });
 
 
-// A TEST ROUTE
 router.get('/testIntegration', requirePoloniexCredentials, async (req, res) => {
   const p = poloniex.createPrivatePoloInstance(res.locals.poloniexKey, res.locals.poloniexSecret);
-  const [dw, bs] = await Promise.all([
-    poloniex.private(p, 'depositsWithdrawals'),
-    poloniex.private(p, 'tradeHistory'),
-  ]);
+  let dw;
+  let bs;
+  try {
+    [dw, bs] = await Promise.all([
+      poloniex.private(p, 'depositsWithdrawals'),
+      poloniex.private(p, 'tradeHistory'),
+    ]);
+    res.json({ dw, bs });
+  } catch (error) {
+    res.statusMessage = error.message;
+    res.status(403).end();
+  }
 
-  res.json('Integration works!');
+  // if (dw && bs) {
+  // } else {
+  //   res.send(false);
+  // }
 });
 
 /* Get dollar performance of every holding and sum them up

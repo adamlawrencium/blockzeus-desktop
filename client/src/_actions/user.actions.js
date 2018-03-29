@@ -7,6 +7,7 @@ export const userActions = {
   login,
   logout,
   register,
+  updatePoloniex,
   getAll,
   delete: _delete,
 };
@@ -62,6 +63,22 @@ function register(user) {
   function success(user) { return { type: userConstants.LOGIN_SUCCESS, user }; }
   function failure(error) { return { type: userConstants.REGISTER_FAILURE, error }; }
 }
+
+
+function updatePoloniex(poloniexKey, poloniexSecret) {
+  return (dispatch) => {
+    userService.updatePoloniexCreds(poloniexKey, poloniexSecret).then((updatedAccount) => {
+      // console.log('updated creds', updatedAccount);
+      console.log(updatedAccount);
+      dispatch(success(updatedAccount));
+    });
+  };
+
+  function request(user) { return { type: userConstants.POLO_UPDATE_REQUEST, user }; }
+  function success(user) { return { type: userConstants.LOGIN_SUCCESS, user }; }
+  function failure(error) { return { type: userConstants.POLO_TEST_FAILURE, error }; }
+}
+
 
 function getAll() {
   return (dispatch) => {

@@ -3,7 +3,7 @@ import { Route, Redirect } from 'react-router-dom';
 
 const checkIfAuthorized = () => {
   const user = JSON.parse(localStorage.getItem('user'));
-  console.log(user);
+  // console.log(user);
   if (user) {
     return true;
   }

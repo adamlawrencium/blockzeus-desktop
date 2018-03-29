@@ -56,7 +56,7 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 app.use((req, res, next) => {
   req.isAuthenticated = function () {
     const token = (req.headers.authorization && req.headers.authorization.split(' ')[1]);
-    console.log(req.headers.authorization);
+    // console.log(req.headers.authorization);
     if (token === 'DEMO') {
       return 'DEMO';
     }
@@ -93,6 +93,7 @@ app.use('/poloniex', poloniex);
 app.post('/user/signup', userController.signupPost);
 app.post('/user/login', userController.loginPost);
 app.put('/user/account', userController.ensureAuthenticated, userController.accountPut);
+app.put('/user/poloniex', userController.ensureAuthenticated, userController.poloniexPut);
 
 app.get('/privbro', userController.ensureAuthenticated, (req, res) => {
   res.json('hi');
