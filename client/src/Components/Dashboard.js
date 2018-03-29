@@ -88,20 +88,20 @@ class Dashboard extends Component {
                         Welcome to BlockZeus - let's get started!
                       </div>
                       <div className="card-body">
-                        <p className="card-text">BlockZeus works by integrating with your cryptocurrency exchange. Click on which exchange you'd like to connect first! Alternatively, you can still view the demo.</p>
+                        <p className="lead">BlockZeus works by integrating with your cryptocurrency exchange. Click on which exchange you'd like to connect first! Alternatively, you can view the demo.</p>
                       </div>
                       <div className="card-footer">
                         <div className="row">
                           <div className="col-5">
                             {/* <a href="#" className="btn btn-info">Connect to Poloniex</a> */}
-                            <a href="/account" type="button" className="btn btn-block btn-info">Link Poloniex</a>
+                            <a href="/account" className="btn btn-block btn-info">Link Poloniex</a>
                           </div>
                           <div className="col-5">
                             {/* <a href="#" className="btn btn-info">Connect to Poloniex</a> */}
-                            <a href="/account" type="button" className="btn btn-block btn-success">Link Bitfinex (coming soon!)</a>
+                            <a href="/account" className="btn btn-block btn-success">Link Bitfinex (coming soon!)</a>
                           </div>
                           <div className="col-2">
-                            <a href="/demo" type="button" className="btn btn-block btn-outline-primary">Demo</a>
+                            <a href="/demo" className="btn btn-block btn-outline-primary">Demo</a>
                             {/* <a href="#" className="btn btn-info">Connect to Bitfinex (coming soon)</a> */}
                           </div>
                         </div>
