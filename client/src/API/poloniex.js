@@ -123,11 +123,13 @@ export async function testPoloniexIntegration() {
   return new Promise(async (resolve, reject) => {
     fetch('poloniex/testIntegration', createAuthHeader()).then(async (res) => {
       if (res.ok) {
-        if (await res.json()) {
+        const sampleData = await res.json();
+        if (sampleData) {
+          console.log(sampleData);
           resolve(true);
         }
       } else {
-        reject(res);
+        reject(res.statusText);
       }
     });
   });

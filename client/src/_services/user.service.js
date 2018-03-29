@@ -9,9 +9,11 @@ export const userService = {
   register,
   getAll,
   getById,
+  updatePoloniexCreds,
   update,
   delete: _delete,
 };
+
 
 function login(email, password) {
   const requestOptions = {
@@ -28,31 +30,12 @@ function login(email, password) {
         localStorage.setItem('user', JSON.stringify(response));
       }
       return response;
-
-    //   if (!response.ok) {
-    //     console.log(response);
-    //     return Promise.reject(response.statusText);
-    //   }
-
-    //   return response.json();
-    // })
-    // .then((user) => {
-    //   // login successful if there's a jwt token in the response
-    //   if (user && user.token) {
-    //     // store user details and jwt token in local storage to keep user logged in between page refreshes
-    //     localStorage.setItem('user', JSON.stringify(user));
-    //   }
-
-    //   return user;
     });
 }
 
 function logout() {
   // remove user from local storage to log user out and add back demo user
   localStorage.removeItem('user');
-  // const demoUser = { token: 'DEMO' };
-  // localStorage.setItem('user', JSON.stringify(demoUser));
-  // return demoUser;
 }
 
 function register(user) {
@@ -75,6 +58,26 @@ function register(user) {
       return userResponse;
     });
 }
+
+function updatePoloniexCreds(poloniexKey, poloniexSecret) {
+  console.log(qs.stringify({ poloniexKey, poloniexSecret }));
+  const requestOptions = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      authorization: `Bearer ${JSON.parse(localStorage.getItem('user')).token}`,
+    },
+    body: qs.stringify({ poloniexKey, poloniexSecret }),
+  };
+  console.log(requestOptions);
+  return fetch('/user/poloniex', requestOptions)
+    .then(handleResponse)
+    .then((updatedAccount) => {
+      console.log(updatedAccount);
+      return updatedAccount;
+    });
+}
+
 
 function getAll() {
   const requestOptions = {
