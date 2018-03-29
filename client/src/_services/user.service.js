@@ -24,6 +24,7 @@ function login(email, password) {
   return fetch('/user/login', requestOptions)
     .then((response) => {
       if (!response.ok) {
+        console.log(response);
         return Promise.reject(response.statusText);
       }
 
