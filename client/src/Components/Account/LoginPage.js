@@ -39,7 +39,7 @@ class LoginPage extends React.Component {
   }
 
   render() {
-    const { loggingIn } = this.props;
+    const { loggingIn, alert } = this.props;
     const { email, password, submitted } = this.state;
     return (
       <div>
@@ -73,6 +73,11 @@ class LoginPage extends React.Component {
                     <Link to="/register" className="btn btn-link">Register</Link>
                   </div>
                 </form>
+                {alert.message && (
+                  <div className={`alert ${alert.type}`} role="alert">
+                    {alert.message}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -110,8 +115,10 @@ class LoginPage extends React.Component {
 
 function mapStateToProps(state) {
   const { loggingIn } = state.authentication;
+  const { alert } = state;
   return {
     loggingIn,
+    alert,
   };
 }
 
