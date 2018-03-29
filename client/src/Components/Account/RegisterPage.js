@@ -14,6 +14,7 @@ class RegisterPage extends React.Component {
     // clear alert on location change
     const { dispatch } = this.props;
     history.listen((location, action) => {
+      console.log('history change');
       dispatch(alertActions.clear());
     });
 

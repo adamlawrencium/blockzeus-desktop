@@ -60,7 +60,7 @@ function register(user) {
   return fetch('/user/signup', requestOptions)
     .then(handleResponse)
     .then((userResponse) => {
-      if (userResponse.user && userResponse.token) {
+      if (userResponse.token) {
         console.log(user);
         localStorage.setItem('user', JSON.stringify(userResponse));
       }
