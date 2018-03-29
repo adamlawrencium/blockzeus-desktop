@@ -31,6 +31,7 @@ export function authentication(state = initialState, action) {
     case userConstants.LOGIN_FAILURE:
       return {};
     case userConstants.LOGOUT:
+    console.log('logged out bro');
       return initialState; // return to demo'd logged out user
     default:
       return state;
