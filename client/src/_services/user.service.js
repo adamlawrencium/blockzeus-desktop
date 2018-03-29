@@ -22,22 +22,28 @@ function login(email, password) {
     body: qs.stringify({ email, password }),
   };
   return fetch('/user/login', requestOptions)
+    .then(handleResponse)
     .then((response) => {
-      if (!response.ok) {
-        console.log(response);
-        return Promise.reject(response.statusText);
+      if (response.token) {
+        localStorage.setItem('user', JSON.stringify(response));
       }
+      return response;
 
-      return response.json();
-    })
-    .then((user) => {
-      // login successful if there's a jwt token in the response
-      if (user && user.token) {
-        // store user details and jwt token in local storage to keep user logged in between page refreshes
-        localStorage.setItem('user', JSON.stringify(user));
-      }
+    //   if (!response.ok) {
+    //     console.log(response);
+    //     return Promise.reject(response.statusText);
+    //   }
 
-      return user;
+    //   return response.json();
+    // })
+    // .then((user) => {
+    //   // login successful if there's a jwt token in the response
+    //   if (user && user.token) {
+    //     // store user details and jwt token in local storage to keep user logged in between page refreshes
+    //     localStorage.setItem('user', JSON.stringify(user));
+    //   }
+
+    //   return user;
     });
 }
 
