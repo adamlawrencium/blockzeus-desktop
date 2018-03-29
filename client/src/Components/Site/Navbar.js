@@ -35,7 +35,7 @@ class Navbar extends Component {
       return (
         <ul className="navbar-nav ml-auto">
           <li className="nav-item">
-            <a className={`nav-link ${path === '/signup' ? 'active' : ''}`} href="" data-toggle="modal" onClick={this.handleDirectToSignup}>Sign Up</a>
+            <a className={`nav-link border ${path === '/signup' ? 'active' : ''}`} href="" data-toggle="modal" onClick={this.handleDirectToSignup}>Sign Up</a>
           </li>
           <li className="nav-item">
             <a className={`nav-link ${path === '/login' ? 'active' : ''}`} href="/login" data-toggle="modal" onClick={this.handleDirectToLogin}>Log In</a>
@@ -53,8 +53,8 @@ class Navbar extends Component {
         <li className="nav-item">
           <Link to="/account" className={`nav-link ${path === '/account' ? 'active' : ''}`}>Account</Link>
         </li>
-        <li className="nav-item border border-round">
-          <Link to="/" className="nav-link" href="" data-toggle="modal" onClick={this.handleLogout}>Log out</Link>
+        <li className="nav-item">
+          <Link to="/" className="nav-link border" href="" data-toggle="modal" onClick={this.handleLogout}>Log out</Link>
         </li>
       </ul>
     );
