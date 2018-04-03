@@ -72,7 +72,9 @@ class Account extends Component {
       return (
         <div className="col-9">
           <div className="alert alert-danger">
-            Uh oh, looks like Poloniex rejected that Key/Secret pair. Make sure both are correct. Otherwise you can generate a new pair and try again - that usually fixes it!
+            Uh oh, looks like Poloniex rejected that Key/Secret pair. Make sure both are correct.
+            Otherwise you can generate a new pair and try again - that usually fixes it! If that still does not work
+            send an email to support@blockzeus.com and we will get back to you within 48 hours.
           </div>
         </div>
       );
