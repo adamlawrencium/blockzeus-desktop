@@ -5,7 +5,7 @@ export const theme = {
     },
   },
   tooltip: {
-    backgroundColor: '#4731B9',
+    backgroundColor: '#A076F1',
     style: {
       color: '#F0F0F0',
     },

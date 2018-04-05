@@ -1,5 +1,5 @@
 body {
-  background-color: #FAFAFA;
+  background-color: #F5F5F5;
   font-family: 'Barlow';
 }
 .container-fluid {
@@ -12,27 +12,26 @@ body {
 .navbar-bz-purple {
   /* background-color: #34407F; blue: 34407F, purple: 482D62 */
   /* background:  #4731B9; */
-  background-image: linear-gradient(-270deg, #4D2B8E 3%, #4D2B8E 100%);
   /* background: linear-gradient(90deg,#F93268, #4731B9); */
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); 
 }
 .navbar {
+  background-color:  #FAFAFA;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); 
   letter-spacing: 0.08em;
+  border-top: 6px solid #A076F1;
   margin-bottom: 1em;
+  color: hsl(0, 0%, 13%);
 }
-.nav-link {
-  color: rgba(250, 250, 250, 0.74);
-  border-bottom: 
-}
+
 .nav-link:hover {
-  color: white;
+  /* color: white; */
 }
 .navbar-brand {
   letter-spacing: 0.1em;
   margin-right: 1rem;
 }
 .blockzeus-comment {
-  color: #BEFA5A !important;
+  /* color: rgb(74, 112, 14) !important; */
   font-size: 1.05rem;
 }
 
@@ -78,10 +77,11 @@ body {
 .card {
   margin-bottom: 20px;
   border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
-.card-header {
-  font-size: 1.5em;
-  letter-spacing: 0.05em;
+.card-title {
+  font-size: 1.8em;
+  letter-spacing: 0.04em;
 }
 .fa-ul {
   line-height: 2em;
@@ -89,6 +89,8 @@ body {
   margin-left: 1.75em;
 }
 .card-section {
+  border-left: 3px solid #A076F1;
+  /* border-left: 3px solid #4C9F70; */
   /* box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); */
   box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.2);
 }
@@ -228,6 +230,6 @@ body {
 
 
 .page-footer {
-  background:  #4731B9;
-  color: whitesmoke;
+  background: #F5F5F5;
+  /* color: whitesmoke; */
 }
