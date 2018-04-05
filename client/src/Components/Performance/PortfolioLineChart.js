@@ -89,14 +89,14 @@ class PortfolioLineChart extends Component {
       stroke: 'none',
       'stroke-width': 1,
       style: {
-        color: '#4731B9',
+        color: '#A076F1',
         fontWeight: 'bold',
       },
       states: {
         hover: {
         },
         select: {
-          fill: '#4731B9',
+          fill: '#A076F1',
           style: {
             color: 'white',
           },
