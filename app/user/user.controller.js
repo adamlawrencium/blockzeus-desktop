@@ -145,7 +145,7 @@ exports.accountPut = function (req, res) {
       } else if (err && err.code === 11000) {
         res.status(409).send({ msg: 'The email address you have entered is already associated with another account.' });
       } else {
-        res.send({ user, msg: 'Your profile information has been updated.' });
+        res.send({ accountInfo: user, msg: 'Your profile information has been updated.' });
       }
     });
   });
@@ -192,8 +192,6 @@ exports.verifyPoloniex = function (req, res) {
     });
   });
 };
-
-
 
 
 /**
