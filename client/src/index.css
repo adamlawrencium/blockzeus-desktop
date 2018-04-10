@@ -1,6 +1,6 @@
 body {
   background-color: #F5F5F5;
-  font-family: 'Barlow';
+  font-family: 'Barlow' !important;
 }
 .container-fluid {
   max-width: 1280px;
@@ -80,7 +80,7 @@ body {
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 }
 .card-title {
-  font-size: 1.8em;
+  font-size: 1.5em;
   letter-spacing: 0.04em;
 }
 .fa-ul {
@@ -112,6 +112,7 @@ body {
   font-weight: 700;
   text-decoration: underline;
 }
+
 
 /* Account Panel */
 .panel {

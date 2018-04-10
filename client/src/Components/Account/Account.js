@@ -5,7 +5,7 @@ import Navbar from '../Site/Navbar';
 import { history } from '../../_helpers';
 import { userService } from '../../_services/user.service';
 import { userActions } from '../../_actions';
-import { testPoloniexIntegration } from '../../API/poloniex';
+import { testPoloniexIntegration, verifyPoloniex } from '../../API/poloniex';
 
 
 class Account extends Component {
@@ -44,11 +44,16 @@ class Account extends Component {
     // test integration
     testPoloniexIntegration()
       .then((worked) => {
-        this.setState({ testingPoloniex: false });
-        this.setState({ testedPoloniex: true });
-        this.setState({ poloniexWorks: true });
+        // send another request to verify poloniex - refactor this!
+        userService.verifyPoloniex().then((res) => {
+          dispatch(userActions.poloniexWorks());
+          this.setState({ testingPoloniex: false });
+          this.setState({ testedPoloniex: true });
+          this.setState({ poloniexWorks: true });
+        });
       })
       .catch((error) => {
+        console.log('error caught', error);
         this.setState({ testingPoloniex: false });
         this.setState({ testedPoloniex: true });
         this.setState({ poloniexWorks: false });

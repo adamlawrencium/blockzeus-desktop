@@ -34,9 +34,9 @@ class Dashboard extends Component {
 
   detectUserWithoutExchangeKeys() {
     const { authentication } = this.props;
-    if (authentication.loggedIn && authentication.user.token !== 'DEMO') {
+    if (authentication.loggedIn && JSON.parse(localStorage.getItem('user')).token !== 'DEMO') {
       console.log(authentication);
-      if (!authentication.user.accountInfo.poloniexKey) {
+      if (!authentication.user.accountInfo.poloniexVerified) {
         console.log('NO KEYS FOUND BRO');
         return true;
       }
@@ -146,7 +146,7 @@ class Dashboard extends Component {
 
           {/* NEW USER NO KEYS ALERT */}
           {/* {this.renderNewUserWithoutKeysAlert()} */}
-          {this.detectUserWithoutExchangeKeys()}
+          {/* {this.detectUserWithoutExchangeKeys()} */}
 
           {/* INFO ALERT */}
           {/* {this.renderInfoAlert()} */}

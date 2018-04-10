@@ -1,7 +1,7 @@
 const createAuthHeader = () => {
   let authToken = JSON.parse(localStorage.getItem('user')).token;
   if (!authToken) { authToken = 'DEMO'; }
-  console.log(authToken);
+  // console.log(authToken);
   return {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -134,6 +134,22 @@ export async function testPoloniexIntegration() {
     });
   });
 }
+
+// export async function verifyPoloniex() {
+//   return new Promise(async (resolve, reject) => {
+//     fetch('poloniex/verifyPoloniex', createAuthHeader()).then(async (res) => {
+//       if (res.ok) {
+//         const sampleData = await res.json();
+//         if (sampleData) {
+//           console.log(sampleData);
+//           resolve(true);
+//         }
+//       } else {
+//         reject(res.statusText);
+//       }
+//     });
+//   });
+// }
 
 function poloObjectToArray(obj) {
   const a = [];

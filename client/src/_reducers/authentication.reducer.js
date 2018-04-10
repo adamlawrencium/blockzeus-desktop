@@ -10,7 +10,7 @@ if (!user) {
   initialState = { loggedIn: false };
 } else {
   // console.log('user found');
-  initialState = { loggedIn: true, user };
+  initialState = { loggedIn: true, user, poloniexIntegrationVerified: false };
 }
 
 export function authentication(state = initialState, action) {
@@ -31,6 +31,12 @@ export function authentication(state = initialState, action) {
       console.log('logged out bro');
       return {
         loggedIn: false,
+      };
+    case 'POLONIEXWORKS':
+      return {
+        loggedIn: true,
+        user: action.user,
+        poloniexIntegrationVerified: true,
       };
     default:
       return state;

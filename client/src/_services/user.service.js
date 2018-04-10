@@ -10,6 +10,7 @@ export const userService = {
   getAll,
   getById,
   updatePoloniexCreds,
+  verifyPoloniex,
   update,
   delete: _delete,
 };
@@ -75,7 +76,27 @@ function updatePoloniexCreds(poloniexKey, poloniexSecret) {
     .then((updatedAccount) => {
       console.log(updatedAccount);
       return updatedAccount;
-    });
+    })
+    .catch(err => err);
+}
+
+function verifyPoloniex() {
+  const requestOptions = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      authorization: `Bearer ${JSON.parse(localStorage.getItem('user')).token}`,
+    },
+    body: qs.stringify({ poloniexWorks: true }),
+  };
+  console.log(requestOptions);
+  return fetch('/user/verifyPoloniex', requestOptions)
+    .then(handleResponse)
+    .then((updatedAccount) => {
+      console.log(updatedAccount);
+      return updatedAccount;
+    })
+    .catch(err => err);
 }
 
 

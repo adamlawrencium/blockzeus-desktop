@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema({
   blah: String,
   poloniexKey: String,
   poloniexSecret: String,
+  poloniexVerified: Boolean,
   connectedExchanges: { type: mongoose.Schema.Types.Mixed },
 }, schemaOptions);
 
