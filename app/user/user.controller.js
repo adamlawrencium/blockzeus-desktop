@@ -162,19 +162,39 @@ exports.poloniexPut = function (req, res) {
         msg: 'Can\'t find user, shits messed up',
       }]);
     }
-    console.log('$$$$$$$$$$$$', user);
     user.poloniexKey = req.body.poloniexKey;
     user.poloniexSecret = req.body.poloniexSecret;
-    console.log('############', user);
     user.save((err) => {
       if (err) {
         res.send({ msg: err });
       } else {
+        res.send({ accountInfo: user });
+      }
+    });
+  });
+};
+
+exports.verifyPoloniex = function (req, res) {
+  User.findById(req.user.id, (err, user) => {
+    if (!user) {
+      return res.status(401).send([{ // wrapped in array to match express-validator asserts
+        msg: 'Can\'t find user, shits messed up',
+      }]);
+    }
+    user.poloniexVerified = 'true';
+    user.save((err) => {
+      if (err) {
+        res.send({ msg: err });
+      } else {
+        console.log('saved in db', user);
         res.send(user);
       }
     });
   });
 };
+
+
+
 
 /**
  * DELETE /account

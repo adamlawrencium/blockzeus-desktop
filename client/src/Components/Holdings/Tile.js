@@ -22,7 +22,7 @@ class Tile extends Component {
     return (
       <div className="col-lg-4 col-md-4 col-sm-6">
         <div className={`card  price-${color}`}>
-          <h4 className="card-header d-flex align-items-center">
+          <h4 className="card-header tile-header d-flex align-items-center">
             <i className={`mr-2 cc ${this.props.currency}`} title="{this.props.currency}" />
             {this.props.currency}
             <small className={`text-${percentColor} text-right w-100`}>

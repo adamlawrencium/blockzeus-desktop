@@ -8,6 +8,7 @@ export const userActions = {
   logout,
   register,
   updatePoloniex,
+  poloniexWorks,
   getAll,
   delete: _delete,
 };
@@ -77,6 +78,18 @@ function updatePoloniex(poloniexKey, poloniexSecret) {
   function request(user) { return { type: userConstants.POLO_UPDATE_REQUEST, user }; }
   function success(user) { return { type: userConstants.LOGIN_SUCCESS, user }; }
   function failure(error) { return { type: userConstants.POLO_TEST_FAILURE, error }; }
+}
+
+// Move this to its own reducer. This returns a user because this reducer needs it
+function poloniexWorks(poloniexKey, poloniexSecret) {
+  return (dispatch) => {
+    userService.verifyPoloniex().then((updatedAccount) => {
+      console.log(updatedAccount);
+      dispatch(success(updatedAccount));
+    });
+  };
+
+  function success(user) { return { type: 'POLONIEXWORKS', user }; }
 }
 
 

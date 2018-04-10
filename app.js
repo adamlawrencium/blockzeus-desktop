@@ -94,6 +94,7 @@ app.post('/user/signup', userController.signupPost);
 app.post('/user/login', userController.loginPost);
 app.put('/user/account', userController.ensureAuthenticated, userController.accountPut);
 app.put('/user/poloniex', userController.ensureAuthenticated, userController.poloniexPut);
+app.put('/user/verifyPoloniex', userController.ensureAuthenticated, userController.verifyPoloniex);
 
 app.get('/privbro', userController.ensureAuthenticated, (req, res) => {
   res.json('hi');
