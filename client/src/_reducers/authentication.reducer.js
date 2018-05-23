@@ -1,16 +1,22 @@
 import { userConstants } from '../_constants';
 
 // See which user is currently set
-const user = JSON.parse(localStorage.getItem('user'));
+const userLocalStorage = JSON.parse(localStorage.getItem('user'));
+console.log(userLocalStorage);
 
 // If user doesn't exist, we assume they're new, and we'll set them to DEMO
 // If they exist, then they'll carry on as they left off
 let initialState;
-if (!user) {
+if (!userLocalStorage) {
   initialState = { loggedIn: false };
 } else {
   // console.log('user found');
-  initialState = { loggedIn: true, user, poloniexIntegrationVerified: false };
+  initialState = {
+    loggedIn: true,
+    token: userLocalStorage.token,
+    user: userLocalStorage.user,
+    poloniexIntegrationVerified: false,
+  };
 }
 
 export function authentication(state = initialState, action) {

@@ -188,7 +188,7 @@ exports.verifyPoloniex = function (req, res) {
       if (err) {
         res.send({ msg: err });
       } else {
-        console.log('USER POLONIEX CREDS VERIFIED', user);
+        console.log('USER POLONIEX CREDS VERIFIED');
         res.send(user);
       }
     });

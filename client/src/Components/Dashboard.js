@@ -36,7 +36,7 @@ class Dashboard extends Component {
     const { authentication } = this.props;
     if (authentication.loggedIn && JSON.parse(localStorage.getItem('user')).token !== 'DEMO') {
       console.log(authentication);
-      if (!authentication.user.user.poloniexVerified) {
+      if (!authentication.user.poloniexVerified) {
         console.log('NO KEYS FOUND BRO');
         return true;
       }
