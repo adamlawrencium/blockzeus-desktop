@@ -32,37 +32,16 @@ class Dashboard extends Component {
       .catch(err => console.log(err));
   }
 
-  detectUserWithoutExchangeKeys() {
-    const { authentication } = this.props;
-    if (authentication.loggedIn && JSON.parse(localStorage.getItem('user')).token !== 'DEMO') {
-      console.log(authentication);
-      if (!authentication.user.poloniexVerified) {
-        console.log('NO KEYS FOUND BRO');
-        return true;
-      }
-      return false;
-    }
-  }
-
-  // // If user is not logged in or is a new user, render the info alert
-  // renderInfoAlert() {
-  //   if (this.props.authentication.user) {
-  //     if (this.props.authentication.user.token === 'DEMO') {
-  //       return <InfoAlert />;
+  // detectUserWithoutExchangeKeys() {
+  //   const { authentication } = this.props;
+  //   if (authentication.loggedIn && JSON.parse(localStorage.getItem('user')).token !== 'DEMO') {
+  //     console.log(authentication);
+  //     if (!authentication.user.poloniexVerified) {
+  //       console.log('NO KEYS FOUND BRO');
+  //       return true;
   //     }
+  //     return false;
   //   }
-  //   return (null);
-  // }
-
-  // If a user is logged in but doesn't have keys added, render this alert
-  // renderNewUserWithoutKeysAlert() {
-  //   if (this.props.authentication.loggedIn) {
-  //     const { accountInfo } = this.props.authentication.user;
-  //     if (!(accountInfo.poloniexKey && accountInfo.poloniexSecret)) {
-  //       return <NoKeysAlert />;
-  //     }
-  //   }
-  //   return (null);
   // }
 
   render() {
@@ -120,41 +99,6 @@ class Dashboard extends Component {
       <div className="App" >
         <Navbar />
         <div className="container-fluid">
-
-          {/* NEW USER NO KEYS ALERT */}
-          {/* {this.renderNewUserWithoutKeysAlert()} */}
-          {/* {this.detectUserWithoutExchangeKeys()} */}
-
-          {/* INFO ALERT */}
-          {/* {this.renderInfoAlert()} */}
-          {/* INFO TILES */}
-          <div className="row d-flex h-100 flex-row">
-            <div className="col d-flex flex-column">
-              <div className="card card-body card-section h-100 " >
-                <div className="text-muted">24h Change</div>
-                <h4>15%</h4>
-              </div>
-            </div>
-            <div className="col d-flex flex-column">
-              <div className="card card-body card-section h-100" >
-              <div className="text-muted">Total Change</div>
-                <h4>6.7%</h4>
-              </div>
-            </div>
-            <div className="col d-flex flex-column">
-              <div className="card card-body card-section h-100" >
-              <div className="text-muted">Portfolio Value</div>
-                <h4>$1,923</h4>
-              </div>
-            </div>
-            <div className="col d-flex flex-column">
-              <div className="card card-body card-section h-100" >
-              <div className="text-muted">Asset Count</div>
-                <h4>15</h4>
-              </div>
-            </div>
-          </div>
-
 
           {/* ALLOCATIONS AND PERFORMANCE */}
           <div className="row d-flex h-100 flex-row">
