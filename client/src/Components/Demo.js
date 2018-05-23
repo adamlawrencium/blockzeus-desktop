@@ -78,6 +78,34 @@ class Demo extends Component {
           {/* INFO ALERT */}
           {this.renderInfoAlert()}
 
+          {/* INFO TILES */}
+          <div className="row d-flex h-100 flex-row">
+            <div className="col d-flex flex-column">
+              <div className="card card-body card-section h-100 " >
+                <div className="text-muted">24hr Change</div>
+                <h4>15%</h4>
+              </div>
+            </div>
+            <div className="col d-flex flex-column">
+              <div className="card card-body card-section h-100" >
+                <div className="text-muted">Total Change</div>
+                <h4>6.7%</h4>
+              </div>
+            </div>
+            <div className="col d-flex flex-column">
+              <div className="card card-body card-section h-100" >
+                <div className="text-muted">Total Value</div>
+                <h4>$1,923</h4>
+              </div>
+            </div>
+            <div className="col d-flex flex-column">
+              <div className="card card-body card-section h-100" >
+                <div className="text-muted">Asset Count</div>
+                <h4>15</h4>
+              </div>
+            </div>
+          </div>
+
           {/* ALLOCATIONS AND PERFORMANCE */}
           <div className="row d-flex h-100 flex-row">
             <div className="col-lg-5 d-flex flex-column">

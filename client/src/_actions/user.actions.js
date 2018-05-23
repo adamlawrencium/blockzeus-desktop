@@ -9,6 +9,7 @@ export const userActions = {
   register,
   updatePoloniex,
   poloniexWorks,
+  poloniexFails,
   getAll,
   delete: _delete,
 };
@@ -90,6 +91,17 @@ function poloniexWorks(poloniexKey, poloniexSecret) {
   };
 
   function success(user) { return { type: 'POLONIEXWORKS', user }; }
+}
+// Move this to its own reducer. This returns a user because this reducer needs it
+function poloniexFails(poloniexKey, poloniexSecret) {
+  return (dispatch) => {
+    userService.verifyPoloniex().then((updatedAccount) => {
+      console.log(updatedAccount);
+      dispatch(fail(updatedAccount));
+    });
+  };
+
+  function fail(user) { return { type: 'POLONIEXFAILS', user }; }
 }
 
 

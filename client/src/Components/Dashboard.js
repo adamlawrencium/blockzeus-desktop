@@ -36,7 +36,7 @@ class Dashboard extends Component {
     const { authentication } = this.props;
     if (authentication.loggedIn && JSON.parse(localStorage.getItem('user')).token !== 'DEMO') {
       console.log(authentication);
-      if (!authentication.user.accountInfo.poloniexVerified) {
+      if (!authentication.user.poloniexVerified) {
         console.log('NO KEYS FOUND BRO');
         return true;
       }
@@ -89,6 +89,7 @@ class Dashboard extends Component {
                       </div>
                       <div className="card-body">
                         <p className="lead">BlockZeus works by integrating with your cryptocurrency exchange. Click on which exchange you'd like to connect first! Alternatively, you can view the demo.</p>
+                        <p className="lead">Please make sure you have saved and verified your credentials.</p>
                       </div>
                       <div className="card-footer">
                         <div className="row">
@@ -110,29 +111,6 @@ class Dashboard extends Component {
                   </div>
                 </div>
               </div>
-              {/* <div className="modal show fade" tabIndex={-1} role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-              <div className="modal-dialog modal-dialog-centered h-100 d-flex flex-column justify-content-center my-0" role="document">
-                <div className="modal-content">
-                  <div className="modal-header">
-                    <h5 className="modal-title">Welcome to BlockZeus!</h5>
-                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">×</span>
-                    </button>
-                  </div>
-                  <div className="modal-body">
-                    Thank you for signing up! BlockZeus works by linking your exchange API keys. Head over to your /Account to get started.
-                  </div>
-                  <div className="modal-footer" id="modal-footer">
-                    <div className="col-6">
-                      <button type="button" className="btn btn-block btn-primary">Link Exchange</button>
-                    </div>
-                    <div className="col-6">
-                      <button type="button" className="btn btn-block btn-outline-primary">Demo</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> */}
             </div>
 
           </div>
@@ -150,6 +128,57 @@ class Dashboard extends Component {
 
           {/* INFO ALERT */}
           {/* {this.renderInfoAlert()} */}
+          {/* INFO TILES */}
+          <div className="col-12">
+            <div id="demo-modal" className="card text-center mx-auto">
+              <div className="card-header">
+                Welcome to BlockZeus - let's get started!
+                      </div>
+              <div className="card-body">
+                <p className="lead">BlockZeus works by integrating with your cryptocurrency exchange. Click on which exchange you'd like to connect first! Alternatively, you can view the demo.</p>
+                <p className="lead">Please make sure you have saved and verified your credentials.</p>
+              </div>
+              <div className="card-footer">
+                <div className="row">
+                  <div className="col-5">
+                    {/* <a href="#" className="btn btn-info">Connect to Poloniex</a> */}
+                    <a href="/account" className="btn btn-block btn-info">Link Poloniex</a>
+                  </div>
+                  <div className="col-5">
+                    {/* <a href="#" className="btn btn-info">Connect to Poloniex</a> */}
+                    <a href="/account" className="btn btn-block btn-success">Link Bitfinex (coming soon!)</a>
+                  </div>
+                  <div className="col-2">
+                    <a href="/demo" className="btn btn-block btn-outline-primary">Demo</a>
+                    {/* <a href="#" className="btn btn-info">Connect to Bitfinex (coming soon)</a> */}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row d-flex h-100 flex-row">
+            <div className="col d-flex flex-column">
+              <div className="card card-body card-section h-100 " >
+                <div className="text-muted">24h change</div>
+                <h4>15%</h4>
+              </div>
+            </div>
+            <div className="col d-flex flex-column">
+              <div className="card card-body card-section h-100 text-center" >
+                <h4>All: 6.7%</h4>
+              </div>
+            </div>
+            <div className="col d-flex flex-column">
+              <div className="card card-body card-section h-100 text-center" >
+                <h4>Value: $1,923</h4>
+              </div>
+            </div>
+            <div className="col d-flex flex-column">
+              <div className="card card-body card-section h-100 text-center" >
+                <h4>Asset count: 15</h4>
+              </div>
+            </div>
+          </div>
 
 
           {/* ALLOCATIONS AND PERFORMANCE */}
