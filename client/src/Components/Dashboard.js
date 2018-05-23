@@ -35,7 +35,6 @@ class Dashboard extends Component {
   detectUserWithoutExchangeKeys() {
     const { authentication } = this.props;
     if (authentication.loggedIn && JSON.parse(localStorage.getItem('user')).token !== 'DEMO') {
-      console.log(authentication);
       if (!authentication.user.poloniexVerified) {
         console.log('NO KEYS FOUND BRO');
         return true;
@@ -127,7 +126,6 @@ class Dashboard extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log(state);
   const { authentication } = state;
   const { alert } = state;
   return {

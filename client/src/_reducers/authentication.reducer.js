@@ -2,7 +2,6 @@ import { userConstants } from '../_constants';
 
 // See which user is currently set
 const userLocalStorage = JSON.parse(localStorage.getItem('user'));
-console.log(userLocalStorage);
 
 // If user doesn't exist, we assume they're new, and we'll set them to DEMO
 // If they exist, then they'll carry on as they left off
