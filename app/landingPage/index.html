@@ -26,6 +26,38 @@
     ga('send', 'pageview');
   </script>
 
+  <!-- Start of Async Drift Code -->
+  <script>
+    !function () {
+      var t;
+      if (t = window.driftt = window.drift = window.driftt || [], !t.init) return t.invoked ? void (window.console && console.error && console.error("Drift snippet included twice.")) : (t.invoked = !0,
+        t.methods = ["identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on"],
+        t.factory = function (e) {
+          return function () {
+            var n;
+            return n = Array.prototype.slice.call(arguments), n.unshift(e), t.push(n), t;
+          };
+        }, t.methods.forEach(function (e) {
+          t[e] = t.factory(e);
+        }), t.load = function (t) {
+          var e, n, o, i;
+          e = 3e5, i = Math.ceil(new Date() / e) * e, o = document.createElement("script"),
+            o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + i + "/" + t + ".js",
+            n = document.getElementsByTagName("script")[0], n.parentNode.insertBefore(o, n);
+        });
+    }();
+    drift.SNIPPET_VERSION = '0.3.1';
+    drift.load('3tg7bitupthe');
+  </script>
+  <!-- End of Async Drift Code -->
+  <script>
+
+    // drift.config({
+    //   welcomeMessageDelay: 5000,
+    // })
+
+  </script>
+
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/color.css">
 
@@ -48,20 +80,20 @@
       <div class="container">
         <div class="col-12 text-center">
           <h1 class="heading-lrg primary-color">Your live cryptocurrency portfolio manager</h1>
-          <h2 class="subheading secondary-color mt20">No more excel. No more data imports. Connect your exchange account to BlockZeus and get a live view of your portfolio.</h2>
+          <h2 class="subheading secondary-color mt20">No more Excel. No more data imports. Connect your exchange account to BlockZeus and get a live view of your portfolio.</h2>
           <div class="mt40">
             <!-- <a id="signup" class="button mt10 mr10 primary-color accent-bg">
               <span> Sign Up for Updates! </span>
             </a> -->
             <span>
               <form action="https://blockzeus.us17.list-manage.com/subscribe/post?u=9c629f95f8d0b7374f4982df1&amp;amp;id=1d42d470a9" method="post"
-                id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" novalidate="novalidate" class="container-sml mailchimp flex mb20">
+                id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" novalidate="novalidate" class="container-sml mailchimp flex mb20" style="max-width:510px">
                 <input type="email" value="" name="EMAIL" id="mce-EMAIL" placeholder="Enter your email address" required="required" class="mailchimp-input mobile-text-center">
                 <div aria-hidden="true" style="position: absolute; left: -5000px;">
                   <input type="text" name="b_3198ee66c8baf4d60aa2fee6b_d60e1830e8" tabindex="-1" value="">
                 </div>
                 <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="white-color button no-max-width primary-color accent-bg"
-                  value="Get Demo">
+                  value="Stay Updated &amp; Get Demo">
               </form>
             </span>
             <!-- <a href="/demo" target="_blank" class="white-color button no-max-width primary-color accent-bg">
@@ -459,7 +491,8 @@
         <p class="paragraph mt20 secondary-color">We all hate spam. You won't get any from us.</p>
         <div class="mt40">
           <form action="https://herokuapp.us17.list-manage.com/subscribe/post?u=9c629f95f8d0b7374f4982df1&amp;amp;id=1d42d470a9" method="post"
-            id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" novalidate="novalidate" class="container-sml mailchimp flex mb20" style="max-width:570px;">
+            id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" novalidate="novalidate" class="container-sml mailchimp flex mb20"
+            style="max-width:570px;">
             <input type="email" value="" name="EMAIL" id="mce-EMAIL" placeholder="Your Email Address" required="required" class="mailchimp-input mobile-text-center">
             <div aria-hidden="true" style="position: absolute; left: -5000px;">
               <input type="text" name="b_3198ee66c8baf4d60aa2fee6b_d60e1830e8" tabindex="-1" value="">
