@@ -39,7 +39,7 @@ class Account extends Component {
     this.setState({ testingPoloniex: true });
 
     const { dispatch } = this.props;
-    dispatch(userActions.updatePoloniex(this.state.poloniexKey, this.state.poloniexSecret));
+    // dispatch(userActions.updatePoloniex(this.state.poloniexKey, this.state.poloniexSecret));
 
     // test integration
     testPoloniexIntegration()

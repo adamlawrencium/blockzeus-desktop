@@ -59,7 +59,7 @@ exports.loginPost = function (req, res) {
       if (!isMatch) {
         return res.status(401).send([{ msg: 'Invalid email or password' }]);
       }
-      res.send({ token: generateToken(user), accountInfo: user.toJSON() });
+      res.send({ token: generateToken(user), user: user.toJSON() });
     });
   });
 };
@@ -96,7 +96,7 @@ exports.signupPost = function (req, res) {
     });
     user.save((err) => {
       if (!err) {
-        res.send({ token: generateToken(user), accountInfo: user.toJSON() });
+        res.send({ token: generateToken(user), user: user.toJSON() });
       } else {
         throw Error(err);
       }
@@ -145,7 +145,7 @@ exports.accountPut = function (req, res) {
       } else if (err && err.code === 11000) {
         res.status(409).send({ msg: 'The email address you have entered is already associated with another account.' });
       } else {
-        res.send({ accountInfo: user, msg: 'Your profile information has been updated.' });
+        res.send(user);
       }
     });
   });
@@ -168,7 +168,7 @@ exports.poloniexPut = function (req, res) {
       if (err) {
         res.send({ msg: err });
       } else {
-        res.send({ accountInfo: user });
+        res.send(user);
       }
     });
   });
