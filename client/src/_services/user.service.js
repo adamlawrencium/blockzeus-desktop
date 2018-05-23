@@ -74,7 +74,6 @@ function updatePoloniexCreds(poloniexKey, poloniexSecret) {
   return fetch('/user/poloniex', requestOptions)
     .then(handleResponse)
     .then((updatedAccount) => {
-      console.log(updatedAccount);
       return updatedAccount;
     })
     .catch(err => err);
@@ -93,7 +92,6 @@ function verifyPoloniex() {
   return fetch('/user/verifyPoloniex', requestOptions)
     .then(handleResponse)
     .then((updatedAccount) => {
-      console.log(updatedAccount);
       return updatedAccount;
     })
     .catch(err => err);

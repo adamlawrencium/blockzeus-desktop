@@ -12,7 +12,7 @@ class Account extends Component {
   constructor(props) {
     super(props);
     // User info:
-    let { email, poloniexKey, poloniexSecret } = this.props.authentication.user.user;
+    let { email, poloniexKey, poloniexSecret } = this.props.authentication.user;
     if (!poloniexKey) poloniexKey = 'Example: N0VU8XMP-TSDTA4X5-IJFBMXR9-2TBDVRTM';
     if (!poloniexSecret) poloniexSecret = 'Example: db7afa959e27aa111e1f85dd8bb4f776b3c173daea6c056ee6e9d7aa832230547ac188f344f2272979bcef56531a1ed413849504ca92a1ce2758290355d73280';
     this.state = {
