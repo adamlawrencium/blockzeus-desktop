@@ -141,6 +141,9 @@ img {
 .container-sml {
 	max-width: 470px;
 }
+.container-md {
+  max-width: 520px;
+}
 .section {
   padding: 100px 0;
   overflow: hidden;

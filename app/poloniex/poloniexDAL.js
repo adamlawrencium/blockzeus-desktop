@@ -2,18 +2,12 @@ const sleep = require('sleep');
 const Poloniex = require('poloniex-api-node');
 // const TimeSeriesCache = require('../../utils/timeSeriesCache/cache'); // TODO
 
-/**
- * This data access layer wraps retry and rate limiting functionality
- * around the 'poloniex-api-node' library.
- *
- * @class poloniexDAL
- */
+
 class poloniexDAL {
   constructor() {
-    this.cache = false; // TODO
+    this.cache = false;
     this.lastCall = Date.now();
     this.PERIOD = 14400;
-    this.initializeCache();
   }
 
   // Route all public Poloniex API calls through here
@@ -30,36 +24,11 @@ class poloniexDAL {
           result = await poloPublic_.returnTicker();
           done = true;
         } else if (apiCall === 'chartData') {
-          if (params in this.cache) { // see if data is in our cache
-            const currentTime = Date.now() / 1000;
-            const lastIndex = (this.cache)[params].length - 1;
-            const lastUpdate = (this.cache)[params][lastIndex].date + this.PERIOD;
-            // Checking if theres been a update, if there hasn't just send cached data
-            if (lastUpdate > currentTime) {
-              result = this.cache[params];
-              console.log('Sent cached data for ', params, '.');
-            } else {
-              // Otherwise, pull new data and push it to the cache
-              result = await poloPublic_.returnChartData(
-                params,
-                this.PERIOD,
-                1000000000,
-                9999999999,
-              );
-              (this.cache)[params] = result;
-              console.log('Updated data in cache for ', params, '.');
-            }
+          if (false) { // see if data is in our cache
+            result = this.cache.get(params);
           } else {
-            // If data not in cache, pull the data through a API call
-            //  and push it to the cache
-            result = await poloPublic_.returnChartData(
-              params,
-              this.PERIOD,
-              1000000000,
-              9999999999,
-            );
-            (this.cache)[params] = result;
-            console.log('Loaded new data in cache for ', params, '.');
+            result = await poloPublic_.returnChartData(params, this.PERIOD, 1000000000, 9999999999);
+            console.log('Received', params, 'data.');
           }
           done = true;
         } else {
@@ -140,25 +109,6 @@ class poloniexDAL {
     return dummyData;
   }
 
-  initializeCache() {
-    // Initialization of 12 most common currencies for caching purposes
-    this.common = ['USDT_BTC', 'USDT_XRP', 'USDT_ETH', 'USDT_ETC', 'USDT_LTC',
-      'USDT_STR', 'USDT_BCH', 'USDT_ZEC', 'USDT_XMR', 'USDT_REP', 'USDT_NXT',
-      'USDT_DASH'];
-    this.cache = {};
-
-    const poloPublic_ = new Poloniex({ socketTimeout: 5000 });
-    for (let i = 0; i < this.common.length; i++) {
-      poloPublic_.returnChartData(
-        this.common[i],
-        this.PERIOD,
-        1000000000,
-        9999999999,
-      ).then((data) => {
-        this.cache[this.common[i]] = data;
-      });
-    }
-  }
 }
 
 module.exports = poloniexDAL;
