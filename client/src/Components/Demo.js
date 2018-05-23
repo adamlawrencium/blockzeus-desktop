@@ -36,7 +36,7 @@ class Demo extends Component {
     const { authentication } = this.props;
     if (authentication.loggedIn && authentication.user.token !== 'DEMO') {
       console.log(authentication);
-      if (!authentication.user.accountInfo.poloniexKey) {
+      if (!authentication.user.poloniexKey) {
         console.log('NO KEYS FOUND BRO');
       }
     }
@@ -76,7 +76,7 @@ class Demo extends Component {
           {this.detectUserWithoutExchangeKeys()}
 
           {/* INFO ALERT */}
-          {this.renderInfoAlert()}
+          <InfoAlert />
 
           {/* INFO TILES */}
           <div className="row d-flex h-100 flex-row">
