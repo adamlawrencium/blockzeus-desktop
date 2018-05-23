@@ -30,7 +30,7 @@ function login(email, password) {
       if (response.token) {
         localStorage.setItem('user', JSON.stringify(response));
       }
-      return response;
+      return response.user;
     });
 }
 
