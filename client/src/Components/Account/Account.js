@@ -54,6 +54,7 @@ class Account extends Component {
       })
       .catch((error) => {
         console.log('error caught', error);
+        dispatch(userActions.poloniexFails());
         this.setState({ testingPoloniex: false });
         this.setState({ testedPoloniex: true });
         this.setState({ poloniexWorks: false });
@@ -99,20 +100,20 @@ class Account extends Component {
                 <hr />
                 <form>
                   <div className="form-group">
-                    <label htmlFor="exampleInputEmail1">Email address</label>
-                    <input autoComplete="email" type="email" name="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={this.state.email} onChange={this.handleChange} />
+                    <label>Email address</label>
+                    <input autoComplete="email" type="email" name="email" className="form-control" aria-describedby="emailHelp" value={this.state.email} onChange={this.handleChange} />
                   </div>
                   <div className="row">
                     <div className="col-6">
                       <div className="form-group">
-                        <label htmlFor="exampleInputPassword1">Change Password</label>
-                        <input type="password" className="form-control" id="exampleInputPassword1" placeholder="8-20 characters" />
+                        <label>Change Password</label>
+                        <input type="password" className="form-control" placeholder="8-20 characters" />
                       </div>
                     </div>
                     <div className="col-6">
                       <div className="form-group">
-                        <label htmlFor="exampleInputPassword1">Confirm Password</label>
-                        <input type="password" className="form-control" id="exampleInputPassword1" placeholder="8-20 characters" />
+                        <label>Confirm Password</label>
+                        <input type="password" className="form-control" placeholder="8-20 characters" />
                       </div>
                     </div>
                   </div>
@@ -144,14 +145,14 @@ class Account extends Component {
                   <div className="row">
                     <div className="col-9">
                       <div className="form-group">
-                        <label htmlFor="exampleInputPassword1">Poloniex Key</label>
-                        <input type="text" className="form-control" id="exampleInputPassword1" name="poloniexKey" value={this.state.poloniexKey} onChange={this.handleChange} />
+                        <label>Poloniex Key</label>
+                        <input type="text" className="form-control" name="poloniexKey" value={this.state.poloniexKey} onChange={this.handleChange} />
                       </div>
                     </div>
                   </div>
                   <div className="form-group">
-                    <label htmlFor="exampleInputPassword1">Poloniex Secret</label>
-                    <input type="text" className="form-control" id="exampleInputPassword1" name="poloniexSecret" value={this.state.poloniexSecret} onChange={this.handleChange} />
+                    <label>Poloniex Secret</label>
+                    <input type="text" className="form-control" name="poloniexSecret" value={this.state.poloniexSecret} onChange={this.handleChange} />
                   </div>
                   <div className="row">
                     <div className="col-3">
@@ -178,13 +179,13 @@ class Account extends Component {
                     <div className="col-9">
                       <div className="form-group">
                         <label htmlFor="exampleInputPassword2">Bitfinex Key</label>
-                        <input type="text" className="form-control" id="exampleInputPassword1" placeholder="Example: N0VU8XMP-TSDTA4X5-IJFBMXR9-2TBDVRTM" />
+                        <input type="text" className="form-control" placeholder="Example: N0VU8XMP-TSDTA4X5-IJFBMXR9-2TBDVRTM" />
                       </div>
                     </div>
                   </div>
                   <div className="form-group">
                     <label htmlFor="exampleInputPassword2">Bitfinex Secret</label>
-                    <input type="text" className="form-control" id="exampleInputPassword1" placeholder="Example: db7afa959e27aa111e1f85dd8bb4f776b3c173daea6c056ee6e9d7aa832230547ac188f344f2272979bcef56531a1ed413849504ca92a1ce2758290355d73280" />
+                    <input type="text" className="form-control" placeholder="Example: db7afa959e27aa111e1f85dd8bb4f776b3c173daea6c056ee6e9d7aa832230547ac188f344f2272979bcef56531a1ed413849504ca92a1ce2758290355d73280" />
                   </div>
                   <button type="submit" className="btn btn-primary" disabled>Save and Sync</button>
                 </form>

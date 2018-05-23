@@ -38,6 +38,12 @@ export function authentication(state = initialState, action) {
         user: action.user,
         poloniexIntegrationVerified: true,
       };
+    case 'POLONIEXFAILS':
+      return {
+        loggedIn: true,
+        user: action.user,
+        poloniexIntegrationVerified: false,
+      };
     default:
       return state;
   }
