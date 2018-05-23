@@ -32,17 +32,17 @@ class Dashboard extends Component {
       .catch(err => console.log(err));
   }
 
-  // detectUserWithoutExchangeKeys() {
-  //   const { authentication } = this.props;
-  //   if (authentication.loggedIn && JSON.parse(localStorage.getItem('user')).token !== 'DEMO') {
-  //     console.log(authentication);
-  //     if (!authentication.user.poloniexVerified) {
-  //       console.log('NO KEYS FOUND BRO');
-  //       return true;
-  //     }
-  //     return false;
-  //   }
-  // }
+  detectUserWithoutExchangeKeys() {
+    const { authentication } = this.props;
+    if (authentication.loggedIn && JSON.parse(localStorage.getItem('user')).token !== 'DEMO') {
+      console.log(authentication);
+      if (!authentication.user.poloniexVerified) {
+        console.log('NO KEYS FOUND BRO');
+        return true;
+      }
+      return false;
+    }
+  }
 
   render() {
     // If user is logged in but doesn't have any keys associated with their account, give them a modal
