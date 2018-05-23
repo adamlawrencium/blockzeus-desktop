@@ -135,22 +135,6 @@ export async function testPoloniexIntegration() {
   });
 }
 
-// export async function verifyPoloniex() {
-//   return new Promise(async (resolve, reject) => {
-//     fetch('poloniex/verifyPoloniex', createAuthHeader()).then(async (res) => {
-//       if (res.ok) {
-//         const sampleData = await res.json();
-//         if (sampleData) {
-//           console.log(sampleData);
-//           resolve(true);
-//         }
-//       } else {
-//         reject(res.statusText);
-//       }
-//     });
-//   });
-// }
-
 function poloObjectToArray(obj) {
   const a = [];
   for (const key in obj) {

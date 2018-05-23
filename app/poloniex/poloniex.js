@@ -12,7 +12,7 @@ const router = express.Router();
 const requirePoloniexCredentials = function (req, res, next) {
   if (req.isAuthenticated()) {
     const token = (req.headers.authorization && req.headers.authorization.split(' ')[1]);
-    console.log(req.headers);
+    // console.log(req.headers);
 
     // If user hasn't made an account is on the dashboard
     if (token === 'DEMO') {
@@ -25,8 +25,8 @@ const requirePoloniexCredentials = function (req, res, next) {
     const userID = decoded.sub; // JWT 'sub' = 'subject', which is essentially a user's unique id in mongodb
     User.findById(userID, (err, user) => {
       if (user) {
-        console.log('found user');
-        console.log(user);
+        // console.log('found user');
+        // console.log(user);
 
         // If the user hasn't inputed their creds yet, request data using demo keys
         if (!user.poloniexSecret || !user.poloniexKey) {
@@ -163,6 +163,7 @@ router.get('/performance/', async (req, res) => {
 
 
 router.get('/testIntegration', requirePoloniexCredentials, async (req, res) => {
+  console.log('TESTING POLONIEX INTEGRATION...');
   const p = poloniex.createPrivatePoloInstance(res.locals.poloniexKey, res.locals.poloniexSecret);
   let dw;
   let bs;
@@ -171,9 +172,11 @@ router.get('/testIntegration', requirePoloniexCredentials, async (req, res) => {
       poloniex.private(p, 'depositsWithdrawals'),
       poloniex.private(p, 'tradeHistory'),
     ]);
+    console.log('POLONIEX INTEGRATION WORKED');
     res.json({ dw, bs });
   } catch (error) {
     res.statusMessage = error.message;
+    console.log('POLONIEX INTEGRATION FAILED:', error.message);
     res.status(403).end();
   }
 

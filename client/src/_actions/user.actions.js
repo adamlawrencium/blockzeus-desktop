@@ -28,7 +28,7 @@ function login(email, password) {
           dispatch(failure(error));
           dispatch(alertActions.error(error));
         },
-      );
+    );
   };
 
   function request(user) { return { type: userConstants.LOGIN_REQUEST, user }; }
@@ -67,13 +67,22 @@ function register(user) {
 }
 
 
-function updatePoloniex(poloniexKey, poloniexSecret) {
+// function updatePoloniex(poloniexKey, poloniexSecret) {
+//   return (dispatch) => {
+//     userService.updatePoloniexCreds(poloniexKey, poloniexSecret).then((updatedAccount) => {
+//       // console.log('updated creds', updatedAccount);
+//       console.log(updatedAccount);
+//       dispatch(success(updatedAccount));
+//     });
+//   };
+
+//   function request(user) { return { type: userConstants.POLO_UPDATE_REQUEST, user }; }
+//   function success(user) { return { type: userConstants.LOGIN_SUCCESS, user }; }
+//   function failure(error) { return { type: userConstants.POLO_TEST_FAILURE, error }; }
+// }
+function updatePoloniex(updatedAccount) {
   return (dispatch) => {
-    userService.updatePoloniexCreds(poloniexKey, poloniexSecret).then((updatedAccount) => {
-      // console.log('updated creds', updatedAccount);
-      console.log(updatedAccount);
-      dispatch(success(updatedAccount));
-    });
+    dispatch(success(updatedAccount));
   };
 
   function request(user) { return { type: userConstants.POLO_UPDATE_REQUEST, user }; }
@@ -113,7 +122,7 @@ function getAll() {
       .then(
         users => dispatch(success(users)),
         error => dispatch(failure(error)),
-      );
+    );
   };
 
   function request() { return { type: userConstants.GETALL_REQUEST }; }
@@ -134,7 +143,7 @@ function _delete(id) {
         (error) => {
           dispatch(failure(id, error));
         },
-      );
+    );
   };
 
   function request(id) { return { type: userConstants.DELETE_REQUEST, id }; }

@@ -12,7 +12,7 @@ class Account extends Component {
   constructor(props) {
     super(props);
     // User info:
-    let { email, poloniexKey, poloniexSecret } = this.props.authentication.user.accountInfo;
+    let { email, poloniexKey, poloniexSecret } = this.props.authentication.user.user;
     if (!poloniexKey) poloniexKey = 'Example: N0VU8XMP-TSDTA4X5-IJFBMXR9-2TBDVRTM';
     if (!poloniexSecret) poloniexSecret = 'Example: db7afa959e27aa111e1f85dd8bb4f776b3c173daea6c056ee6e9d7aa832230547ac188f344f2272979bcef56531a1ed413849504ca92a1ce2758290355d73280';
     this.state = {
@@ -34,31 +34,37 @@ class Account extends Component {
     this.setState({ [name]: value });
   }
 
-  handlePoloniexSubmit(e) {
+  async handlePoloniexSubmit(e) {
     e.preventDefault();
     this.setState({ testingPoloniex: true });
 
     const { dispatch } = this.props;
-    // dispatch(userActions.updatePoloniex(this.state.poloniexKey, this.state.poloniexSecret));
 
-    // test integration
-    testPoloniexIntegration()
-      .then((worked) => {
-        // send another request to verify poloniex - refactor this!
-        userService.verifyPoloniex().then((res) => {
-          dispatch(userActions.poloniexWorks());
+    // await dispatch(userActions.updatePoloniex(this.state.poloniexKey, this.state.poloniexSecret));
+    userService.updatePoloniexCreds(this.state.poloniexKey, this.state.poloniexSecret).then((updatedAccount) => {
+      // test integration. if doesn't work, user will simply have to fix it themself
+      dispatch(userActions.updatePoloniex(updatedAccount));
+      testPoloniexIntegration()
+        .then((worked) => {
+          // send another request to verify poloniex - refactor this!
+          userService.verifyPoloniex().then((res) => {
+            dispatch(userActions.poloniexWorks());
+            this.setState({ testingPoloniex: false });
+            this.setState({ testedPoloniex: true });
+            this.setState({ poloniexWorks: true });
+          });
+        })
+        .catch((error) => {
+          console.log('error caught', error);
+          dispatch(userActions.poloniexFails());
           this.setState({ testingPoloniex: false });
           this.setState({ testedPoloniex: true });
-          this.setState({ poloniexWorks: true });
+          this.setState({ poloniexWorks: false });
         });
-      })
-      .catch((error) => {
-        console.log('error caught', error);
-        dispatch(userActions.poloniexFails());
-        this.setState({ testingPoloniex: false });
-        this.setState({ testedPoloniex: true });
-        this.setState({ poloniexWorks: false });
-      });
+    });
+    
+
+      console.log('finished test poloneix integration')
   }
 
   renderPoloniexErrorAlert() {

@@ -164,10 +164,12 @@ exports.poloniexPut = function (req, res) {
     }
     user.poloniexKey = req.body.poloniexKey;
     user.poloniexSecret = req.body.poloniexSecret;
+    user.poloniexVerified = false; // on any change, creds are no longer verified.
     user.save((err) => {
       if (err) {
         res.send({ msg: err });
       } else {
+        console.log('USER POLONIEX CREDS UPDATED');
         res.send(user);
       }
     });
@@ -181,12 +183,12 @@ exports.verifyPoloniex = function (req, res) {
         msg: 'Can\'t find user, shits messed up',
       }]);
     }
-    user.poloniexVerified = 'true';
+    user.poloniexVerified = true;
     user.save((err) => {
       if (err) {
         res.send({ msg: err });
       } else {
-        console.log('saved in db', user);
+        console.log('USER POLONIEX CREDS VERIFIED', user);
         res.send(user);
       }
     });
