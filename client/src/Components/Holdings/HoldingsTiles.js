@@ -69,7 +69,7 @@ class HoldingsTiles extends Component {
     const holdings = JSON.parse(JSON.stringify(holdings_)); // deep copy
 
     // Filter ticker based on holdings
-    let filteredTicker = this.filterTicker(holdings, ticker);
+    const filteredTicker = this.filterTicker(holdings, ticker);
 
     // Normalize data to USDT base
     const BTC_USDT_rate = parseFloat(ticker.USDT_BTC.last);
@@ -159,7 +159,9 @@ class HoldingsTiles extends Component {
       <div className="card card-section" >
         <div className="card-body">
           <div className="row">
-            <div className="col"><h2>Individual Holdings</h2></div>
+            <div className="col">
+              <h2 className="card-title">Individual Holdings</h2>
+            </div>
             <div className="col">
               {/* Sorting */}
               <span className="float-right">
@@ -181,7 +183,7 @@ class HoldingsTiles extends Component {
           {this.props.ticker.USDT_BTC && Object.keys(this.props.holdings).length ? (
             this.renderTiles(this.state.tileSortBy)
           ) : (
-            this.renderLoading()
+              this.renderLoading()
             )}
         </div>
       </div>

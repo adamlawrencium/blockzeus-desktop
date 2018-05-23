@@ -1,6 +1,6 @@
 const sleep = require('sleep');
 const Poloniex = require('poloniex-api-node');
-const TimeSeriesCache = require('../../utils/timeSeriesCache/cache'); // TODO
+// const TimeSeriesCache = require('../../utils/timeSeriesCache/cache'); // TODO
 
 
 class poloniexDAL {
@@ -71,8 +71,15 @@ class poloniexDAL {
           throw Error('BZ: Invalid API Call');
         }
       } catch (err) {
-        console.log('Error happened, retrying...', err);
-        sleep.msleep(300); // abide by rate limits and avoid nonce issue
+        if (err.message.includes('Invalid API')) { // Error: Poloniex error 403: Forbidden. Invalid API key/secret pair.
+          console.log(err.message);
+          throw new Error(err.message);
+        } else if (err.message.includes('Nonce')) {
+          console.log(err.message);
+          sleep.msleep(300); // abide by rate limits and avoid nonce issue
+        } else {
+          console.log('### Other error: ', err);
+        }
       }
       if (done) {
         break;
@@ -82,9 +89,7 @@ class poloniexDAL {
   }
 
   // Creates an instance of Poloniex for private commands
-  createPrivatePoloInstance(auth) {
-    const key = 'GTTSHNIZ-V4EYK5K9-4QT6XXS8-EPGJ9G5F';
-    const secret = '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f9847e55edb39685c69350c9536c9f0f26d5b70804415859bfb90408ae364c19d';
+  createPrivatePoloInstance(key, secret) {
     return (new Poloniex(key, secret, { socketTimeout: 5000 }));
   }
 

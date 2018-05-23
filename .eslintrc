@@ -1,42 +1,45 @@
 {
-    "parser": "babel-eslint",
-    "extends": "airbnb",
-    "plugins": [
-        "react",
-        "import"
+  "parser": "babel-eslint",
+  "extends": "airbnb",
+  "plugins": [
+    "react",
+    "import"
+  ],
+  "env": {
+    "browser": true,
+    "node": true,
+    "jasmine": true
+  },
+  "rules": {
+    "no-use-before-define": "off",
+    "no-return-assign": "off",
+    "import/no-unresolved": "off",
+    "no-console": "off",
+    "no-plusplus": [
+      "error",
+      {
+        "allowForLoopAfterthoughts": true
+      }
     ],
-    "rules": {
-        "no-use-before-define": "off",
-        "no-return-assign": "off",
-        "import/no-unresolved": "off",
-        "no-console": "off",
-        "no-plusplus": [
-            "error",
-            {
-                "allowForLoopAfterthoughts": true
-            }
-        ],
-        "max-len": [
-            "error",
-            {
-                "code": 100,
-                "ignoreComments": true,
-                "ignoreStrings": true
-            }
-        ],
-        "class-methods-use-this": "off",
-        "no-await-in-loop": "off",
-        "no-template-curly-in-string": "off",
-        "no-underscore-dangle": "off",
-        "import/prefer-default-export": "off",
-        
-        "react/jsx-filename-extension": "off",
-        "react/prefer-stateless-function": "off",
-        
-        "jsx-a11y/click-events-have-key-events": "off",
-        "jsx-a11y/label-has-for": "off",
-        "jsx-a11y/no-noninteractive-element-interactions": "off",
-        "jsx-a11y/anchor-is-valid": "off"
-
-    }
+    "max-len": [
+      "error",
+      {
+        "code": 100,
+        "ignoreComments": true,
+        "ignoreStrings": true
+      }
+    ],
+    "class-methods-use-this": "off",
+    "no-await-in-loop": "off",
+    "no-template-curly-in-string": "off",
+    "no-underscore-dangle": "off",
+    "import/prefer-default-export": "off",
+    "func-names": "off",
+    "react/jsx-filename-extension": "off",
+    "react/prefer-stateless-function": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/label-has-for": "off",
+    "jsx-a11y/no-noninteractive-element-interactions": "off",
+    "jsx-a11y/anchor-is-valid": "off"
+  }
 }

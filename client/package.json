@@ -12,10 +12,16 @@
     "react-highcharts": "^15.0.0",
     "react-jsx-highcharts": "^2.0.3",
     "react-jsx-highstock": "^2.0.3",
+    "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.17",
     "react-twitter-widgets": "^1.7.1",
-    "reactstrap": "^5.0.0-alpha.4"
+    "react-validate-form": "^1.0.6",
+    "reactstrap": "^5.0.0-alpha.4",
+    "redux": "^3.7.2",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.2.0",
+    "whatwg-fetch": "^2.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
