@@ -12,6 +12,7 @@ import RegisterPage from './Account/RegisterPage';
 import Dashboard from '../Components/Dashboard';
 import Demo from '../Components/Demo';
 import NotFound from './Site/NotFound';
+import LandingPage from './Site/LandingPage';
 
 // import '../App.css';
 
@@ -33,6 +34,7 @@ class App extends React.Component {
         <Switch>
           {/* <Route exact path="/" component={Dashboard} /> */}
           <Route exact path="/demo" component={Demo} />
+          <PublicOnly exact path="/" component={LandingPage} />
           <PublicOnly exact path="/login" component={LoginPage} />
           <PublicOnly exact path="/register" component={RegisterPage} />
           <PrivateRoute exact path="/dashboard" component={Dashboard} />
