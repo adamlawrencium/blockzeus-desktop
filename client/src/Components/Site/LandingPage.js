@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import Navbar from './Navbar';
 
-import './color.css';
-import './main.css';
+import './landing_color.css';
+import './landing_main.css';
 
 class LandingPage extends Component {
-
 
   render() {
     return (
