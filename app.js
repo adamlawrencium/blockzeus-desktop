@@ -81,12 +81,12 @@ app.use((req, res, next) => {
 
 
 // SEND REACT APP
-app.get('/demo', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(path.join(`${__dirname}/client/build/index.html`));
 });
 
 // ROUTES
-app.use('/', landingPage);
+// app.use('/', landingPage);
 
 app.use('/poloniex', poloniex);
 
