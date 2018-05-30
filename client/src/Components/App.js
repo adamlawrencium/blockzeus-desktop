@@ -2,6 +2,8 @@ import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import ReactGA from 'react-ga';
+
 import { history } from '../_helpers';
 import { alertActions } from '../_actions';
 import { PrivateRoute, PublicOnly } from '../_components';
@@ -16,6 +18,8 @@ import LandingPage from './Site/LandingPage';
 
 // import '../App.css';
 
+ReactGA.initialize('UA-58206630-6'); // Unique Google Analytics tracking number
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -27,10 +31,14 @@ class App extends React.Component {
     // });
   }
 
+  fireTracking() {
+    ReactGA.pageview(window.location.hash);
+  }
+
   render() {
     const { alert } = this.props; // TODO: add success/alert messages
     return (
-      <Router history={history}>
+      <Router onUpdate={this.fireTracking} history={history}>
         <Switch>
           {/* <Route exact path="/" component={Dashboard} /> */}
           <Route exact path="/demo" component={Demo} />
