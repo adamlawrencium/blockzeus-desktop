@@ -80,10 +80,7 @@ app.use((req, res, next) => {
 });
 
 
-// SEND REACT APP
-app.get('/', (req, res) => {
-  res.sendFile(path.join(`${__dirname}/client/build/index.html`));
-});
+
 
 // ROUTES
 // app.use('/', landingPage);
@@ -100,6 +97,10 @@ app.get('/privbro', userController.ensureAuthenticated, (req, res) => {
   res.json('hi');
 });
 
+// SEND REACT APP
+app.get('*', (req, res) => {
+  res.sendFile(path.join(`${__dirname}/client/build/index.html`));
+});
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
