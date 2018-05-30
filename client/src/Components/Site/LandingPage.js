@@ -5,7 +5,6 @@ import './landing_color.css';
 import './landing_main.css';
 
 class LandingPage extends Component {
-
   render() {
     return (
       <div>
@@ -31,12 +30,12 @@ class LandingPage extends Component {
               <span> Sign Up for Updates! </span>
             </a> */}
                   <span>
-                    <form action="https://blockzeus.us17.list-manage.com/subscribe/post?u=9c629f95f8d0b7374f4982df1&amp;id=1d42d470a9" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" noValidate="novalidate" className="container-sml mailchimp flex mb20" style={{ maxWidth: 510 }}>
-                      <input type="email" defaultValue name="EMAIL" id="mce-EMAIL" placeholder="Enter your email address" required="required" className="mailchimp-input mobile-text-center" />
-                      <div aria-hidden="true" style={{ position: 'absolute', left: '-5000px' }}>
-                        <input type="text" name="b_3198ee66c8baf4d60aa2fee6b_d60e1830e8" tabIndex={-1} defaultValue />
-                      </div>
-                      <input type="submit" name="subscribe" id="mc-embedded-subscribe" className="white-color button no-max-width primary-color accent-bg" defaultValue="Stay Updated & Get Demo" />
+                    <form id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" noValidate="novalidate" className="container-sml mailchimp flex mb20">
+                      <input type="email" id="mce-EMAIL" placeholder="Enter your email address" required="required" className="mailchimp-input mobile-text-center" />
+                      {/* <div aria-hidden="true" style={{ position: 'absolute', left: '-5000px' }}>
+                        <input type="text" name="b_3198ee66c8baf4d60aa2fee6b_d60e1830e8" tabIndex={-1} />
+                      </div> */}
+                      <a href="/register" type="button" id="mc-embedded-subscribe" className="white-color button no-max-width primary-color accent-bg" defaultValue="Sign Up">Sign Up</a>
                     </form>
                   </span>
                   {/* <a href="/demo" target="_blank" class="white-color button no-max-width primary-color accent-bg">
@@ -114,6 +113,17 @@ class LandingPage extends Component {
                 <div className>
                   <img src="images/expose.png" alt="Screenshot of small App" className="custom-img" />
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        {/* DEMO SECTION */}
+        <section className="section fuschia-white pt-0 pb-5">
+          <div className="container text-center">
+            <div className="col-12">
+              <h2 className="primary-color">Check out the demo!</h2>
+              <div className="mt40">
+                  <a href="/demo" type="button" id="mc-embedded-subscribe" className="white-color button no-max-width primary-color accent-bg" defaultValue="Sign Up">Take me to the demo</a>
               </div>
             </div>
           </div>
@@ -416,19 +426,20 @@ class LandingPage extends Component {
             </div>
           </div>
         </section>
+        
         {/* FINAL SIGN UP */}
         <section className="section fuschia-black">
           <div className="container text-center">
             <div className="col-12">
-              <h4 id="calltoaction" className="heading primary-color">Stay updated and get access to the demo.</h4>
+              <h4 id="calltoaction" className="heading primary-color">Jump into your new portfolio manager today.</h4>
               <p className="paragraph mt20 secondary-color">We all hate spam. You won't get any from us.</p>
               <div className="mt40">
-                <form action="https://herokuapp.us17.list-manage.com/subscribe/post?u=9c629f95f8d0b7374f4982df1&amp;id=1d42d470a9" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" noValidate="novalidate" className="container-sml mailchimp flex mb20" style={{ maxWidth: 570 }}>
-                  <input type="email" defaultValue name="EMAIL" id="mce-EMAIL" placeholder="Your Email Address" required="required" className="mailchimp-input mobile-text-center" />
-                  <div aria-hidden="true" style={{ position: 'absolute', left: '-5000px' }}>
-                    <input type="text" name="b_3198ee66c8baf4d60aa2fee6b_d60e1830e8" tabIndex={-1} defaultValue />
-                  </div>
-                  <input type="submit" name="subscribe" id="mc-embedded-subscribe" className="white-color button no-max-width primary-color accent-bg" defaultValue="Stay Updated & Get Demo" />
+                <form id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" noValidate="novalidate" className="container-sml mailchimp flex mb20">
+                  <input type="email" id="mce-EMAIL" placeholder="Enter your email address" required="required" className="mailchimp-input mobile-text-center" />
+                  {/* <div aria-hidden="true" style={{ position: 'absolute', left: '-5000px' }}>
+                        <input type="text" name="b_3198ee66c8baf4d60aa2fee6b_d60e1830e8" tabIndex={-1} />
+                      </div> */}
+                  <a href="/register" type="button" id="mc-embedded-subscribe" className="white-color button no-max-width primary-color accent-bg" defaultValue="Sign Up">Sign Up</a>
                 </form>
               </div>
             </div>
@@ -452,5 +463,5 @@ class LandingPage extends Component {
       </div>
     );
   }
-};
+}
 export default LandingPage;
