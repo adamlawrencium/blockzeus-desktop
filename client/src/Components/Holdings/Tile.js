@@ -44,7 +44,7 @@ class Tile extends Component {
             </div>
 
             {/* <p>Value (USD): {this.props.value}</p> */}
-            <a href="https://poloniex.com/exchange#usdt_btc" className="btn btn-outline-primary btn-sm btn-block" target="_blank">Trade</a>
+            <a href="https://poloniex.com/exchange#usdt_btc" className="btn btn-outline-primary btn-sm btn-block" target="_blank">View Pair on Poloniex</a>
           </div>
         </div>
       </div>
