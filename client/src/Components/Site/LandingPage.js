@@ -35,7 +35,7 @@ class LandingPage extends Component {
                       {/* <div aria-hidden="true" style={{ position: 'absolute', left: '-5000px' }}>
                         <input type="text" name="b_3198ee66c8baf4d60aa2fee6b_d60e1830e8" tabIndex={-1} />
                       </div> */}
-                      <a href="/register" type="button" id="mc-embedded-subscribe" className="white-color button no-max-width primary-color accent-bg" defaultValue="Sign Up">Sign Up</a>
+                      <a href="/register" type="button" id="mc-embedded-subscribe" className="button no-max-width primary-color accent-bg" defaultValue="Sign Up">Sign Up</a>
                     </form>
                   </span>
                   {/* <a href="/demo" target="_blank" class="white-color button no-max-width primary-color accent-bg">
@@ -439,7 +439,7 @@ class LandingPage extends Component {
                   {/* <div aria-hidden="true" style={{ position: 'absolute', left: '-5000px' }}>
                         <input type="text" name="b_3198ee66c8baf4d60aa2fee6b_d60e1830e8" tabIndex={-1} />
                       </div> */}
-                  <a href="/register" type="button" id="mc-embedded-subscribe" className="white-color button no-max-width primary-color accent-bg" defaultValue="Sign Up">Sign Up</a>
+                  <a href="/register" type="button" id="mc-embedded-subscribe" className="btn btn-primary" defaultValue="Sign Up">Sign Up</a>
                 </form>
               </div>
             </div>
