@@ -123,7 +123,7 @@ class LandingPage extends Component {
             <div className="col-12">
               <h2 className="primary-color">Check out the demo!</h2>
               <div className="mt40">
-                  <a href="/demo" type="button" id="mc-embedded-subscribe" className="white-color button no-max-width primary-color accent-bg" defaultValue="Sign Up">Take me to the demo</a>
+                <a href="/demo" type="button" id="mc-embedded-subscribe" className="white-color button no-max-width primary-color accent-bg" defaultValue="Sign Up">Take me to the demo</a>
               </div>
             </div>
           </div>
@@ -426,7 +426,7 @@ class LandingPage extends Component {
             </div>
           </div>
         </section>
-        
+
         {/* FINAL SIGN UP */}
         <section className="section fuschia-black">
           <div className="container text-center">
@@ -439,7 +439,7 @@ class LandingPage extends Component {
                   {/* <div aria-hidden="true" style={{ position: 'absolute', left: '-5000px' }}>
                         <input type="text" name="b_3198ee66c8baf4d60aa2fee6b_d60e1830e8" tabIndex={-1} />
                       </div> */}
-                  <a href="/register" type="button" id="mc-embedded-subscribe" className="btn btn-primary" defaultValue="Sign Up">Sign Up</a>
+                  <a href="/register" type="button" id="mc-embedded-subscribe" className="button no-max-width primary-color accent-bg" defaultValue="Sign Up">Sign Up</a>
                 </form>
               </div>
             </div>
@@ -452,7 +452,7 @@ class LandingPage extends Component {
               <a href="#" className="nav-link secondary-color">Terms</a>
               <a href="#" className="nav-link secondary-color">Privacy</a>
               <a href="#" className="nav-link secondary-color">Careers</a>
-              <a href="#" className="nav-link secondary-color">Contact</a>
+              <a href="mailto:contact@blockzeus.com" className="nav-link secondary-color">Contact</a>
             </nav>
             <div className="mt50">
               <span className="span secondary-color">©</span>
