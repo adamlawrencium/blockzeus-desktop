@@ -151,6 +151,10 @@ img {
 }
 
 /*button*/
+#mc-embedded-subscribe {
+  -webkit-appearance: none !important;
+}
+
 .button {
 	display: inline-block;
 	padding: 15px 20px;
