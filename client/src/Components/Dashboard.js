@@ -52,44 +52,30 @@ class Dashboard extends Component {
       return (
         <div>
           <Navbar />
-          <div className="container-fluid">
-            <div className="row">
-              <div className="App blurredBackground">
-                <div className="blurredBackground" style={{ backgroundImage: `url(${blurredImage})`, height: '100%' }}>
-                  {/* <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-              Launch demo modal
-            </button> */}
-                  <div className="col-12">
-                    <div id="demo-modal" className="card text-center mx-auto">
-                      <div className="card-header">
-                        Welcome to BlockZeus - let's get started!
-                      </div>
-                      <div className="card-body">
-                        <p className="lead">BlockZeus works by integrating with your cryptocurrency exchange. Click on which exchange you'd like to connect first! Alternatively, you can view the demo.</p>
-                        <p className="lead">Please make sure you have saved and verified your credentials.</p>
-                      </div>
-                      <div className="card-footer">
-                        <div className="row">
-                          <div className="col-5">
-                            {/* <a href="#" className="btn btn-info">Connect to Poloniex</a> */}
-                            <a href="/account" className="btn btn-block btn-info">Link Poloniex</a>
-                          </div>
-                          <div className="col-5">
-                            {/* <a href="#" className="btn btn-info">Connect to Poloniex</a> */}
-                            <a href="/account" className="btn btn-block btn-success">Link Bitfinex (coming soon!)</a>
-                          </div>
-                          <div className="col-2">
-                            <a href="/demo" className="btn btn-block btn-outline-primary">Demo</a>
-                            {/* <a href="#" className="btn btn-info">Connect to Bitfinex (coming soon)</a> */}
-                          </div>
-                        </div>
-                      </div>
+          <div className="App">
+            <div className="col-12">
+              <div id="demo-modal" className="card text-center mx-auto">
+                <div className="card-header">
+                  Welcome to BlockZeus - let's get started!
+                </div>
+                <div className="card-body">
+                  <p className="lead">BlockZeus syncs with your exchange account to give you a live portfolio dashboard. Click on "Link Poloniex" below to connect now! Alternatively, you can view the demo.</p>
+                </div>
+                <div className="card-footer">
+                  <div className="row">
+                    <div className="col-5">
+                      <a href="/account" className="btn btn-block btn-info">Link Poloniex</a>
+                    </div>
+                    <div className="col-5">
+                      <a href="/account" className="btn btn-block btn-outline-success disabled" >Link Bitfinex (coming soon!)</a>
+                    </div>
+                    <div className="col-2">
+                      <a href="/demo" className="btn btn-block btn-outline-primary">Demo</a>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       );
