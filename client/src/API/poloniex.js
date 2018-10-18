@@ -1,3 +1,7 @@
+const PoloniexDAL = require('./poloniexDAL').default;
+const poloniex = new PoloniexDAL();
+
+
 const createAuthHeader = () => {
   let authToken = JSON.parse(localStorage.getItem('user')).token;
   if (!authToken) { authToken = 'DEMO'; }
@@ -19,23 +23,34 @@ const createDemoAuthHeader = () => {
   };
 };
 
-export function fetchPoloniexTicker() {
+export async function fetchPoloniexTicker() {
   console.log('calling /poloniex/ticker');
-  return new Promise((resolve, reject) => {
-    fetch('/poloniex/ticker').then((res) => {
-      if (!res.ok) {
-        reject(res);
-      } else {
-        res.json().then((data) => {
-          resolve(data);
-        });
-      }
-    });
-  });
+  const ticker = await poloniex.public('ticker');
+  console.log(ticker);
+  return ticker;
+  // return new Promise(async (resolve, reject) => {
+
+  //   fetch('/poloniex/ticker').then((res) => {
+  //     if (!res.ok) {
+  //       reject(res);
+  //     } else {
+  //       res.json().then((data) => {
+  //         resolve(data);
+  //       });
+  //     }
+  //   });
+  // });
 }
 
-export function fetchPoloniexCompleteBalances() {
+export async function fetchPoloniexCompleteBalances() {
   console.log('calling /poloniex/completeBalances');
+  // const p = (new Poloniex('GTTSHNIZ-V4EYK5K9-4QT6XXS8-EPGJ9G5F', '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f9847e55edb39685c69350c9536c9f0f26d5b70804415859bfb90408ae364c19d', { socketTimeout: 5000 }));
+  // const p = poloniex.createPrivatePoloInstance(res.locals.poloniexKey, res.locals.poloniexSecret);
+  const p = poloniex.createPrivatePoloInstance('GTTSHNIZ-V4EYK5K9-4QT6XXS8-EPGJ9G5F', '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f9847e55edb39685c69350c9536c9f0f26d5b70804415859bfb90408ae364c19d', { nonce: () => new Date().time() });
+  const balances = await poloniex.private(p, 'balances');
+  console.log(balances);
+  return balances;
+
   return new Promise((resolve, reject) => {
     fetch('/poloniex/completeBalances', createAuthHeader()).then((res) => {
       if (!res.ok) {

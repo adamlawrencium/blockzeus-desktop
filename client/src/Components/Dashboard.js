@@ -37,9 +37,9 @@ class Dashboard extends Component {
     if (authentication.loggedIn && JSON.parse(localStorage.getItem('user')).token !== 'DEMO') {
       if (!authentication.user.poloniexVerified) {
         console.log('NO KEYS FOUND BRO');
-        return true;
+        return false;
       }
-      return false;
+      return false; // BRUTE FORCE that user has keys
     }
   }
 
