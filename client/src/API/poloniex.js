@@ -43,6 +43,7 @@ export async function fetchPoloniexTicker() {
 }
 
 export async function fetchPoloniexCompleteBalances() {
+  return;
   console.log('calling /poloniex/completeBalances');
   // const p = (new Poloniex('GTTSHNIZ-V4EYK5K9-4QT6XXS8-EPGJ9G5F', '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f9847e55edb39685c69350c9536c9f0f26d5b70804415859bfb90408ae364c19d', { socketTimeout: 5000 }));
   // const p = poloniex.createPrivatePoloInstance(res.locals.poloniexKey, res.locals.poloniexSecret);
@@ -66,6 +67,7 @@ export async function fetchPoloniexCompleteBalances() {
 }
 
 export function fetchDemoPoloniexCompleteBalances() {
+  return;
   console.log('calling /poloniex/completeBalances');
   return new Promise((resolve, reject) => {
     fetch('/poloniex/completeBalances', createDemoAuthHeader()).then((res) => {
@@ -83,6 +85,7 @@ export function fetchDemoPoloniexCompleteBalances() {
 
 export function fetchTradeHistory(pair) {
   console.log('calling /poloniex/tradeHistory');
+  return;
   return new Promise((resolve, reject) => {
     fetch(`/poloniex/tradeHistory/${pair}`, createAuthHeader()).then((res) => {
       if (!res.ok) {
@@ -97,6 +100,7 @@ export function fetchTradeHistory(pair) {
 }
 
 export function fetchPortfolioPerformance(pair) {
+  return;
   return new Promise((resolve, reject) => {
     fetch('/poloniex/performance', createAuthHeader()).then((res) => {
       if (!res.ok) {
@@ -111,6 +115,7 @@ export function fetchPortfolioPerformance(pair) {
 }
 
 export async function fetchFullPortfolioPerformance() {
+  return;
   return new Promise(async (resolve, reject) => {
     fetch('poloniex/fullPerformance', createAuthHeader()).then(async (res) => {
       if (res.ok) {
@@ -123,6 +128,7 @@ export async function fetchFullPortfolioPerformance() {
 }
 
 export async function fetchFullDemoPortfolioPerformance() {
+  return;
   return new Promise(async (resolve, reject) => {
     fetch('poloniex/fullPerformance', createDemoAuthHeader()).then(async (res) => {
       if (res.ok) {
@@ -135,6 +141,7 @@ export async function fetchFullDemoPortfolioPerformance() {
 }
 
 export async function testPoloniexIntegration() {
+  return;
   return new Promise(async (resolve, reject) => {
     fetch('poloniex/testIntegration', createAuthHeader()).then(async (res) => {
       if (res.ok) {
