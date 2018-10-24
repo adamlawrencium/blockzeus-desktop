@@ -23,7 +23,7 @@ function createWindow() {
     width: 900,
     height: 680,
     transparent: true,
-    titleBarStyle: 'hidden',
+    titleBarStyle: 'hiddenInset',
     webPreferences: {
       webSecurity: false
     } 

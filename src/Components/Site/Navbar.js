@@ -36,10 +36,11 @@ class Navbar extends Component {
     return (
       <ul className="navbar-nav ml-auto">
         <li className="nav-item">
-          <Link to="/dashboard" className={`nav-link ${path === '/dashboard' ? 'active' : ''}`}>Dashboard</Link>
+          {/* <Link to="/dashboard" className={`nav-link ${path === '/dashboard' ? 'active' : ''}`}>Dashboard</Link> */}
         </li>
-        <li className="nav-item">
-          <Link to="/account" className={`nav-link ${path === '/account' ? 'active' : ''}`}>Account</Link>
+        <li className="nav-item mr-5">
+          Settings
+          {/* <Link to="/account" className={`nav-link ${path === '/account' ? 'active' : ''}`}>Account</Link> */}
         </li>
       </ul>
     );
@@ -48,9 +49,9 @@ class Navbar extends Component {
 
   render() {
     return (
-      <nav className="navbar navbar-light navbar-expand-lg sticky-top  navbar-bz-purple" style={{"-webkit-app-region": "drag"}}>
-        <Link to={localStorage.getItem('user') ? '/dashboard' : '/dashboard'} className="navbar-brand abs" href="">BlockZeus</Link>
-        <a className="blockzeus-comment pl-lg-2">Cryptocurrency Manager</a>
+      <nav className="navbar navbar-light navbar-expand-lg sticky-top  navbar-bz-purple" style={{ "-webkit-app-region": "drag" }}>
+        {/* <Link to={localStorage.getItem('user') ? '/dashboard' : '/dashboard'} className="navbar-brand abs" href="">BlockZeus</Link> */}
+        <a className="blockzeus-comment pl-lg-2">BlockZeus // Cryptocurrency Manager</a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
           <span className="navbar-toggler-icon" />
         </button>
