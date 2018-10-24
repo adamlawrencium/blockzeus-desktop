@@ -44,7 +44,9 @@ export async function fetchPoloniexTicker() {
 
 export async function fetchPoloniexCompleteBalances() {
   console.log('calling /poloniex/completeBalances');
-  const p = poloniex.createPrivatePoloInstance('bananakey', 'bananasecret');
+  // const p = (new Poloniex('GTTSHNIZ-V4EYK5K9-4QT6XXS8-EPGJ9G5F', '4f7a16db0f85e7a6924228c0693c94a3572c18dca8ff2d2e1e1038e9d24dcd0f9847e55edb39685c69350c9536c9f0f26d5b70804415859bfb90408ae364c19d', { socketTimeout: 5000 }));
+  // const p = poloniex.createPrivatePoloInstance(res.locals.poloniexKey, res.locals.poloniexSecret);
+  const p = poloniex.createPrivatePoloInstance('banana', 'bananasecret');
   const balances = await poloniex.private(p, 'completeBalances');
   console.log(balances);
   return balances;

@@ -31,19 +31,6 @@ class Navbar extends Component {
 
   renderNavItems() {
     const path = window.location.pathname;
-    if (!this.props.loggedIn) {
-      return (
-        <ul className="navbar-nav ml-auto">
-          <li className="nav-item">
-            <a className={`nav-link border ${path === '/signup' ? 'active' : ''}`} href="" data-toggle="modal" onClick={this.handleDirectToSignup}>Sign Up</a>
-          </li>
-          <li className="nav-item">
-            <a className={`nav-link ${path === '/login' ? 'active' : ''}`} href="/login" data-toggle="modal" onClick={this.handleDirectToLogin}>Log In</a>
-          </li>
-        </ul>
-      );
-    }
-
     // If user is loggedin
     return (
       <ul className="navbar-nav ml-auto">
@@ -52,9 +39,6 @@ class Navbar extends Component {
         </li>
         <li className="nav-item">
           <Link to="/account" className={`nav-link ${path === '/account' ? 'active' : ''}`}>Account</Link>
-        </li>
-        <li className="nav-item">
-          <Link to="/" className="nav-link border" href="" data-toggle="modal" onClick={this.handleLogout}>Log out</Link>
         </li>
       </ul>
     );
