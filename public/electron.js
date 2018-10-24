@@ -13,15 +13,17 @@ console.log('process.env.HI');
 let mainWindow;
 
 require("update-electron-app")({
-  repo: "kitze/react-electron-example",
+  repo: "adamalawrence/blockzeus-desktop",
   updateInterval: "1 hour"
 });
 
 app.commandLine.appendSwitch('disable-web-security');
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 900, 
-    height: 680, 
+    width: 900,
+    height: 680,
+    transparent: true,
+    titleBarStyle: 'hidden',
     webPreferences: {
       webSecurity: false
     } 

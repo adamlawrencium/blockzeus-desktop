@@ -29,6 +29,7 @@ class Navbar extends Component {
     history.push('/register');
   }
 
+
   renderNavItems() {
     const path = window.location.pathname;
     // If user is loggedin
@@ -44,9 +45,10 @@ class Navbar extends Component {
     );
   }
 
+
   render() {
     return (
-      <nav className="navbar navbar-light navbar-expand-lg sticky-top  navbar-bz-purple">
+      <nav className="navbar navbar-light navbar-expand-lg sticky-top  navbar-bz-purple" style={{"-webkit-app-region": "drag"}}>
         <Link to={localStorage.getItem('user') ? '/dashboard' : '/dashboard'} className="navbar-brand abs" href="">BlockZeus</Link>
         <a className="blockzeus-comment pl-lg-2">Cryptocurrency Manager</a>
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
