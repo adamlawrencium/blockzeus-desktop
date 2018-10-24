@@ -22,6 +22,7 @@ class HoldingsTiles extends Component {
    */
   flattenTicker(ticker_) {
     const ticker = Object.assign({}, ticker_);
+    console.log(ticker);
     const flattendTicker = [];
     Object.keys(ticker).forEach((currency) => {
       const x = [
@@ -34,6 +35,16 @@ class HoldingsTiles extends Component {
     return flattendTicker;
   }
 
+  flattenHoldings(holdings_) {
+    const holdings = Object.assign({}, holdings_);
+    const flattendHoldings = [];
+    Object.keys(holdings).forEach((currency) => {
+      const x = [currency, parseFloat(holdings[currency].available)];
+      flattendHoldings.push(x);
+    });
+    return flattendHoldings;
+  }
+
   /**
    * Filter out currencies that aren't in holdings
    *
@@ -43,6 +54,7 @@ class HoldingsTiles extends Component {
    * @memberof HoldingsTiles
    */
   filterTicker(holdings, ticker) {
+    console.log(holdings);
     const filteredTicker = {};
     holdings.forEach((holding) => {
       Object.keys(ticker).forEach((currency) => {
@@ -68,15 +80,20 @@ class HoldingsTiles extends Component {
     const ticker = JSON.parse(JSON.stringify(ticker_)); // deep copy
     const holdings = JSON.parse(JSON.stringify(holdings_)); // deep copy
 
+    // const flattendTicker = this.flattenTicker(ticker); // object to 2d
+    const flattendHoldings = this.flattenHoldings(holdings).filter(x => x[1] > 0); // object to 2d
     // Filter ticker based on holdings
-    const filteredTicker = this.filterTicker(holdings, ticker);
+    const filteredTicker = this.filterTicker(flattendHoldings, ticker);
 
     // Normalize data to USDT base
     const BTC_USDT_rate = parseFloat(ticker.USDT_BTC.last);
     const BTC_USDT_change = parseFloat(ticker.USDT_BTC.percentChange);
 
     const tiles = [];
-    holdings.forEach((holding) => {
+    console.log(filteredTicker);
+    console.log(flattendHoldings);
+    flattendHoldings.forEach((holding) => {
+      console.log(holding);
       const BTC_X = filteredTicker[`BTC_${holding[0]}`]; // assume a BTC_X market exists
 
       if (holding[0] === 'USDT') { // handle market neutral USDT case

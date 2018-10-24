@@ -95,7 +95,7 @@ class Dashboard extends Component {
           {/* TILES AND TWITTER ROW */}
           <div className="row" id="poloniex">
             <div className="col-lg-9">
-              {/* <HoldingsTiles holdings={this.state.balances} ticker={this.state.ticker} /> */}
+              <HoldingsTiles holdings={this.state.balances} ticker={this.state.ticker} />
             </div>
             <div className="col-lg-3">
               <TwitterFeed />
