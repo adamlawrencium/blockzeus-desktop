@@ -1,3 +1,4 @@
+const poloniexEnv = require('./env.json');
 // const sleep = require('sleep');
 const Poloniex = require('poloniex-api-node');
 console.log(Poloniex);
@@ -91,7 +92,7 @@ export default class poloniexDAL {
 
   // Creates an instance of Poloniex for private commands
   createPrivatePoloInstance(key, secret) {
-    return (new Poloniex(key, secret, { socketTimeout: 5000 }));
+    return (new Poloniex(poloniexEnv.key, poloniexEnv.secret, { socketTimeout: 5000 }));
   }
 
   // Create a fake dataset from the reasonable beginning of Polo time to Now
