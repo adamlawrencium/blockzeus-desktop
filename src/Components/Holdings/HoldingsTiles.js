@@ -80,22 +80,16 @@ class HoldingsTiles extends Component {
     const ticker = JSON.parse(JSON.stringify(ticker_)); // deep copy
     const holdings = JSON.parse(JSON.stringify(holdings_)); // deep copy
 
-    // const flattendTicker = this.flattenTicker(ticker); // object to 2d
     const flattendHoldings = this.flattenHoldings(holdings).filter(x => x[1] > 0); // object to 2d
-    // Filter ticker based on holdings
-    const filteredTicker = this.filterTicker(flattendHoldings, ticker);
+    const filteredTicker = this.filterTicker(flattendHoldings, ticker); // only keep currencies that exist in portfolio
 
     // Normalize data to USDT base
     const BTC_USDT_rate = parseFloat(ticker.USDT_BTC.last);
     const BTC_USDT_change = parseFloat(ticker.USDT_BTC.percentChange);
 
     const tiles = [];
-    console.log(filteredTicker);
-    console.log(flattendHoldings);
     flattendHoldings.forEach((holding) => {
-      console.log(holding);
       const BTC_X = filteredTicker[`BTC_${holding[0]}`]; // assume a BTC_X market exists
-
       if (holding[0] === 'USDT') { // handle market neutral USDT case
         tiles.push({
           currency: holding[0],
@@ -158,7 +152,6 @@ class HoldingsTiles extends Component {
 
     return (
       <div className="row">
-
         {holdings.map(holding =>
           (<Tile
             key={holding.currency}

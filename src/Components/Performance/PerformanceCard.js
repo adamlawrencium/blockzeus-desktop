@@ -14,11 +14,11 @@ class PerformanceCard extends Component {
   }
 
   componentWillMount() {
-    // fetchFullPortfolioPerformance().then((fullPerformance) => {
-    //   this.setState({ fullPerformance });
-    //   this.setState({ loaded: true });
-    //   // console.log(fullPerformance);
-    // }).catch(err => console.log(err));
+    fetchFullPortfolioPerformance().then((fullPerformance) => {
+      this.setState({ fullPerformance });
+      this.setState({ loaded: true });
+      // console.log(fullPerformance);
+    }).catch(err => console.log(err));
   }
 
   renderChart() {
