@@ -41,12 +41,12 @@ class App extends React.Component {
       <Router onUpdate={this.fireTracking} history={history}>
         <Switch>
           {/* <Route exact path="/" component={Dashboard} /> */}
-          <Route exact path="/demo" component={Demo} />
-          <PublicOnly exact path="/" component={LandingPage} />
-          <PublicOnly exact path="/login" component={LoginPage} />
-          <PublicOnly exact path="/register" component={RegisterPage} />
-          <PrivateRoute exact path="/dashboard" component={Dashboard} />
-          <PrivateRoute exact path="/account" component={Account} />
+          {/* <Route exact path="/demo" component={Demo} /> */}
+          {/* <PublicOnly exact path="/" component={LandingPage} /> */}
+          {/* <PublicOnly exact path="/login" component={LoginPage} /> */}
+          {/* <PublicOnly exact path="/register" component={RegisterPage} /> */}
+          <Route path="/" component={Dashboard} />
+          <Route path="/account" component={Account} />
           <Route component={NotFound} />
         </Switch>
       </Router>

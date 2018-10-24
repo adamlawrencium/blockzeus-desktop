@@ -20,18 +20,21 @@ class AllocationsCard extends Component {
   }
 
   renderChart() {
-    const balances = JSON.parse(JSON.stringify(this.props.balances)); // deep copy
+    let balances_object = JSON.parse(JSON.stringify(this.props.balances)); // deep copy
+    let balances = [];
+    for (let currency in balances_object) {
+      balances.push([currency, parseFloat(balances_object[currency].btcValue)]);
+    }
     // change BTC-valued balances to USD value
     for (let i = 0; i < balances.length; i++) {
-      if (balances[i][0] !== 'USDT') {
+      if (balances[i][0] !== 'USDT' || balances[i][1] > 0) {
+        console.log(parseFloat(this.props.ticker.USDT_BTC.last));
         balances[i][1] *= parseFloat(this.props.ticker.USDT_BTC.last);
       }
     }
-
     const total = this.totalUSDValue(balances);
-
-    // Sort balances by value of holding
-    balances.sort((a, b) => b[1] - a[1]);
+    // Filter balances > 0 and sort by largest to smalling balance
+    balances = balances.filter(balance => balance[1] > 0).sort((a, b) => b[1] - a[1]);
     return (
       <DonutChart balances={balances} total={total} />
     );

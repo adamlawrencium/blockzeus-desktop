@@ -23,13 +23,13 @@ class Dashboard extends Component {
     };
   }
   componentDidMount() {
-    // fetchPoloniexTicker()
-    //   .then((ticker) => { this.setState({ ticker }); })
-    //   .catch((err) => { console.log(err); });
+    fetchPoloniexTicker()
+      .then((ticker) => { this.setState({ ticker }); })
+      .catch((err) => { console.log(err); });
 
-    // fetchPoloniexCompleteBalances()
-    //   .then((balances) => { this.setState({ balances }); })
-    //   .catch(err => console.log(err));
+    fetchPoloniexCompleteBalances()
+      .then((balances) => { this.setState({ balances }); })
+      .catch(err => console.log(err));
   }
 
   detectUserWithoutExchangeKeys() {
@@ -45,9 +45,6 @@ class Dashboard extends Component {
 
   render() {
     // If user is logged in but doesn't have any keys associated with their account, give them a modal
-    if (!this.props.authentication.loggedIn) {
-      return (<h1>LOGIN BRO</h1>);
-    }
     if (this.detectUserWithoutExchangeKeys()) {
       return (
         <div>
@@ -98,7 +95,7 @@ class Dashboard extends Component {
           {/* TILES AND TWITTER ROW */}
           <div className="row" id="poloniex">
             <div className="col-lg-9">
-              <HoldingsTiles holdings={this.state.balances} ticker={this.state.ticker} />
+              {/* <HoldingsTiles holdings={this.state.balances} ticker={this.state.ticker} /> */}
             </div>
             <div className="col-lg-3">
               <TwitterFeed />
