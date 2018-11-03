@@ -1,11 +1,7 @@
-# React + Electron = 😍
+# BlockZeus ⚡ Control your financial data
+### BlockZeus is a cryptocurrency portfolio manager that syncs with your Poloniex account.
+Other online portfolio services have access to your exchange private keys and information. BlockZeus puts you in control of your sensitive financial information by keeping it all on your machine.
 
-An example of using create-react-app and Electron.  
-Made by [Kitze](https://twitter.com/thekitze).
+<img width="1361" alt="screen shot 2018-10-24 at 12 58 51 pm" src="https://user-images.githubusercontent.com/10917080/47531198-e686be00-d87a-11e8-9368-45a2a72b1890.png">
 
-## Scripts
-```yarn start``` will start the Electron app and the React app at the same time.  
-```yarn build``` will build the React app and package it along the Electron app.
-
-## Read more
-You can read more about it in [my Medium article](https://medium.com/@kitze/%EF%B8%8F-from-react-to-an-electron-app-ready-for-production-a0468ecb1da3).
+## Getting Started...
