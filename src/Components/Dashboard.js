@@ -23,13 +23,18 @@ class Dashboard extends Component {
     };
   }
   componentDidMount() {
-    fetchPoloniexTicker()
-      .then((ticker) => { this.setState({ ticker }); })
-      .catch((err) => { console.log(err); });
-
-    fetchPoloniexCompleteBalances()
-      .then((balances) => { this.setState({ balances }); })
-      .catch(err => console.log(err));
+      this.interval = setInterval(() => {
+        fetchPoloniexTicker()
+          .then((ticker) => { this.setState({ ticker }); })
+          .catch((err) => { console.log(err); });
+    
+        fetchPoloniexCompleteBalances()
+          .then((balances) => { this.setState({ balances }); })
+          .catch(err => console.log(err));
+      }, 5000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.setInterval);
   }
 
   detectUserWithoutExchangeKeys() {
